@@ -1,0 +1,73 @@
+name: quizora
+
+services:
+  app:
+    build: .
+    container_name: quizora-app
+    volumes:
+      - public_assets:/var/www/html/public
+      - ./storage:/var/www/html/storage
+      - ./bootstrap/cache:/var/www/html/bootstrap/cache
+      - ./.env.docker:/var/www/html/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  web:
+    image: nginx:1.27-alpine
+    container_name: quizora-web
+    ports:
+      - "8080:80"
+    volumes:
+      - public_assets:/var/www/html/public:ro
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    container_name: quizora-mysql
+    environment:
+      MYSQL_DATABASE: quizora
+      MYSQL_USER: quizora
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: rootsecret
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-prootsecret"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: quizora-redis
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  queue:
+    build: .
+    container_name: quizora-queue
+    command: php artisan queue:work redis --queue=payments,emails,payouts,default --tries=3 --timeout=120
+    volumes:
+      - ./storage:/var/www/html/storage
+      - ./bootstrap/cache:/var/www/html/bootstrap/cache
+      - ./.env.docker:/var/www/html/.env
+    depends_on:
+      - app
+      - redis
+    restart: unless-stopped
+
+volumes:
+  public_assets:
+  mysql_data:
+  redis_data:

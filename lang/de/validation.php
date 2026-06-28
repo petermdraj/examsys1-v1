@@ -1,0 +1,22 @@
+<?php
+return [
+    "required"        => "Das Feld :attribute ist erforderlich.",
+    "email"           => "Das Feld :attribute muss eine gültige E-Mail-Adresse sein.",
+    "min"             => ["string" => "Das Feld :attribute muss mindestens :min Zeichen lang sein.", "numeric" => "Der Wert :attribute muss mindestens :min betragen."],
+    "max"             => ["string" => "Das Feld :attribute darf nicht mehr als :max Zeichen haben.", "numeric" => "Der Wert :attribute darf nicht größer als :max sein.", "file" => "Die Datei :attribute darf nicht größer als :max Kilobytes sein."],
+    "confirmed"       => "Die Bestätigung von :attribute stimmt nicht überein.",
+    "unique"          => "Das Feld :attribute ist bereits vergeben.",
+    "numeric"         => "Das Feld :attribute muss eine Zahl sein.",
+    "integer"         => "Das Feld :attribute muss eine ganze Zahl sein.",
+    "in"              => "Der ausgewählte Wert für :attribute ist ungültig.",
+    "url"             => "Das Feld :attribute muss eine gültige URL sein.",
+    "image"           => "Das Feld :attribute muss ein Bild sein.",
+    "mimes"           => "Das Feld :attribute muss eine Datei vom Typ :values sein.",
+    "size"            => ["file" => "Die Datei :attribute muss :size Kilobytes groß sein."],
+    "between"         => ["numeric" => "Der Wert :attribute muss zwischen :min und :max liegen."],
+    "password"        => ["min" => "Das Passwort muss mindestens :min Zeichen lang sein."],
+    "attributes"      => ["name" => "Name", "email" => "E-Mail-Adresse", "password" => "Passwort", "password_confirmation" => "Passwortbestätigung", "title" => "Titel", "description" => "Beschreibung", "price" => "Preis", "category_id" => "Kategorie", "pass_percentage" => "Bestehensquote", "duration_minutes" => "Dauer", "max_attempts" => "Maximale Versuche"],
+    "login_failed"    => "Diese Anmeldedaten stimmen nicht mit unseren Aufzeichnungen überein.",
+    "account_inactive" => "Ihr Konto wurde deaktiviert. Bitte kontaktieren Sie den Support.",
+    "throttle"        => "Zu viele Anmeldeversuche. Bitte versuchen Sie es in :seconds Sekunden erneut.",
+];

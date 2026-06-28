@@ -1,0 +1,233 @@
+/* ═══════════════════════════════════════════════════════
+   Quizora — Filament Admin Sidebar Theme
+   Brand: primary #6C2E63 · accent #E0A431 · bg #1A1035
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Shell ─────────────────────────────────────────────── */
+.fi-sidebar,
+.fi-sidebar-nav {
+    background: linear-gradient(180deg, #1A1035 0%, #1C1240 100%) !important;
+    border-right: 1px solid rgba(255,255,255,.06) !important;
+}
+
+.fi-sidebar-header {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255,255,255,.07) !important;
+    padding: 18px 16px !important;
+}
+
+/* ── Brand ──────────────────────────────────────────────── */
+.fi-sidebar-header a,
+.fi-sidebar-header a *,
+.fi-brand-name,
+.fi-sidebar-header span,
+.fi-sidebar-header p {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    letter-spacing: -.01em !important;
+}
+
+/* ── Group spacing ──────────────────────────────────────── */
+.fi-sidebar-group,
+.fi-sidebar-group > *,
+.fi-sidebar-nav > ul,
+.fi-sidebar-nav > div,
+.fi-sidebar-nav > nav {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    gap: 0 !important;
+}
+
+.fi-sidebar-group-items {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    gap: 0 !important;
+}
+
+/* Filament sometimes uses space-y via a wrapping ul with gap */
+.fi-sidebar-nav ul,
+.fi-sidebar-nav ol {
+    gap: 0 !important;
+    row-gap: 0 !important;
+}
+
+/* ── Group labels ───────────────────────────────────────── */
+.fi-sidebar-group-label {
+    color: rgba(255,255,255,.32) !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: .1em !important;
+    text-transform: uppercase !important;
+    padding: 10px 14px 4px !important;
+}
+
+/* Hide group icon (makes it look cluttered) */
+.fi-sidebar-group > button svg,
+.fi-sidebar-group-label svg {
+    display: none !important;
+}
+
+/* ── Nav items — base ───────────────────────────────────── */
+.fi-sidebar-item-button {
+    border-radius: 7px !important;
+    margin: 1px 6px !important;
+    padding: 6px 10px !important;
+    transition: background .15s, color .15s !important;
+    border-left: 2px solid transparent !important;
+}
+
+.fi-sidebar-item-label {
+    color: rgba(255,255,255,.65) !important;
+    font-size: 12.5px !important;
+    font-weight: 500 !important;
+}
+
+.fi-sidebar-item-button svg {
+    color: rgba(255,255,255,.38) !important;
+    width: 18px !important;
+    height: 18px !important;
+    flex-shrink: 0 !important;
+}
+
+/* ── Hover ──────────────────────────────────────────────── */
+.fi-sidebar-item-button:hover {
+    background: rgba(255,255,255,.07) !important;
+    border-left-color: rgba(255,255,255,.15) !important;
+}
+
+.fi-sidebar-item-button:hover .fi-sidebar-item-label {
+    color: rgba(255,255,255,.9) !important;
+}
+
+.fi-sidebar-item-button:hover svg {
+    color: rgba(255,255,255,.65) !important;
+}
+
+/* ── Active / current ───────────────────────────────────── */
+.fi-sidebar-item-button[aria-current],
+.fi-sidebar-item-button.fi-active,
+.fi-sidebar-item-active,
+.fi-sidebar-item > a[aria-current],
+.fi-sidebar-item > button[aria-current] {
+    background: rgba(108,46,99,.45) !important;
+    border-left: 2px solid #C084FC !important;
+}
+
+.fi-sidebar-item-button[aria-current] .fi-sidebar-item-label,
+.fi-sidebar-item-button.fi-active .fi-sidebar-item-label,
+.fi-sidebar-item-active .fi-sidebar-item-label {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+.fi-sidebar-item-button[aria-current] svg,
+.fi-sidebar-item-button.fi-active svg,
+.fi-sidebar-item-active svg {
+    color: #C084FC !important;
+}
+
+/* Filament injects bg via inline Tailwind — override it */
+.fi-sidebar .fi-sidebar-item-button[class*="fi-active"],
+.fi-sidebar li[class*="active"] > button,
+.fi-sidebar li[class*="active"] > a {
+    background: rgba(108,46,99,.45) !important;
+}
+
+/* ── Footer ─────────────────────────────────────────────── */
+.fi-sidebar-footer,
+.fi-sidebar footer {
+    background: rgba(0,0,0,.25) !important;
+    border-top: 1px solid rgba(255,255,255,.07) !important;
+}
+
+.fi-sidebar-footer .fi-user-name,
+.fi-sidebar-footer [class*="user-name"],
+.fi-sidebar-footer p {
+    color: rgba(255,255,255,.88) !important;
+    font-weight: 600 !important;
+}
+
+.fi-sidebar-footer .fi-user-email,
+.fi-sidebar-footer [class*="user-email"],
+.fi-sidebar-footer span {
+    color: rgba(255,255,255,.42) !important;
+}
+
+/* ── Collapse toggle ─────────────────────────────────────── */
+.fi-sidebar-close-btn svg,
+.fi-topbar-sidebar-btn svg {
+    color: rgba(255,255,255,.5) !important;
+}
+
+.fi-sidebar-close-btn:hover svg,
+.fi-topbar-sidebar-btn:hover svg {
+    color: rgba(255,255,255,.9) !important;
+}
+
+/* ── Topbar ──────────────────────────────────────────────── */
+.fi-topbar {
+    background: #ffffff !important;
+    border-bottom: 1px solid #E5E7EB !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06) !important;
+}
+
+/* ── Badges on nav items ─────────────────────────────────── */
+.fi-sidebar-item-badge {
+    background: rgba(192,132,252,.2) !important;
+    color: #C084FC !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    border-radius: 20px !important;
+    padding: 1px 6px !important;
+}
+
+/* ── Collapsed state — center icons with more room ──────── */
+[data-collapsed="true"] .fi-sidebar-item-button,
+.fi-sidebar-collapsed .fi-sidebar-item-button {
+    justify-content: center !important;
+    padding: 10px !important;
+    margin: 2px 8px !important;
+}
+
+[data-collapsed="true"] .fi-sidebar-item-button svg,
+.fi-sidebar-collapsed .fi-sidebar-item-button svg {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────── */
+.fi-sidebar-nav::-webkit-scrollbar { width: 4px; }
+.fi-sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+.fi-sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); border-radius: 4px; }
+.fi-sidebar-nav::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.22); }
+
+/* ── Hide group connector lines & dots ───────────────────── */
+.fi-sidebar-group-items::before,
+.fi-sidebar-group-items::after,
+.fi-sidebar-item::before,
+.fi-sidebar-item::after,
+.fi-sidebar-item > *::before,
+.fi-sidebar-item > *::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Filament renders the tree connector as a child div sometimes */
+.fi-sidebar-item [class*="connector"],
+.fi-sidebar-item [class*="border-l"],
+.fi-sidebar-item > div:not([class*="fi-"]) {
+    border: none !important;
+    background: none !important;
+}
+
+/* The dot is a small rounded div Filament injects */
+.fi-sidebar-item-button > *:first-child:not(svg):not(span) {
+    display: none !important;
+}
+
+/* ── Precise fix: hide Filament's grouped connector line & dot ── */
+.fi-sidebar-item-grouped-border {
+    display: none !important;
+}

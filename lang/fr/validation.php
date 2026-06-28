@@ -1,0 +1,22 @@
+<?php
+return [
+    "required"        => "Le champ :attribute est obligatoire.",
+    "email"           => "Le champ :attribute doit être une adresse e-mail valide.",
+    "min"             => ["string" => "Le champ :attribute doit contenir au moins :min caractères.", "numeric" => "La valeur :attribute doit être d'au moins :min."],
+    "max"             => ["string" => "Le champ :attribute ne peut pas dépasser :max caractères.", "numeric" => "La valeur :attribute ne peut pas être supérieure à :max.", "file" => "Le fichier :attribute ne peut pas dépasser :max kilo-octets."],
+    "confirmed"       => "La confirmation de :attribute ne correspond pas.",
+    "unique"          => "Le champ :attribute est déjà utilisé.",
+    "numeric"         => "Le champ :attribute doit être un nombre.",
+    "integer"         => "Le champ :attribute doit être un entier.",
+    "in"              => "La valeur sélectionnée pour :attribute est invalide.",
+    "url"             => "Le champ :attribute doit être une URL valide.",
+    "image"           => "Le champ :attribute doit être une image.",
+    "mimes"           => "Le champ :attribute doit être un fichier de type : :values.",
+    "size"            => ["file" => "Le fichier :attribute doit faire :size kilo-octets."],
+    "between"         => ["numeric" => "La valeur :attribute doit être comprise entre :min et :max."],
+    "password"        => ["min" => "Le mot de passe doit contenir au moins :min caractères."],
+    "attributes"      => ["name" => "nom", "email" => "adresse e-mail", "password" => "mot de passe", "password_confirmation" => "confirmation du mot de passe", "title" => "titre", "description" => "description", "price" => "prix", "category_id" => "catégorie", "pass_percentage" => "pourcentage de réussite", "duration_minutes" => "durée", "max_attempts" => "tentatives maximales"],
+    "login_failed"    => "Ces identifiants ne correspondent pas à nos enregistrements.",
+    "account_inactive" => "Votre compte a été désactivé. Veuillez contacter le support.",
+    "throttle"        => "Trop de tentatives de connexion. Veuillez réessayer dans :seconds secondes.",
+];

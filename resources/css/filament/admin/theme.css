@@ -1,0 +1,68 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+:root,
+.fi-sidebar {
+    --sidebar-bg: #1E1B4B;
+}
+
+/* Sidebar background */
+.fi-sidebar {
+    background-color: #1E1B4B !important;
+}
+
+/* Sidebar header (brand area) */
+.fi-sidebar-header {
+    background-color: #1E1B4B !important;
+    border-bottom-color: rgba(255,255,255,.08) !important;
+}
+
+/* Brand name text */
+.fi-sidebar-header .fi-brand-name {
+    color: #fff !important;
+}
+
+/* Nav item text & icons */
+.fi-sidebar-nav .fi-sidebar-item-label,
+.fi-sidebar-nav .fi-sidebar-group-label {
+    color: rgba(255,255,255,.75) !important;
+}
+
+.fi-sidebar-nav svg {
+    color: rgba(255,255,255,.6) !important;
+}
+
+/* Active / hover nav item */
+.fi-sidebar-item-button:hover,
+.fi-sidebar-item-button.fi-active {
+    background-color: rgba(255,255,255,.10) !important;
+    border-radius: 8px;
+}
+
+.fi-sidebar-item-button.fi-active .fi-sidebar-item-label,
+.fi-sidebar-item-button:hover   .fi-sidebar-item-label {
+    color: #fff !important;
+}
+
+.fi-sidebar-item-button.fi-active svg,
+.fi-sidebar-item-button:hover   svg {
+    color: #E0A431 !important;
+}
+
+/* Group label */
+.fi-sidebar-group-label {
+    color: rgba(255,255,255,.4) !important;
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+/* Sidebar footer (user info) */
+.fi-sidebar-footer {
+    background-color: #1E1B4B !important;
+    border-top-color: rgba(255,255,255,.08) !important;
+}
+
+.fi-sidebar-footer .fi-user-name,
+.fi-sidebar-footer .fi-user-email {
+    color: rgba(255,255,255,.85) !important;
+}
