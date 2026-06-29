@@ -3,7 +3,7 @@
 return [
     // Navigation (Filament panel)
     'nav_dashboard'             => 'डैशबोर्ड',
-    'nav_quizzes'               => 'क्विज़',
+    'nav_quizzes'               => 'परीक्षा',
     'nav_ai_generator'          => 'AI जनरेटर',
     'nav_earnings'              => 'कमाई',
     'nav_reports'               => 'रिपोर्ट',
@@ -12,7 +12,7 @@ return [
     'nav_group_account'         => 'खाता',
 
     // Model labels
-    'quiz_model_label'          => 'क्विज़',
+    'quiz_model_label'          => 'परीक्षा',
     'qbank_model_label'         => 'बैंक प्रश्न',
 
     // Question Bank form
@@ -56,20 +56,20 @@ return [
     'qbank_notif_errors'        => ':n में त्रुटियाँ थीं।',
 
     // Dashboard stats widget
-    'stat_my_quizzes'           => 'मेरी क्विज़',
+    'stat_my_quizzes'           => 'मेरी परीक्षा',
     'stat_published_draft'      => ':published प्रकाशित · :draft ड्राफ्ट',
     'stat_total_attempts'       => 'कुल प्रयास',
     'stat_this_month'           => 'इस माह',
     'stat_total_earnings'       => 'कुल कमाई',
     'stat_total_sales'          => 'कुल बिक्री',
-    'stat_paid_quiz_purchases'  => 'पेड क्विज़ खरीद',
+    'stat_paid_quiz_purchases'  => 'पेड परीक्षा खरीद',
 
     // Recent quizzes widget
-    'recent_quizzes_heading'    => 'मेरी हाल की क्विज़',
+    'recent_quizzes_heading'    => 'मेरी हाल की परीक्षा',
 
     // Recent sales widget
     'recent_sales_heading'      => 'हाल की बिक्री',
-    'recent_sales_col_quiz'     => 'क्विज़',
+    'recent_sales_col_quiz'     => 'परीक्षा',
     'recent_sales_col_buyer'    => 'खरीदार',
     'recent_sales_col_earned'   => 'आपकी कमाई',
     'recent_sales_col_date'     => 'तारीख',
@@ -90,14 +90,14 @@ return [
     'ai_credits_left'           => 'शेष',
     'ai_used_lifetime'          => 'कुल उपयोग',
     'ai_wallet_balance'         => 'वॉलेट बैलेंस',
-    'ai_btn_generate_quiz'      => 'क्विज़ बनाएं',
+    'ai_btn_generate_quiz'      => 'परीक्षा बनाएं',
     'ai_btn_upgrade_plan'       => 'प्लान अपग्रेड करें',
 
     // Sidebar plan card
     'sidebar_current_plan'      => 'वर्तमान प्लान',
     'sidebar_ai_credits'        => 'AI क्रेडिट',
     'sidebar_commission'        => 'कमीशन',
-    'sidebar_quizzes'           => 'क्विज़',
+    'sidebar_quizzes'           => 'परीक्षा',
     'sidebar_renews'            => 'नवीनीकरण',
 
     // Quiz wizard steps
@@ -146,7 +146,7 @@ return [
     'field_negative_marking'    => 'नकारात्मक अंकन सक्षम करें',
     'field_certificate'         => 'प्रमाणपत्र जारी करें',
     'field_certificate_style'   => 'प्रमाणपत्र शैली',
-    'plan_no_paid_quizzes'      => 'आपका :plan प्लान सशुल्क क्विज़ की अनुमति नहीं देता। अनलॉक करने के लिए अपग्रेड करें।',
+    'plan_no_paid_quizzes'      => 'आपका :plan प्लान सशुल्क परीक्षा की अनुमति नहीं देता। अनलॉक करने के लिए अपग्रेड करें।',
 
     // Review & Publish step
     'section_publish_settings'  => 'प्रकाशन सेटिंग',
@@ -154,15 +154,15 @@ return [
     'status_draft_option'       => '📝 ड्राफ्ट के रूप में सहेजें',
     'status_published_option'   => '🚀 अभी प्रकाशित करें',
     'status_scheduled_option'   => '📅 निर्धारित',
-    'status_helper_published'   => 'क्विज़ तुरंत ग्राहकों को दिखेगा।',
-    'status_helper_scheduled'   => 'क्विज़ नीचे दी गई तारीख पर स्वचालित रूप से लाइव होगा।',
-    'status_helper_draft'       => 'क्विज़ केवल आपको दिखता है। तैयार होने पर प्रकाशित करें।',
+    'status_helper_published'   => 'परीक्षा तुरंत ग्राहकों को दिखेगा।',
+    'status_helper_scheduled'   => 'परीक्षा नीचे दी गई तारीख पर स्वचालित रूप से लाइव होगा।',
+    'status_helper_draft'       => 'परीक्षा केवल आपको दिखता है। तैयार होने पर प्रकाशित करें।',
     'field_start_at_scheduled'  => 'प्रकाशित करें',
     'field_start_at_optional'   => 'उपलब्ध तिथि (वैकल्पिक)',
-    'start_at_helper_scheduled' => 'क्विज़ इस तारीख और समय पर स्वचालित रूप से लाइव होगा।',
-    'start_at_helper_optional'  => 'क्विज़ तुरंत उपलब्ध करने के लिए खाली छोड़ें।',
+    'start_at_helper_scheduled' => 'परीक्षा इस तारीख और समय पर स्वचालित रूप से लाइव होगा।',
+    'start_at_helper_optional'  => 'परीक्षा तुरंत उपलब्ध करने के लिए खाली छोड़ें।',
     'field_end_at'              => 'बंद करें (वैकल्पिक)',
-    'end_at_helper'             => 'इस तारीख के बाद क्विज़ अनुपलब्ध हो जाएगा।',
+    'end_at_helper'             => 'इस तारीख के बाद परीक्षा अनुपलब्ध हो जाएगा।',
 
     // SEO section
     'section_seo'               => 'SEO',
@@ -204,9 +204,9 @@ return [
     'aig_settings_heading'      => 'जनरेशन सेटिंग्स',
     'aig_settings_sub'          => 'कॉन्फ़िगर करें, फिर जनरेट करें',
     'aig_save_to'               => 'कहाँ सहेजें',
-    'aig_tab_quiz'              => 'क्विज़',
+    'aig_tab_quiz'              => 'परीक्षा',
     'aig_tab_bank'              => 'प्रश्न बैंक',
-    'aig_select_quiz'           => 'क्विज़ चुनें',
+    'aig_select_quiz'           => 'परीक्षा चुनें',
     'aig_prompt_label'          => 'विषय / प्रॉम्प्ट',
     'aig_prompt_placeholder'    => 'जैसे मध्यम स्तर के डेवलपर्स के लिए PHP OOP अवधारणाएं…',
     'aig_questions_label'       => 'प्रश्न',
@@ -237,10 +237,10 @@ return [
     'aig_expand_all'            => '⊞ सभी खोलें',
     'aig_save_done'             => '✓ सहेजें और समाप्त',
     'aig_modal_title'           => 'यह प्रश्न हटाएं?',
-    'aig_modal_body'            => 'यह प्रश्न क्विज़ से हटा दिया जाएगा। यह क्रिया पूर्ववत नहीं की जा सकती।',
+    'aig_modal_body'            => 'यह प्रश्न परीक्षा से हटा दिया जाएगा। यह क्रिया पूर्ववत नहीं की जा सकती।',
     'aig_modal_cancel'          => 'रद्द करें',
     'aig_modal_confirm'         => 'हां, हटाएं',
-    'aig_err_select_quiz'       => 'पहले एक क्विज़ चुनें।',
+    'aig_err_select_quiz'       => 'पहले एक परीक्षा चुनें।',
     'aig_err_enter_prompt'      => 'कोई विषय या प्रॉम्प्ट दर्ज करें।',
     'aig_err_connection'        => 'कनेक्शन त्रुटि। पुनः प्रयास करें।',
 
@@ -310,7 +310,7 @@ return [
 
     // Customer-facing dashboard
     'welcome_back'              => 'वापस स्वागत है',
-    'stat_quizzes_enrolled'     => 'नामांकित क्विज़',
+    'stat_quizzes_enrolled'     => 'नामांकित परीक्षा',
     'stat_pass_rate'            => 'उत्तीर्ण दर',
     'stat_certificates_earned'  => 'अर्जित प्रमाणपत्र',
     'recent_attempts'           => 'हाल के प्रयास',
@@ -318,8 +318,8 @@ return [
     'passed_short'              => 'उत्तीर्ण',
     'failed_short'              => 'अनुत्तीर्ण',
     'result_btn'                => 'परिणाम',
-    'no_attempts_yet'           => 'आपने अभी तक कोई क्विज़ नहीं दिया।',
-    'browse_quizzes_btn'        => 'क्विज़ देखें',
+    'no_attempts_yet'           => 'आपने अभी तक कोई परीक्षा नहीं दिया।',
+    'browse_quizzes_btn'        => 'परीक्षा देखें',
 
     // Account settings (customer-facing)
     'account_settings_heading'  => 'खाता सेटिंग',
@@ -343,12 +343,12 @@ return [
     'update_password_btn'       => 'पासवर्ड अपडेट करें',
     'section_notifications'     => 'सूचना प्राथमिकताएं',
     'notifications_sub'         => 'चुनें कि आप कौन से ईमेल प्राप्त करना चाहते हैं।',
-    'notify_quiz_results'       => 'क्विज़ परिणाम',
-    'notify_quiz_results_sub'   => 'आपके क्विज़ प्रयास का मूल्यांकन होने पर ईमेल',
+    'notify_quiz_results'       => 'परीक्षा परिणाम',
+    'notify_quiz_results_sub'   => 'आपके परीक्षा प्रयास का मूल्यांकन होने पर ईमेल',
     'notify_purchases'          => 'खरीद पुष्टि',
-    'notify_purchases_sub'      => 'क्विज़ खरीदने के बाद रसीद ईमेल',
+    'notify_purchases_sub'      => 'परीक्षा खरीदने के बाद रसीद ईमेल',
     'notify_weekly_digest'      => 'साप्ताहिक सारांश',
-    'notify_weekly_digest_sub'  => 'आपकी श्रेणियों में नए क्विज़ का साप्ताहिक सारांश',
+    'notify_weekly_digest_sub'  => 'आपकी श्रेणियों में नए परीक्षा का साप्ताहिक सारांश',
     'save_preferences_btn'      => 'प्राथमिकताएं सहेजें',
     'section_purchase_history'  => 'खरीद इतिहास',
     'paid_badge'                => 'भुगतान किया',
@@ -383,7 +383,7 @@ return [
 
     // Question Bank empty state
     'qbank_empty_heading'           => 'आपका प्रश्न बैंक खाली है',
-    'qbank_empty_desc'              => 'किसी भी क्विज़ में जोड़ने के लिए प्रश्नों की एक पुन: उपयोगी लाइब्रेरी बनाएं।',
+    'qbank_empty_desc'              => 'किसी भी परीक्षा में जोड़ने के लिए प्रश्नों की एक पुन: उपयोगी लाइब्रेरी बनाएं।',
 
     // Earnings page blade strings
     'earn_available_balance'        => 'उपलब्ध बैलेंस',
@@ -394,7 +394,7 @@ return [
     'earn_total_sales'              => 'कुल बिक्री',
     'earn_avg_sale'                 => 'औसत :avg / बिक्री',
     'earn_no_sales_yet'             => 'अभी कोई बिक्री नहीं',
-    'earn_no_sales_sub'             => 'कमाई शुरू करने के लिए एक पेड क्विज़ प्रकाशित करें',
+    'earn_no_sales_sub'             => 'कमाई शुरू करने के लिए एक पेड परीक्षा प्रकाशित करें',
     'earn_no_payouts_yet'           => 'अभी तक कोई पेआउट नहीं',
     'earn_recent_sales'             => 'हाल की बिक्री',
     'earn_last_20'                  => 'पिछले 20 लेनदेन',
@@ -404,7 +404,7 @@ return [
     'earn_tokens_left'              => 'टोकन शेष',
     'earn_tokens_per_month'         => 'टोकन / माह आपके प्लान में शामिल',
     'earn_get_more_tokens'          => 'अधिक टोकन पाएं',
-    'earn_token_equals'             => '1 टोकन = 1 AI क्विज़ जनरेशन',
+    'earn_token_equals'             => '1 टोकन = 1 AI परीक्षा जनरेशन',
     'earn_payout_history'           => 'भुगतान इतिहास',
     'earn_requests'                 => 'अनुरोध',
     'earn_total_paid_out'           => 'कुल भुगतान',
@@ -430,7 +430,7 @@ return [
     'rp_recent_attempts'            => 'हाल के प्रयास',
     'rp_no_data_yet'                => 'अभी कोई डेटा नहीं',
     'rp_no_attempts_yet'            => 'अभी कोई प्रयास नहीं',
-    'rp_quiz_config'                => 'क्विज़ कॉन्फ़िगरेशन',
+    'rp_quiz_config'                => 'परीक्षा कॉन्फ़िगरेशन',
     'rp_meta_questions'             => 'प्रश्न',
     'rp_meta_total_marks'           => 'कुल अंक',
     'rp_meta_pass_pct'              => 'उत्तीर्ण %',
@@ -441,9 +441,9 @@ return [
     'rp_free'                       => 'मुफ्त',
 
     // Notifications (Filament)
-    'notification_quiz_published'   => 'क्विज़ प्रकाशित',
-    'notification_quiz_archived'    => 'क्विज़ संग्रहीत',
-    'notification_quiz_drafted'     => 'क्विज़ ड्राफ्ट के रूप में सहेजा',
+    'notification_quiz_published'   => 'परीक्षा प्रकाशित',
+    'notification_quiz_archived'    => 'परीक्षा संग्रहीत',
+    'notification_quiz_drafted'     => 'परीक्षा ड्राफ्ट के रूप में सहेजा',
     'notification_question_duplicated' => 'प्रश्न डुप्लिकेट किया गया',
     'notification_import_result'    => ':total में से :imported प्रश्न आयात किए',
     'notification_profile_saved'    => 'प्रोफ़ाइल सफलतापूर्वक अपडेट हुई',
@@ -458,13 +458,13 @@ return [
     'qbank_notif_already_in_bank'   => 'पहले से आपके बैंक में है',
     'manage_q_empty_heading'        => 'अभी तक कोई प्रश्न नहीं',
     'manage_q_empty_desc'           => 'प्रश्न मैन्युअल रूप से जोड़ें या AI से जनरेट करें।',
-    'btn_back_to_quiz'              => '← क्विज़ पर वापस',
+    'btn_back_to_quiz'              => '← परीक्षा पर वापस',
 
     // Plan / Quiz / Bank limit notifications
     'notif_plan_limit_reached'      => 'प्लान सीमा पहुँच गई',
-    'notif_quiz_limit_reached'      => 'क्विज़ सीमा पहुँच गई',
+    'notif_quiz_limit_reached'      => 'परीक्षा सीमा पहुँच गई',
     'notif_bank_limit_reached'      => 'बैंक सीमा पहुँच गई',
-    'notif_import_skipped_body'     => ':imported प्रश्न आयात किए। :skipped छोड़े गए — आपका :plan प्लान अधिकतम :max प्रश्न प्रति क्विज़ अनुमति देता है।',
+    'notif_import_skipped_body'     => ':imported प्रश्न आयात किए। :skipped छोड़े गए — आपका :plan प्लान अधिकतम :max प्रश्न प्रति परीक्षा अनुमति देता है।',
 
     // Payout notification body
     'payout_exceeds_body'           => 'आप अधिकतम :sym:amount निकाल सकते हैं।',

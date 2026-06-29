@@ -13,7 +13,6 @@ use App\Settings\PlatformSettings;
 use Filament\Support\Colors\Color;
 use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -41,7 +40,7 @@ class LecturerPanelProvider extends PanelProvider
             })
             ->sidebarCollapsibleOnDesktop()
             ->collapsedSidebarWidth('6.5rem')
-            ->renderHook(PanelsRenderHook::HEAD_END, fn () => Blade::render('<style>' . file_get_contents(resource_path('css/filament/sidebar.css')) . '</style>'))
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->renderHook(PanelsRenderHook::TOPBAR_END, function () {
                 $show = rescue(fn () => app(PlatformSettings::class)->show_switcher_lecturer, true, false);
                 return $show ? view('filament.partials.language-switcher') : '';

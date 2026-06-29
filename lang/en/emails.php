@@ -2,9 +2,9 @@
 
 return [
     // Attempt result email
-    'result_subject'            => 'Quiz Result',
+    'result_subject'            => 'Exam Result',
     'result_passed_heading'     => '🎉 You Passed!',
-    'result_completed_heading'  => 'Quiz Completed',
+    'result_completed_heading'  => 'Exam Completed',
     'result_greeting'           => 'Hi :name,',
     'result_intro'              => 'Here are your results:',
     'result_stat_score'         => 'Score',
@@ -27,16 +27,16 @@ return [
     'result_label_time_taken'   => 'Time Taken',
 
     // Weekly digest email
-    'digest_subject'            => 'New quizzes this week',
-    'digest_heading'            => 'New quizzes dropped this week 🎯',
+    'digest_subject'            => 'New exams this week',
+    'digest_heading'            => 'New exams dropped this week 🎯',
     'digest_date_range'         => ':from – :to',
     'digest_greeting'           => 'Hi :name,',
     'digest_intro'              => "Here's what's new on the platform this week. Jump in and test your knowledge!",
-    'digest_section_label'      => "This week's quizzes",
+    'digest_section_label'      => "This week's exams",
     'digest_questions_count'    => '· :count questions',
     'digest_duration'           => '· :minutes min',
     'digest_badge_free'         => 'Free',
-    'digest_cta'                => 'Browse all quizzes',
+    'digest_cta'                => 'Browse all exams',
     'digest_unsubscribe_text'   => "You're receiving this because you opted in to weekly digests.",
     'digest_unsubscribe'        => "You're receiving this because you opted in to weekly digests.",
     'digest_manage_prefs'       => 'Manage notification preferences',

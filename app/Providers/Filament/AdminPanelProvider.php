@@ -6,7 +6,6 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use App\Settings\PlatformSettings;
@@ -14,7 +13,6 @@ use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Platform;
 use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -42,7 +40,7 @@ class AdminPanelProvider extends PanelProvider
             })
             ->sidebarCollapsibleOnDesktop()
             ->collapsedSidebarWidth('6.5rem')
-            ->renderHook(PanelsRenderHook::HEAD_END, fn () => Blade::render('<style>' . file_get_contents(resource_path('css/filament/sidebar.css')) . '</style>'))
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->renderHook(PanelsRenderHook::TOPBAR_END, function () {
                 $show = rescue(fn () => app(PlatformSettings::class)->show_switcher_admin, true, false);
                 return $show ? view('filament.partials.language-switcher') : '';
@@ -51,15 +49,9 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(PanelsRenderHook::BODY_START, fn () => view('filament.partials.demo-banner'))
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
-            ->pages([
-                Pages\Dashboard::class,
-            ])
             ->navigationGroups([
                 \Filament\Navigation\NavigationGroup::make(__('admin.nav_group_platform'))->collapsible(false),
-                \Filament\Navigation\NavigationGroup::make(__('admin.nav_group_marketing'))->collapsible(false),
                 \Filament\Navigation\NavigationGroup::make(__('admin.nav_group_content'))->collapsible(false),
-                \Filament\Navigation\NavigationGroup::make(__('admin.nav_group_finance'))->collapsible(false),
-                \Filament\Navigation\NavigationGroup::make(__('admin.nav_group_ai'))->collapsible(false),
                 \Filament\Navigation\NavigationGroup::make(__('admin.nav_group_configuration'))->collapsible(false),
             ])
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')

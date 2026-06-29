@@ -4,7 +4,10 @@ namespace App\Filament\Lecturer\Pages;
 
 use App\Models\Attempt;
 use App\Models\Quiz;
+use App\Services\Exam\ExamGradeReportService;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Str;
 
 class Reports extends Page
 {
@@ -15,6 +18,8 @@ class Reports extends Page
     protected static string $view = 'filament.lecturer.pages.reports';
 
     public ?string $selectedQuizId = null;
+
+    public string $attemptMode = 'best';
 
     public function mount(): void
     {
@@ -92,5 +97,59 @@ class Reports extends Page
     public function selectQuiz(string $id): void
     {
         $this->selectedQuizId = $id;
+    }
+
+    public function exportExcel()
+    {
+        $quiz = $this->resolveOwnedQuiz();
+        if (! $quiz) {
+            abort(403);
+        }
+
+        $path = app(ExamGradeReportService::class)->exportExcel($quiz, null, $this->attemptMode);
+
+        if (! $path) {
+            Notification::make()->title(__('lecturer.grade_no_data'))->warning()->send();
+
+            return;
+        }
+
+        $filename = 'grade-report-' . Str::slug($quiz->title) . '-' . now()->format('Y-m-d') . '.xlsx';
+
+        return response()->download(
+            $path,
+            $filename,
+            ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+        )->deleteFileAfterSend();
+    }
+
+    public function exportPdf()
+    {
+        $quiz = $this->resolveOwnedQuiz();
+        if (! $quiz) {
+            abort(403);
+        }
+
+        $rows = app(ExamGradeReportService::class)->buildRows($quiz, null, $this->attemptMode);
+
+        if ($rows->isEmpty()) {
+            Notification::make()->title(__('lecturer.grade_no_data'))->warning()->send();
+
+            return;
+        }
+
+        return app(ExamGradeReportService::class)->exportPdf($quiz, null, $this->attemptMode);
+    }
+
+    protected function resolveOwnedQuiz(): ?Quiz
+    {
+        if (! $this->selectedQuizId) {
+            return null;
+        }
+
+        return Quiz::query()
+            ->where('id', $this->selectedQuizId)
+            ->where('lecturer_id', auth()->id())
+            ->first();
     }
 }

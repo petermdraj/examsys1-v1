@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Services\Auth\LoginHistoryService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -27,6 +28,8 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
         $user = auth()->user();
+
+        app(LoginHistoryService::class)->record($user, $request);
 
         if ($user->role === 'super_admin') {
             return redirect()->intended('/admin');

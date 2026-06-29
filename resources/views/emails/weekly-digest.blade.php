@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>New quizzes this week</title>
+<title>{{ __('emails.digest_section_label') }}</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #F3F0FF; padding: 32px 16px; color: #1E1B4B; }

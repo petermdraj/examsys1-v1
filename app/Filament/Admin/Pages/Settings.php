@@ -3,11 +3,13 @@
 namespace App\Filament\Admin\Pages;
 
 use App\Settings\PlatformSettings;
+use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\Page;
+use Filament\Support\Enums\Alignment;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -18,6 +20,10 @@ class Settings extends Page
 
     protected static ?string $navigationIcon  = 'heroicon-o-cog-6-tooth';
     protected static ?int    $navigationSort  = 10;
+
+    public static bool $formActionsAreSticky = true;
+
+    public static string | Alignment $formActionsAlignment = Alignment::End;
 
     public static function getNavigationLabel(): string { return __('admin.nav_settings'); }
     public static function getNavigationGroup(): ?string { return __('admin.nav_group_configuration'); }
@@ -101,6 +107,8 @@ class Settings extends Page
                 default  => $value,
             };
         }
+
+        $this->form->fill($this->data);
     }
 
     /** Returns a masked tail preview: e.g. *****ab12, or translated "Not set". */
@@ -157,22 +165,6 @@ class Settings extends Page
                                     ->directory('logos')
                                     ->helperText(__('admin.settings_helper_cert_logo'))
                                     ->columnSpanFull(),
-                                Forms\Components\Select::make('default_currency')
-                                    ->label(__('admin.settings_field_currency_code'))
-                                    ->options(\App\Support\CurrencyList::selectOptions())
-                                    ->searchable()
-                                    ->live()
-                                    ->afterStateUpdated(function ($state, Forms\Set $set) {
-                                        $symbol = \App\Support\CurrencyList::symbol($state);
-                                        if ($symbol) {
-                                            $set('currency_symbol', $symbol);
-                                        }
-                                    })
-                                    ->helperText(__('admin.settings_helper_currency_code')),
-                                Forms\Components\TextInput::make('currency_symbol')
-                                    ->label(__('admin.settings_field_currency_symbol'))
-                                    ->helperText(__('admin.settings_helper_currency_symbol'))
-                                    ->maxLength(5),
                             ])->columns(2),
 
                         // ── Theme ─────────────────────────────────────────────
@@ -390,9 +382,6 @@ class Settings extends Page
                                             ->maxLength(300)
                                             ->helperText(__('admin.settings_helper_tagline'))
                                             ->columnSpanFull(),
-                                        Forms\Components\Toggle::make('footer_show_newsletter')
-                                            ->label(__('admin.settings_field_show_newsletter'))
-                                            ->columnSpanFull(),
                                     ]),
 
                                 Forms\Components\Section::make(__('admin.settings_section_footer_columns'))
@@ -579,27 +568,27 @@ class Settings extends Page
                             ]),
 
                         // ── Languages ────────────────────────────────────────
-                        Forms\Components\Tabs\Tab::make('Languages')
+                        Forms\Components\Tabs\Tab::make(__('admin.settings_tab_languages'))
                             ->icon('heroicon-o-language')
                             ->schema([
-                                Forms\Components\Section::make('Language Switcher Visibility')
-                                    ->description('Control where the language switcher is shown across the platform.')
+                                Forms\Components\Section::make(__('admin.settings_section_language_switcher'))
+                                    ->description(__('admin.settings_desc_language_switcher'))
                                     ->schema([
                                         Forms\Components\Toggle::make('show_switcher_admin')
-                                            ->label('Show in Admin panel')
-                                            ->helperText('Display the language switcher in the /admin topbar.'),
+                                            ->label(__('admin.settings_field_switcher_admin'))
+                                            ->helperText(__('admin.settings_helper_switcher_admin')),
                                         Forms\Components\Toggle::make('show_switcher_lecturer')
-                                            ->label('Show in Lecturer panel')
-                                            ->helperText('Display the language switcher in the /lecturer topbar.'),
+                                            ->label(__('admin.settings_field_switcher_lecturer'))
+                                            ->helperText(__('admin.settings_helper_switcher_lecturer')),
                                         Forms\Components\Toggle::make('show_switcher_front')
-                                            ->label('Show on Customer / Frontend')
-                                            ->helperText('Display the language switcher in the customer-facing navigation.'),
+                                            ->label(__('admin.settings_field_switcher_front'))
+                                            ->helperText(__('admin.settings_helper_switcher_front')),
                                     ])
                                     ->columns(3)
                                     ->collapsible(),
 
-                                Forms\Components\Section::make('Active Locales')
-                                    ->description('Choose which languages are available in the switcher. English is always included.')
+                                Forms\Components\Section::make(__('admin.settings_section_active_locales'))
+                                    ->description(__('admin.settings_desc_active_locales'))
                                     ->schema([
                                         Forms\Components\CheckboxList::make('enabled_locales')
                                             ->label('')
@@ -635,12 +624,9 @@ class Settings extends Page
                                             ->label(__('admin.settings_field_cron_jobs'))
                                             ->content(function (): \Illuminate\Support\HtmlString {
                                                 $items = [
-                                                    'cron_job_renewal'       => __('admin.settings_cron_job_renewal'),
-                                                    'cron_job_expiry'        => __('admin.settings_cron_job_expiry'),
-                                                    'cron_job_grace'         => __('admin.settings_cron_job_grace'),
-                                                    'cron_job_digest'        => __('admin.settings_cron_job_digest'),
-                                                    'cron_job_stats'         => __('admin.settings_cron_job_stats'),
-                                                    'cron_job_cleanup'       => __('admin.settings_cron_job_cleanup'),
+                                                    'cron_job_digest'  => __('admin.settings_cron_job_digest'),
+                                                    'cron_job_stats'   => __('admin.settings_cron_job_stats'),
+                                                    'cron_job_cleanup' => __('admin.settings_cron_job_cleanup'),
                                                 ];
                                                 $li = '';
                                                 foreach ($items as $item) {
@@ -810,15 +796,21 @@ class Settings extends Page
 
     protected function getHeaderActions(): array
     {
-        return [];
+        return [
+            Action::make('save')
+                ->label(__('admin.settings_btn_save'))
+                ->action('save')
+                ->keyBindings(['mod+s']),
+        ];
     }
 
     protected function getFormActions(): array
     {
         return [
-            \Filament\Actions\Action::make('save')
+            Action::make('save')
                 ->label(__('admin.settings_btn_save'))
-                ->submit('save'),
+                ->submit('save')
+                ->keyBindings(['mod+s']),
         ];
     }
 }

@@ -35,7 +35,7 @@
                 <path d="M404 247V275c0 4-3 6-6 6h-26" fill="none" stroke="#BF861A" stroke-width="1.4"/>
                 <rect x="183" y="46" width="22" height="22" rx="4" fill="#6C2E63"/>
                 <text x="194" y="62" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="bold" fill="#E0A431">Q</text>
-                <text x="215" y="62" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#6C2E63">Quiz</text>
+                <text x="215" y="62" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#6C2E63">Exam</text>
                 <text x="248" y="62" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#BF861A">ora</text>
                 <text x="210" y="95" text-anchor="middle" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#6C2E63">Certificate of Achievement</text>
                 <text x="210" y="116" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#5E535B" font-style="italic">Verified proficiency in a platform assessment</text>
@@ -56,7 +56,7 @@
                 <text x="76" y="258" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-style="italic" fill="#6C2E63">Arjun Mehta</text>
                 <line x1="30" y1="263" x2="122" y2="263" stroke="#261C23" stroke-width="0.8" opacity="0.4"/>
                 <text x="76" y="273" text-anchor="middle" font-family="Arial,sans-serif" font-size="7" font-weight="700" fill="#261C23">Arjun Mehta</text>
-                <text x="76" y="282" text-anchor="middle" font-family="Arial,sans-serif" font-size="6" fill="#938793">Quiz Author &amp; Instructor</text>
+                <text x="76" y="282" text-anchor="middle" font-family="Arial,sans-serif" font-size="6" fill="#938793">{{ __('certificate.sig_author_role') }} &amp; Instructor</text>
             </svg>
 
             <div>
@@ -87,7 +87,7 @@
                 <rect x="0" y="0" width="122" height="297" fill="#6C2E63"/>
                 <rect x="10" y="16" width="22" height="22" rx="4" fill="#E0A431"/>
                 <text x="21" y="32" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="800" fill="#4D2049">Q</text>
-                <text x="38" y="32" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#FBF4F8">Quiz</text>
+                <text x="38" y="32" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#FBF4F8">Exam</text>
                 <text x="69" y="32" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#E0A431">ora</text>
                 <circle cx="61" cy="122" r="36" fill="#380d50" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
                 <circle cx="61" cy="122" r="28" fill="none" stroke="rgba(235,217,166,0.6)" stroke-width="1" stroke-dasharray="3,2"/>
@@ -114,7 +114,7 @@
                 <text x="370" y="215" text-anchor="end" font-family="Georgia,serif" font-size="14" font-style="italic" fill="#6C2E63">Kavya Reddy</text>
                 <line x1="232" y1="221" x2="370" y2="221" stroke="#261C23" stroke-width="0.8" opacity="0.4"/>
                 <text x="370" y="231" text-anchor="end" font-family="Arial,sans-serif" font-size="7" font-weight="700" fill="#261C23">Kavya Reddy</text>
-                <text x="370" y="240" text-anchor="end" font-family="Arial,sans-serif" font-size="6" fill="#938793">Quiz Author</text>
+                <text x="370" y="240" text-anchor="end" font-family="Arial,sans-serif" font-size="6" fill="#938793">{{ __('certificate.sig_author_role') }}</text>
                 <line x1="136" y1="255" x2="406" y2="255" stroke="#EADFE6" stroke-width="1"/>
                 <text x="136" y="268" font-family="Arial,sans-serif" font-size="6.5" font-weight="700" letter-spacing="1" fill="#938793">SCORE</text>
                 <text x="136" y="281" font-family="Georgia,serif" font-size="11" font-weight="600" fill="#261C23">91% · Distinction</text>

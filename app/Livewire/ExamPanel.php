@@ -15,10 +15,19 @@ class ExamPanel extends Component
     public array $markedForReview = [];
     public int $durationSeconds = 0;
 
+    public function refreshAttemptStatus(): void
+    {
+        $this->attempt->refresh();
+
+        if (in_array($this->attempt->status, ['completed', 'terminated', 'timed_out'], true)) {
+            $this->redirect(route('attempt.result', $this->attempt));
+        }
+    }
+
     public function mount(Attempt $attempt): void
     {
         abort_unless($attempt->user_id === auth()->id(), 403);
-        abort_unless($attempt->status === 'in_progress', 404);
+        abort_unless(in_array($attempt->status, ['in_progress', 'paused'], true), 404);
 
         $this->attempt = $attempt;
         $quiz = $attempt->quiz()->with(

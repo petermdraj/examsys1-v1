@@ -28,8 +28,8 @@ return [
     'register_submit'                => 'Create account',
     'register_have_account'          => 'Already have an account?',
     'register_login_link'            => 'Log in →',
-    'register_lecturer_toggle_label'  => 'Are you a quiz lecturer?',
-    'register_lecturer_toggle_desc'   => 'Enable this to publish and sell your own quizzes',
+    'register_lecturer_toggle_label'  => 'Are you an exam lecturer?',
+    'register_lecturer_toggle_desc'   => 'Enable this to publish and sell your own exams',
 
     // Social login
     'or_divider'              => 'or',

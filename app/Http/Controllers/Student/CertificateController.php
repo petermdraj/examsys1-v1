@@ -25,6 +25,7 @@ class CertificateController extends Controller
             ->firstOrFail();
 
         abort_unless($attempt->is_passed && $attempt->quiz->certificate_enabled, 403);
+        abort_unless($attempt->quiz->resultsAreVisible(), 403, 'Results have not been published yet.');
 
         $cert = $this->certService->generate($attempt);
 

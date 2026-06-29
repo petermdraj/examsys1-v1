@@ -15,7 +15,8 @@ class Quiz extends Model
     protected $fillable = [
         'lecturer_id', 'category_id', 'title', 'slug', 'description', 'cover_image', 'status',
         'visibility', 'duration_minutes', 'start_at', 'end_at', 'max_attempts', 'pass_percentage',
-        'shuffle_questions', 'shuffle_options', 'show_result_immediately', 'allow_review_after_submit',
+        'shuffle_questions', 'shuffle_options', 'show_result_immediately', 'hold_results_until_published',
+        'results_published_at', 'allow_review_after_submit',
         'negative_marking_enabled', 'proctoring_enabled', 'certificate_enabled', 'certificate_template',
         'eligibility_rules', 'meta_keywords', 'meta_description', 'total_questions', 'total_marks',
         'total_attempts', 'average_score',
@@ -27,8 +28,10 @@ class Quiz extends Model
             'eligibility_rules'          => 'array',
             'shuffle_questions'          => 'boolean',
             'shuffle_options'            => 'boolean',
-            'show_result_immediately'    => 'boolean',
-            'allow_review_after_submit'  => 'boolean',
+            'show_result_immediately'       => 'boolean',
+            'hold_results_until_published'  => 'boolean',
+            'results_published_at'          => 'datetime',
+            'allow_review_after_submit'     => 'boolean',
             'negative_marking_enabled'   => 'boolean',
             'proctoring_enabled'         => 'boolean',
             'certificate_enabled'        => 'boolean',
@@ -57,6 +60,20 @@ class Quiz extends Model
 
     public function scopePublished($q) { return $q->where('status', 'published'); }
     public function scopePublic($q) { return $q->where('visibility', 'public'); }
+
+    public function resultsAreVisible(): bool
+    {
+        if (! $this->hold_results_until_published) {
+            return true;
+        }
+
+        return $this->results_published_at !== null;
+    }
+
+    public function hasPendingResults(): bool
+    {
+        return $this->hold_results_until_published && $this->results_published_at === null;
+    }
 
     protected static function booted(): void
     {

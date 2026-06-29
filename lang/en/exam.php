@@ -78,8 +78,8 @@ return [
     'time_taken'               => 'Time taken',
     'min_allowed'              => '/ :minutes min allowed',
     'download_certificate'     => 'Download certificate',
-    'retry_quiz'               => 'Retry quiz',
-    'browse_more_quizzes'      => 'Browse more quizzes',
+    'retry_quiz'               => 'Retry exam',
+    'browse_more_quizzes'      => 'Browse more exams',
 
     // Review section
     'question_review_heading'  => 'Question-by-question review',
@@ -115,5 +115,12 @@ return [
     'passed_label'             => '✓ Passed',
     'failed_label'             => '✗ Failed',
     'no_attempts_found'        => 'No attempts found for this filter.',
-    'browse_quizzes'           => 'Browse quizzes',
+    'browse_quizzes'           => 'Browse exams',
+
+    // Proctoring & admin pause
+    'exam_paused_by_admin'     => 'Exam Paused',
+    'exam_paused_wait'         => 'An administrator has paused your session. Please wait — this page will update automatically when the exam resumes.',
+    'result_pending_title'     => 'Results Not Yet Published',
+    'result_pending_body'      => 'Your attempt for :quiz has been submitted. Results will appear here once your institution publishes them.',
+    'view_my_attempts'         => 'View my attempts',
 ];

@@ -213,7 +213,7 @@ body {
 
 {{-- Body copy --}}
 <div class="body">
-    has successfully completed the <span class="quiz">{{ $quiz->title }}</span>
+    {{ __('certificate.has_completed') }} <span class="quiz">{{ $quiz->title }}</span>
     on {{ $cert->issued_at->format('d F Y') }}, demonstrating advanced command of the subject
     by scoring <strong>{{ number_format($attempt->percentage, 1) }}%</strong>
     ({{ $attempt->score }}/{{ $attempt->total_marks }} marks) &mdash; {{ $attempt->is_passed ? 'PASSED' : 'COMPLETED' }}.
@@ -237,7 +237,7 @@ body {
                 <div class="sig-mark">{{ $quiz->lecturer->name }}</div>
                 <div class="sig-rule"></div>
                 <div class="sig-name">{{ $quiz->lecturer->name }}</div>
-                <div class="sig-role">Quiz Author &amp; Instructor</div>
+                <div class="sig-role">{{ __('certificate.sig_author_role') }} &amp; Instructor</div>
             </td>
             <td width="40%" style="vertical-align:bottom; text-align:center;">
                 <div class="meta-qr"><img src="{{ $qrBase64 }}" alt="QR"></div>

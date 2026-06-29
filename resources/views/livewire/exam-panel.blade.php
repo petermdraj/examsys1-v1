@@ -4,6 +4,7 @@ $letters = ['A','B','C','D','E','F'];
 @endphp
 
 <div
+  wire:poll.10s="refreshAttemptStatus"
   x-data="examPanel({
     questions: @js($questions),
     initialAnswers: @js($answers),
@@ -11,10 +12,23 @@ $letters = ['A','B','C','D','E','F'];
     durationSeconds: {{ $durationSeconds }},
     startedAt: {{ $attempt->started_at->valueOf() }},
     saveUrl: '{{ route('attempt.answer', $attempt) }}',
+    violationUrl: '{{ route('attempt.violation', $attempt) }}',
+    proctoringEnabled: @js($quiz->proctoring_enabled),
+    isPaused: @js($attempt->status === 'paused'),
     csrf: '{{ csrf_token() }}'
   })"
   class="exam"
 >
+
+  @if($attempt->status === 'paused')
+  <div class="exam-paused-overlay" style="position:fixed;inset:0;z-index:9999;background:rgba(15,23,42,.92);display:flex;align-items:center;justify-content:center;color:#fff;text-align:center;padding:24px;">
+    <div>
+      <div style="font-size:48px;margin-bottom:16px;">⏸</div>
+      <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:8px;">{{ __('exam.exam_paused_by_admin') }}</h2>
+      <p style="opacity:.8;max-width:360px;">{{ __('exam.exam_paused_wait') }}</p>
+    </div>
+  </div>
+  @endif
 
   {{-- TOP BAR --}}
   <div class="exam-top">
@@ -261,7 +275,7 @@ $letters = ['A','B','C','D','E','F'];
 
   <script>
 'use strict';
-function examPanel({ questions, initialAnswers, initialMarked, durationSeconds, startedAt, saveUrl, csrf }) {
+function examPanel({ questions, initialAnswers, initialMarked, durationSeconds, startedAt, saveUrl, violationUrl, proctoringEnabled, isPaused, csrf }) {
   return {
     questions,
     curQ: 0,
@@ -278,6 +292,7 @@ function examPanel({ questions, initialAnswers, initialMarked, durationSeconds, 
     timerRemaining: durationSeconds,
     timerInterval: null,
     autoSaveInterval: null,
+    lastViolationAt: 0,
 
     get timerDisplay() {
       const h = String(Math.floor(this.timerRemaining / 3600)).padStart(2, '0');
@@ -308,8 +323,31 @@ function examPanel({ questions, initialAnswers, initialMarked, durationSeconds, 
       }
 
       this.autoSaveInterval = setInterval(() => {
-        this.saveCurrentAnswer();
+        if (!isPaused) this.saveCurrentAnswer();
       }, 30000);
+
+      if (proctoringEnabled && violationUrl && !isPaused) {
+        const logViolation = (type, message) => {
+          const now = Date.now();
+          if (now - this.lastViolationAt < 2000) return;
+          this.lastViolationAt = now;
+          fetch(violationUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrf },
+            body: JSON.stringify({ type, message }),
+          }).catch(() => {});
+        };
+
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            logViolation('tab_switch', 'User switched browser tab or minimized window');
+          }
+        });
+
+        window.addEventListener('blur', () => {
+          logViolation('window_blur', 'Browser window lost focus');
+        });
+      }
     },
 
     isAnswered(qid) {

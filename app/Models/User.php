@@ -89,6 +89,7 @@ class User extends Authenticatable implements FilamentUser
     public function favourites() { return $this->hasMany(QuizFavourite::class); }
     public function enrollments() { return $this->hasMany(QuizEnrollment::class); }
     public function attempts() { return $this->hasMany(Attempt::class); }
+    public function loginHistories() { return $this->hasMany(LoginHistory::class); }
     public function certificates() { return $this->hasMany(Certificate::class); }
     public function aiGenerationLogs() { return $this->hasMany(AiGenerationLog::class); }
     public function aiCreditTransactions() { return $this->hasMany(AiCreditTransaction::class); }

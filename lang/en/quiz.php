@@ -3,9 +3,9 @@
 return [
 
     // Discovery / listing page
-    'discover_title'           => 'Discover Quizzes',
-    'discover_subtitle'        => 'Browse quizzes created by experts and AI.',
-    'search_placeholder'       => 'Search quizzes…',
+    'discover_title'           => 'Discover Exams',
+    'discover_subtitle'        => 'Browse exams created by experts and AI.',
+    'search_placeholder'       => 'Search exams…',
     'filters'                  => 'Filters',
     'search'                   => 'Search',
     'filter_category'          => 'Category',
@@ -24,7 +24,7 @@ return [
     'sort_price_desc'          => 'Price: High → Low',
     'clear_all_filters'        => 'Clear all filters',
     'clear_filters'            => 'Clear filters',
-    'no_results'               => 'No quizzes found',
+    'no_results'               => 'No exams found',
     'no_results_desc'          => 'Try different keywords or filters.',
 
     // Quiz card
@@ -35,7 +35,7 @@ return [
     'card_by'                  => 'by :name',
 
     // Quiz detail / show
-    'whats_in_this_quiz'       => "What's in this quiz",
+    'whats_in_this_quiz'       => "What's in this exam",
     'label_questions'          => 'Questions',
     'label_duration'           => 'Duration',
     'label_duration_minutes'   => ':count minutes',
@@ -75,7 +75,7 @@ return [
     'countdown_opens'          => 'Opens :datetime',
     'countdown_ends_in'        => 'Ends in',
     'countdown_closes'         => 'Closes :datetime',
-    'countdown_ended'          => 'Quiz ended',
+    'countdown_ended'          => 'Exam ended',
     'countdown_ended_at'       => 'Ended :datetime',
     'countdown_days'           => 'Days',
     'countdown_hours'          => 'Hours',
@@ -95,12 +95,12 @@ return [
     // Share
     'save_to_favourites'       => 'Save to favourites',
     'remove_from_favourites'   => 'Remove from favourites',
-    'share_this_quiz'          => 'Share this quiz',
+    'share_this_quiz'          => 'Share this exam',
     'copy_link'                => 'Copy link',
     'link_copied'              => 'Link copied!',
 
     // Creator card on quiz detail
-    'lecturer_quizzes_published'  => ':count quizzes published',
+    'lecturer_quizzes_published'  => ':count exams published',
     'more_by_lecturer'            => 'More by this creator',
 
     // Attempt / result page
@@ -119,12 +119,12 @@ return [
     'result_download_cert'     => 'Download certificate',
     'result_review_answers'    => 'Review answers',
     'result_try_again'         => 'Try again',
-    'result_back_to_quiz'      => 'Back to quiz',
+    'result_back_to_quiz'      => 'Back to exam',
 
     // My attempts page
     'my_attempts_title'        => 'My Attempts',
     'my_attempts_empty'        => 'No attempts yet.',
-    'my_attempts_empty_desc'   => 'Browse quizzes and take your first exam.',
+    'my_attempts_empty_desc'   => 'Browse exams and take your first exam.',
     'attempt_number'           => 'Attempt #:number',
     'attempt_date'             => 'Taken :date',
     'attempt_in_progress'      => 'In progress',
@@ -141,7 +141,7 @@ return [
     // My certificates
     'certificates_title'       => 'My Certificates',
     'certificates_empty'       => 'No certificates yet.',
-    'certificates_empty_desc'  => 'Pass a quiz with certificate enabled to earn one.',
+    'certificates_empty_desc'  => 'Pass an exam with certificate enabled to earn one.',
     'certificate_download'     => 'Download',
     'certificate_verify_url'   => 'Verify',
     'certificate_issued'       => 'Issued :date',
@@ -149,7 +149,7 @@ return [
     // Checkout
     'checkout_title'           => 'Complete your purchase',
     'checkout_order_summary'   => 'Order summary',
-    'checkout_quiz'            => 'Quiz',
+    'checkout_quiz'            => 'Exam',
     'checkout_price'           => 'Price',
     'checkout_total'           => 'Total',
     'checkout_pay_with'        => 'Pay with',
@@ -160,9 +160,9 @@ return [
     'checkout_failed'          => 'Payment failed. Please try again.',
 
     // For creators page
-    'fc_eyebrow'               => 'AI-powered · free to start · earn from every quiz sale',
+    'fc_eyebrow'               => 'AI-powered · free to start · earn from every exam sale',
     'fc_hero_h1'               => 'Turn your expertise into a passive income stream.',
-    'fc_hero_sub'              => 'Create AI-powered quizzes in minutes. Publish once. Earn every time someone buys — while you sleep, teach, or take a break.',
+    'fc_hero_sub'              => 'Create AI-powered exams in minutes. Publish once. Earn every time someone buys — while you sleep, teach, or take a break.',
     'fc_hero_cta_primary'      => 'Start creating free',
     'fc_hero_cta_secondary'    => 'See pricing',
     'fc_hiw_title'             => 'Start earning in 4 steps',
@@ -176,7 +176,7 @@ return [
     'fc_hiw_step4_desc'        => 'Track attempts, see your score distribution, request a payout when ready.',
     'fc_cta_h2'                => 'Ready to start earning?',
     'fc_cta_sub'               => 'Join educators, coaches, and subject matter experts already selling on :app.',
-    'fc_cta_btn'               => 'Create your first quiz free',
+    'fc_cta_btn'               => 'Create your first exam free',
     'fc_compact_features_header' => 'Plus everything else you need',
     'fc_pricing_sub'           => "Start free. Upgrade when you're ready to scale.",
     'fc_view_full_pricing'     => 'View full pricing details →',
@@ -197,7 +197,7 @@ return [
     // Feature row 2 — IBPS Exam Interface
     'fc_feat2_label'           => 'Professional Exam Interface',
     'fc_feat2_h2'              => 'Your students get a professional exam experience.',
-    'fc_feat2_body'            => 'Every quiz you publish runs in our IBPS-style exam panel — numbered question palette, colour-coded status (answered/skipped/marked), countdown timer, and easy navigation. Designed to feel familiar to students who have taken competitive exams.',
+    'fc_feat2_body'            => 'Every exam you publish runs in our IBPS-style exam panel — numbered question palette, colour-coded status (answered/skipped/marked), countdown timer, and easy navigation. Designed to feel familiar to students who have taken competitive exams.',
     'fc_feat2_b1'              => 'Numbered question palette with colour coding',
     'fc_feat2_b2'              => 'Per-question and overall timers',
     'fc_feat2_b3'              => 'Mark for review, save & next, submit exam',
@@ -206,9 +206,9 @@ return [
     // Feature row 3 — Monetization
     'fc_feat3_label'           => 'Monetization',
     'fc_feat3_h2'              => 'Set your price. Earn from every sale.',
-    'fc_feat3_body'            => 'Free quizzes build your audience. Paid quizzes build your income. Set any price — the platform takes a small commission, you keep the rest. Request a payout to your bank or UPI at any time (processed by the platform admin).',
-    'fc_feat3_b1'              => 'Per-quiz pricing — customers pay once for access',
-    'fc_feat3_b2'              => 'Mix free and paid quizzes in your portfolio',
+    'fc_feat3_body'            => 'Free exams build your audience. Paid exams build your income. Set any price — the platform takes a small commission, you keep the rest. Request a payout to your bank or UPI at any time (processed by the platform admin).',
+    'fc_feat3_b1'              => 'Per-exam pricing — customers pay once for access',
+    'fc_feat3_b2'              => 'Mix free and paid exams in your portfolio',
     'fc_feat3_b3'              => 'Real-time earnings dashboard',
     'fc_feat3_b4'              => 'Request payout to bank, UPI, or PayPal',
 
@@ -226,6 +226,6 @@ return [
     'fc_cf_item5'              => 'Multiple attempts with configurable limits',
     'fc_cf_item6'              => 'Per-question timers and question shuffle',
     'fc_cf_item7'              => 'Proctoring — detect tab switching',
-    'fc_cf_item8'              => 'Free + paid quiz mix in same account',
+    'fc_cf_item8'              => 'Free + paid exam mix in same account',
 
 ];

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Settings\PlatformSettings;
+use App\Services\Auth\LoginHistoryService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -21,7 +23,7 @@ class SocialAuthController extends Controller
         return Socialite::driver('google')->redirect();
     }
 
-    public function handleGoogleCallback()
+    public function handleGoogleCallback(Request $request)
     {
         if (! $this->settings->allow_social_login) {
             return redirect()->route('login')->with('error', 'Social login is not enabled.');
@@ -45,6 +47,8 @@ class SocialAuthController extends Controller
         }
 
         auth()->login($user, true);
+
+        app(LoginHistoryService::class)->record($user, $request);
 
         return redirect()->intended('/');
     }

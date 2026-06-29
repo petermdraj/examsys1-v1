@@ -21,7 +21,7 @@ return [
     'your_answer'=>'あなたの回答：','no_answer_given'=>'（回答なし）',
     'accepted_answer'=>'正解の回答','accepted_answers'=>'正解の回答（複数）','correct_answer'=>'正解',
     'explanation_label'=>'解説.',
-    'try_again_heading'=>'もう一度試しますか？','try_again_body'=>'これにより :quiz の新しい試行が開始されます。以前の結果は保存されたままです。',
+    'try_again_heading'=>'もう一度試しますか？','try_again_body'=> 'これにより :quiz の新しい試行が開始されます。以前の結果は保存されたままです。',
     'yes_retry'=>'はい、再試行する',
     'history_eyebrow'=>'履歴','my_attempts_heading'=>'私の試行',
     'filter_completed'=>'完了','filter_in_progress'=>'進行中','filter_missed'=>'失敗',

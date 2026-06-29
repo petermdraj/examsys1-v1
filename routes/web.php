@@ -86,6 +86,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/quiz/{slug}/start',          [AttemptController::class, 'start'])->name('attempt.start');
         Route::get('/attempt/{attempt}',            [AttemptController::class, 'show'])->name('attempt.show');
         Route::post('/attempt/{attempt}/answer',    [AttemptController::class, 'saveAnswer'])->name('attempt.answer');
+        Route::post('/attempt/{attempt}/violation', [AttemptController::class, 'logViolation'])->name('attempt.violation');
         Route::post('/attempt/{attempt}/submit',    [AttemptController::class, 'submit'])->name('attempt.submit');
         Route::get('/attempt/{attempt}/result',     [AttemptController::class, 'result'])->name('attempt.result');
         Route::get('/attempt/{attempt}/certificate/download', [CertificateController::class, 'download'])->name('certificate.download');

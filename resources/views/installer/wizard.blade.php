@@ -294,7 +294,7 @@ $svgPaths = [
         <div class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl">
             <div>
                 <p class="text-sm font-semibold text-slate-800">Install sample data</p>
-                <p class="text-xs text-slate-500 mt-0.5">Pre-populate your platform with categories, quizzes, and users so it's ready to demo.</p>
+                <p class="text-xs text-slate-500 mt-0.5">Pre-populate your platform with categories, exams, and users so it's ready to demo.</p>
             </div>
             <button type="button" wire:click="toggleDemo"
                 class="relative flex-shrink-0 w-12 h-6 rounded-full transition-colors duration-200 focus:outline-none

@@ -19,9 +19,9 @@ class AiGenerationLogResource extends Resource
     use RestrictInDemoMode;
     protected static ?string $model = AiGenerationLog::class;
     protected static ?string $navigationIcon = 'heroicon-o-cpu-chip';
-    protected static ?int $navigationSort = 20;
+    protected static ?int $navigationSort = 12;
 
-    public static function getNavigationGroup(): ?string  { return __('admin.nav_group_ai'); }
+    public static function getNavigationGroup(): ?string  { return __('admin.nav_group_configuration'); }
     public static function getNavigationLabel(): string   { return __('admin.nav_ai_logs'); }
     public static function getModelLabel(): string        { return __('admin.ai_log_model_label'); }
     public static function getPluralModelLabel(): string  { return __('admin.ai_log_model_label_plural'); }

@@ -3,7 +3,7 @@
 return [
     // Navigation (Filament panel)
     'nav_dashboard'=>'Dashboard',
-    'nav_quizzes'               => 'Quizzes',
+    'nav_quizzes'               => 'Exams',
     'nav_ai_generator'          => 'AI Generator',
     'nav_earnings'              => 'Earnings',
     'nav_reports'               => 'Reports',
@@ -12,7 +12,7 @@ return [
     'nav_group_account'         => 'Account',
 
     // Model labels
-    'quiz_model_label'          => 'Quiz',
+    'quiz_model_label'          => 'Exam',
     'qbank_model_label'         => 'Bank Question',
 
     // Question Bank form
@@ -56,20 +56,20 @@ return [
     'qbank_notif_errors'        => ':n had errors.',
 
     // Dashboard stats widget
-    'stat_my_quizzes'           => 'My Quizzes',
+    'stat_my_quizzes'           => 'My Exams',
     'stat_published_draft'      => ':published published · :draft draft',
     'stat_total_attempts'       => 'Total Attempts',
     'stat_this_month'           => 'this month',
     'stat_total_earnings'       => 'Total Earnings',
     'stat_total_sales'          => 'Total Sales',
-    'stat_paid_quiz_purchases'  => 'Paid quiz purchases',
+    'stat_paid_quiz_purchases'  => 'Paid exam purchases',
 
     // Recent quizzes widget
-    'recent_quizzes_heading'    => 'My Recent Quizzes',
+    'recent_quizzes_heading'    => 'My Recent Exams',
 
     // Recent sales widget
     'recent_sales_heading'      => 'Recent Sales',
-    'recent_sales_col_quiz'     => 'Quiz',
+    'recent_sales_col_quiz'     => 'Exam',
     'recent_sales_col_buyer'    => 'Buyer',
     'recent_sales_col_earned'   => 'You earned',
     'recent_sales_col_date'     => 'Date',
@@ -99,14 +99,14 @@ return [
     'ai_credits_left'           => 'left',
     'ai_used_lifetime'          => 'used lifetime',
     'ai_wallet_balance'         => 'Wallet balance',
-    'ai_btn_generate_quiz'      => 'Generate Quiz',
+    'ai_btn_generate_quiz'      => 'Generate Exam',
     'ai_btn_upgrade_plan'       => 'Upgrade Plan',
 
     // Sidebar plan card
     'sidebar_current_plan'      => 'Current Plan',
     'sidebar_ai_credits'        => 'AI Credits',
     'sidebar_commission'        => 'Commission',
-    'sidebar_quizzes'           => 'Quizzes',
+    'sidebar_quizzes'           => 'Exams',
     'sidebar_renews'            => 'Renews',
 
     // Quiz wizard steps
@@ -155,7 +155,7 @@ return [
     'field_negative_marking'    => 'Enable Negative Marking',
     'field_certificate'         => 'Issue Certificates',
     'field_certificate_style'   => 'Certificate Style',
-    'plan_no_paid_quizzes'      => 'Your :plan plan does not allow paid quizzes. Upgrade to unlock this.',
+    'plan_no_paid_quizzes'      => 'Your :plan plan does not allow paid exams. Upgrade to unlock this.',
 
     // Review & Publish step
     'section_publish_settings'  => 'Publish Settings',
@@ -163,15 +163,15 @@ return [
     'status_draft_option'       => '📝 Save as Draft',
     'status_published_option'   => '🚀 Publish Now',
     'status_scheduled_option'   => '📅 Scheduled',
-    'status_helper_published'   => 'Quiz will be immediately visible to customers.',
-    'status_helper_scheduled'   => 'Quiz will go live automatically on the date you choose below.',
-    'status_helper_draft'       => 'Quiz is only visible to you. Publish when ready.',
+    'status_helper_published'   => 'Exam will be immediately visible to customers.',
+    'status_helper_scheduled'   => 'Exam will go live automatically on the date you choose below.',
+    'status_helper_draft'       => 'Exam is only visible to you. Publish when ready.',
     'field_start_at_scheduled'  => 'Publish On',
     'field_start_at_optional'   => 'Available From (optional)',
-    'start_at_helper_scheduled' => 'Quiz will go live automatically at this date & time.',
-    'start_at_helper_optional'  => 'Leave blank to make the quiz immediately available.',
+    'start_at_helper_scheduled' => 'Exam will go live automatically at this date & time.',
+    'start_at_helper_optional'  => 'Leave blank to make the exam immediately available.',
     'field_end_at'              => 'Close On (optional)',
-    'end_at_helper'             => 'Quiz becomes inaccessible after this date.',
+    'end_at_helper'             => 'Exam becomes inaccessible after this date.',
 
     // SEO section
     'section_seo'               => 'SEO',
@@ -181,7 +181,7 @@ return [
     'seo_no_title_warning'      => 'No title found — go back to Basic Info first',
     'seo_desc_generated'        => 'SEO description generated!',
     'field_meta_keywords'       => 'SEO Keywords',
-    'meta_keywords_helper'      => 'Comma-separated keywords. e.g. "php quiz, oop test"',
+    'meta_keywords_helper'      => 'Comma-separated keywords. e.g. "php exam, oop test"',
     'ai_generate_seo_kw'        => 'Generate with AI',
     'seo_kw_generated'          => 'SEO keywords generated!',
 
@@ -205,9 +205,9 @@ return [
     'aig_settings_heading'      => 'Generation Settings',
     'aig_settings_sub'          => 'Configure, then Generate',
     'aig_save_to'               => 'Save To',
-    'aig_tab_quiz'              => 'Quiz',
+    'aig_tab_quiz'              => 'Exam',
     'aig_tab_bank'              => 'Question Bank',
-    'aig_select_quiz'           => 'Select Quiz',
+    'aig_select_quiz'           => 'Select Exam',
     'aig_prompt_label'          => 'Topic / Prompt',
     'aig_prompt_placeholder'    => 'e.g. PHP OOP concepts for intermediate developers…',
     'aig_questions_label'       => 'Questions',
@@ -238,10 +238,10 @@ return [
     'aig_expand_all'            => '⊞ Expand all',
     'aig_save_done'             => '✓ Save & Done',
     'aig_modal_title'           => 'Remove this question?',
-    'aig_modal_body'            => 'This question will be deleted from the quiz. This action cannot be undone.',
+    'aig_modal_body'            => 'This question will be deleted from the exam. This action cannot be undone.',
     'aig_modal_cancel'          => 'Cancel',
     'aig_modal_confirm'         => 'Yes, Remove',
-    'aig_err_select_quiz'       => 'Select a quiz first.',
+    'aig_err_select_quiz'       => 'Select an exam first.',
     'aig_err_enter_prompt'      => 'Enter a topic or prompt.',
     'aig_err_connection'        => 'Connection error. Try again.',
 
@@ -311,7 +311,7 @@ return [
 
     // Customer-facing dashboard
     'welcome_back'              => 'Welcome back',
-    'stat_quizzes_enrolled'     => 'Quizzes Enrolled',
+    'stat_quizzes_enrolled'     => 'Exams Enrolled',
     'stat_pass_rate'            => 'Pass Rate',
     'stat_certificates_earned'  => 'Certificates Earned',
     'recent_attempts'           => 'Recent Attempts',
@@ -319,8 +319,8 @@ return [
     'passed_short'              => 'Passed',
     'failed_short'              => 'Failed',
     'result_btn'                => 'Result',
-    'no_attempts_yet'           => "You haven't attempted any quizzes yet.",
-    'browse_quizzes_btn'        => 'Browse quizzes',
+    'no_attempts_yet'           => "You haven't attempted any exams yet.",
+    'browse_quizzes_btn'        => 'Browse exams',
 
     // Account settings (customer-facing)
     'account_settings_heading'  => 'Account Settings',
@@ -344,12 +344,12 @@ return [
     'update_password_btn'       => 'Update Password',
     'section_notifications'     => 'Notification Preferences',
     'notifications_sub'         => "Choose which emails you'd like to receive.",
-    'notify_quiz_results'       => 'Quiz Results',
-    'notify_quiz_results_sub'   => 'Get an email when your quiz attempt is scored',
+    'notify_quiz_results'       => 'Exam Results',
+    'notify_quiz_results_sub'   => 'Get an email when your exam attempt is scored',
     'notify_purchases'          => 'Purchase Confirmations',
-    'notify_purchases_sub'      => 'Receipt emails after buying a quiz',
+    'notify_purchases_sub'      => 'Receipt emails after buying an exam',
     'notify_weekly_digest'      => 'Weekly Digest',
-    'notify_weekly_digest_sub'  => 'A weekly summary of new quizzes in your categories',
+    'notify_weekly_digest_sub'  => 'A weekly summary of new exams in your categories',
     'save_preferences_btn'      => 'Save Preferences',
     'section_purchase_history'  => 'Purchase History',
     'paid_badge'                => 'Paid',
@@ -384,7 +384,7 @@ return [
 
     // Question Bank empty state
     'qbank_empty_heading'           => 'Your question bank is empty',
-    'qbank_empty_desc'              => 'Build a reusable library of questions you can add to any quiz. Import from a quiz, generate with AI, or add questions manually.',
+    'qbank_empty_desc'              => 'Build a reusable library of questions you can add to any exam. Import from an exam, generate with AI, or add questions manually.',
 
     // Earnings page blade strings
     'earn_available_balance'        => 'AVAILABLE BALANCE',
@@ -395,7 +395,7 @@ return [
     'earn_total_sales'              => 'TOTAL SALES',
     'earn_avg_sale'                 => 'Avg :avg / sale',
     'earn_no_sales_yet'             => 'No sales yet',
-    'earn_no_sales_sub'             => 'Publish a paid quiz to start earning',
+    'earn_no_sales_sub'             => 'Publish a paid exam to start earning',
     'earn_no_payouts_yet'           => 'No payouts yet',
     'earn_recent_sales'             => 'Recent Sales',
     'earn_last_20'                  => 'Last 20 transactions',
@@ -405,7 +405,7 @@ return [
     'earn_tokens_left'              => 'tokens left',
     'earn_tokens_per_month'         => 'tokens / month included in your plan',
     'earn_get_more_tokens'          => 'Get More Tokens',
-    'earn_token_equals'             => '1 token = 1 AI quiz generation',
+    'earn_token_equals'             => '1 token = 1 AI exam generation',
     'earn_payout_history'           => 'Payout History',
     'earn_requests'                 => 'requests',
     'earn_total_paid_out'           => 'total paid out',
@@ -431,7 +431,7 @@ return [
     'rp_recent_attempts'            => 'RECENT ATTEMPTS',
     'rp_no_data_yet'                => 'No data yet',
     'rp_no_attempts_yet'            => 'No attempts yet',
-    'rp_quiz_config'                => 'QUIZ CONFIGURATION',
+    'rp_quiz_config'                => 'EXAM CONFIGURATION',
     'rp_meta_questions'             => 'QUESTIONS',
     'rp_meta_total_marks'           => 'TOTAL MARKS',
     'rp_meta_pass_pct'              => 'PASS %',
@@ -442,9 +442,9 @@ return [
     'rp_free'                       => 'Free',
 
     // Notifications (Filament)
-    'notification_quiz_published'   => 'Quiz published',
-    'notification_quiz_archived'    => 'Quiz archived',
-    'notification_quiz_drafted'     => 'Quiz saved as draft',
+    'notification_quiz_published'   => 'Exam published',
+    'notification_quiz_archived'    => 'Exam archived',
+    'notification_quiz_drafted'     => 'Exam saved as draft',
     'notification_question_duplicated' => 'Question duplicated',
     'notification_import_result'    => ':imported of :total questions imported',
     'notification_profile_saved'    => 'Profile updated successfully',
@@ -459,13 +459,13 @@ return [
     'qbank_notif_already_in_bank'   => 'Already in your bank',
     'manage_q_empty_heading'        => 'No questions yet',
     'manage_q_empty_desc'           => 'Add questions manually or generate them with AI.',
-    'btn_back_to_quiz'              => '← Back to Quiz',
+    'btn_back_to_quiz'              => '← Back to Exam',
 
     // Plan / Quiz / Bank limit notifications
     'notif_plan_limit_reached'      => 'Plan limit reached',
-    'notif_quiz_limit_reached'      => 'Quiz limit reached',
+    'notif_quiz_limit_reached'      => 'Exam limit reached',
     'notif_bank_limit_reached'      => 'Bank limit reached',
-    'notif_import_skipped_body'     => 'Imported :imported question(s). :skipped skipped — your :plan plan allows a maximum of :max questions per quiz.',
+    'notif_import_skipped_body'     => 'Imported :imported question(s). :skipped skipped — your :plan plan allows a maximum of :max questions per exam.',
 
     // Payout notification body
     'payout_exceeds_body'           => 'You can withdraw at most :sym:amount.',

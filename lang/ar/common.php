@@ -7,10 +7,10 @@ return [
 
     // Pubbar (secondary discovery bar)
     'pubbar_explore'          => 'Explore',
-    'pubbar_quizzes'          => 'Quizzes',
+    'pubbar_quizzes'          => 'Exams',
     'pubbar_categories'       => 'Categories',
     'pubbar_for_lecturers'     => 'For creators',
-    'pubbar_search'           => 'Search quizzes…',
+    'pubbar_search'           => 'Search exams…',
 
     // Navigation
     'nav_discover'           => 'Discover',
@@ -79,7 +79,7 @@ return [
     // Pricing page
     'pricing_title'          => 'Plans for every creator',
     'pricing_eyebrow'        => 'Simple, transparent pricing',
-    'pricing_subtitle'       => "Start free. Upgrade when you're ready to sell paid quizzes and earn more.",
+    'pricing_subtitle'       => "Start free. Upgrade when you're ready to sell paid exams and earn more.",
     'pricing_billing_monthly' => 'Monthly',
     'pricing_billing_yearly' => 'Yearly',
     'pricing_save_badge'     => 'Save up to 25%',
@@ -88,8 +88,8 @@ return [
     'pricing_free'           => 'Free',
     'pricing_per_month'      => '/ month',
     'pricing_per_year'       => '/ year',
-    'pricing_unlimited_quizzes'    => 'Unlimited published quizzes',
-    'pricing_up_to_quizzes'        => 'Up to :count published quizzes',
+    'pricing_unlimited_quizzes'    => 'Unlimited published exams',
+    'pricing_up_to_quizzes'        => 'Up to :count published exams',
     'pricing_free_ai_generations'  => ':count free AI generations',
     'pricing_commission_rate'      => ':rate% platform commission',
     'pricing_current_plan_btn'     => 'Current plan',
@@ -103,20 +103,20 @@ return [
     'pricing_cancel_anytime'       => 'Cancel anytime',
     'pricing_cancel_anytime_desc'  => 'No lock-ins. Downgrade or cancel your plan at any time.',
     'pricing_need_help'            => 'Need help choosing?',
-    'pricing_need_help_desc'       => 'Start with Free — you can always upgrade as your quiz library grows.',
+    'pricing_need_help_desc'       => 'Start with Free — you can always upgrade as your exam library grows.',
 
     // Dashboard
     'welcome_back'             => 'Welcome back',
-    'quizzes_enrolled'         => 'Quizzes Enrolled',
+    'quizzes_enrolled'         => 'Exams Enrolled',
     'pass_rate'                => 'Pass Rate',
     'certificates_earned'      => 'Certificates Earned',
     'recent_attempts'          => 'Recent Attempts',
     'result'                   => 'Result',
-    'havent_attempted_yet'     => "You haven't attempted any quizzes yet.",
+    'havent_attempted_yet'     => "You haven't attempted any exams yet.",
 
     // Generic page misc
-    'view_all_quizzes'       => 'View all quizzes →',
-    'no_quizzes_yet'         => 'No quizzes published yet.',
+    'view_all_quizzes'       => 'View all exams →',
+    'no_quizzes_yet'         => 'No exams published yet.',
     'create_first_quiz_link' => 'Create the first one →',
     'questions_count'        => ':count question|:count questions',
     'duration_min'           => ':count min',
@@ -154,7 +154,7 @@ return [
     // Categories page
     'categories_title'              => 'Categories',
     'categories_heading'            => 'Browse by Category',
-    'categories_subtitle'           => ':count :word · click any to explore quizzes',
+    'categories_subtitle'           => ':count :word · click any to explore exams',
     'categories_none'               => 'No categories yet.',
 
     // Certificate verify page
@@ -171,13 +171,13 @@ return [
     'certificates_view_btn'         => 'View',
     'certificates_download_btn'     => 'Download',
     'certificates_none_heading'     => 'No certificates yet',
-    'certificates_none_body'        => 'Pass a quiz that has certificates enabled to earn your first one.',
-    'certificates_go_quizzes'       => 'Go to My Quizzes',
+    'certificates_none_body'        => 'Pass an exam that has certificates enabled to earn your first one.',
+    'certificates_go_quizzes'       => 'Go to My Exams',
 
     // Checkout page
     'checkout_heading'              => 'Complete Purchase',
     'checkout_buying_access'        => "You're buying access to :quiz",
-    'checkout_quiz_access'          => 'Quiz Access',
+    'checkout_quiz_access'          => 'Exam Access',
     'checkout_total'                => 'Total',
     'checkout_no_gateway'           => 'No payment gateway is configured. Please contact the site administrator.',
     'checkout_pay_razorpay'         => 'Pay with Razorpay',
@@ -207,12 +207,12 @@ return [
     'update_password_btn'           => 'Update Password',
     'notifications_heading'         => 'Notification Preferences',
     'notifications_sub'             => "Choose which emails you'd like to receive.",
-    'notify_quiz_results'           => 'Quiz Results',
-    'notify_quiz_results_sub'       => 'Get an email when your quiz attempt is scored',
+    'notify_quiz_results'           => 'Exam Results',
+    'notify_quiz_results_sub'       => 'Get an email when your exam attempt is scored',
     'notify_purchases'              => 'Purchase Confirmations',
-    'notify_purchases_sub'          => 'Receipt emails after buying a quiz',
+    'notify_purchases_sub'          => 'Receipt emails after buying an exam',
     'notify_weekly_digest'          => 'Weekly Digest',
-    'notify_weekly_digest_sub'      => 'A weekly summary of new quizzes in your categories',
+    'notify_weekly_digest_sub'      => 'A weekly summary of new exams in your categories',
     'save_preferences_btn'          => 'Save Preferences',
     'purchase_history_heading'      => 'Purchase History',
     'paid_badge'                    => 'Paid',
@@ -238,21 +238,21 @@ return [
 
     // Home themes — students
     'browse_by_subject'                 => 'Browse by subject',
-    'students_hero_eyebrow'             => 'Free quizzes · certificates · every subject',
+    'students_hero_eyebrow'             => 'Free exams · certificates · every subject',
     'students_hero_h1'                  => 'Test what you know. Get certified.',
-    'students_hero_sub'                 => 'Thousands of quizzes across every subject — science, maths, history, coding, and more. Free quizzes to start, premium deep-dives to master.',
-    'students_browse_free'              => 'Browse Free Quizzes',
+    'students_hero_sub'                 => 'Thousands of exams across every subject — science, maths, history, coding, and more. Free exams to start, premium deep-dives to master.',
+    'students_browse_free'              => 'Browse Free Exams',
     'students_see_all_categories'       => 'See All Categories',
     'students_cert_title'               => 'Certificate of Achievement',
-    'hiw_step1_discover_title'          => 'Discover Quizzes',
-    'hiw_step1_discover_desc'           => 'Browse free and paid quizzes across any subject, sorted by popularity and difficulty.',
+    'hiw_step1_discover_title'          => 'Discover Exams',
+    'hiw_step1_discover_desc'           => 'Browse free and paid exams across any subject, sorted by popularity and difficulty.',
     'hiw_step2_attempt_title'           => 'Attempt at Your Pace',
     'hiw_step2_attempt_desc'            => 'Timed or untimed. Multiple attempts. Instant results with answer explanations.',
     'hiw_step3_cert_title'              => 'Download Certificate',
-    'hiw_step3_cert_desc'               => 'Pass the quiz and get a verifiable PDF certificate with QR code. Share it anywhere.',
-    'featured_quizzes'                  => 'Featured quizzes',
+    'hiw_step3_cert_desc'               => 'Pass the exam and get a verifiable PDF certificate with QR code. Share it anywhere.',
+    'featured_quizzes'                  => 'Featured exams',
     'see_all'                           => 'See all →',
-    'no_quizzes_published'              => 'No quizzes yet.',
+    'no_quizzes_published'              => 'No exams yet.',
     'be_first_lecturer'                  => 'Be the first creator →',
     'quiz_questions'                    => 'questions',
     'quiz_min'                          => 'min',
@@ -264,7 +264,7 @@ return [
     // Home themes — professionals
     'professionals_hero_eyebrow'        => 'Verifiable certifications · career skills · LinkedIn-ready',
     'professionals_hero_h1'             => 'Prove Your Professional Skills.',
-    'professionals_hero_sub'            => 'Industry-aligned quizzes across finance, tech, management, and more. Earn verifiable certificates with QR codes to showcase on LinkedIn and your CV.',
+    'professionals_hero_sub'            => 'Industry-aligned exams across finance, tech, management, and more. Earn verifiable certificates with QR codes to showcase on LinkedIn and your CV.',
     'professionals_find_cert'           => 'Find Your Certification',
     'professionals_browse_domains'      => 'Browse Domains',
     'professionals_cert_title'          => 'Certificate of Completion',
@@ -279,10 +279,10 @@ return [
     'no_certs_published'                => 'No certifications published yet.',
     'publish_first_cert'                => 'Publish the first one →',
     'lecturer_teaser_professionals'      => 'Are you a subject matter expert or L&D professional?',
-    'lecturer_teaser_link_professionals' => 'Publish certification quizzes →',
+    'lecturer_teaser_link_professionals' => 'Publish certification exams →',
 
     // Home themes — competition (hardcoded fallback label only)
-    'no_quizzes_competition'            => 'No quizzes published yet.',
+    'no_quizzes_competition'            => 'No exams published yet.',
     'create_first_one'                  => 'Create the first one →',
 
     // Subscription checkout page
@@ -309,14 +309,14 @@ return [
     'saved_eyebrow'                     => 'Saved',
     'my_favourites_heading'             => 'My Favourites',
     'saved_on'                          => 'Saved :date',
-    'view_quiz_btn'                     => 'View Quiz',
+    'view_quiz_btn'                     => 'View Exam',
     'no_favourites_heading'             => 'No favourites yet',
-    'no_favourites_body'                => 'Tap the heart icon on any quiz to save it here for later.',
-    'browse_quizzes_btn'                => 'Browse Quizzes',
+    'no_favourites_body'                => 'Tap the heart icon on any exam to save it here for later.',
+    'browse_quizzes_btn'                => 'Browse Exams',
 
     // My Quizzes page
     'your_library'                      => 'Your library',
-    'my_quizzes_heading'                => 'My Quizzes',
+    'my_quizzes_heading'                => 'My Exams',
     'enrolled_on'                       => 'Enrolled :date',
     'last_attempt_result'               => 'Last attempt: :pct% — :status',
     'passed_label'                      => 'Passed',
@@ -325,15 +325,15 @@ return [
     'start_btn'                         => 'Start',
     'result_btn'                        => 'Result',
     'continue_btn'                      => 'Continue',
-    'no_quizzes_heading'                => 'No quizzes yet',
-    'no_quizzes_body'                   => 'Browse our library and enroll in a quiz to get started.',
-    'discover_quizzes_btn'              => 'Discover quizzes',
+    'no_quizzes_heading'                => 'No exams yet',
+    'no_quizzes_body'                   => 'Browse our library and enroll in an exam to get started.',
+    'discover_quizzes_btn'              => 'Discover exams',
 
     // Competition home theme
     'cmp_answered'                      => 'Answered',
     'cmp_unanswered'                    => 'Unanswered',
     'cmp_marked'                        => 'Marked',
-    'cmp_view_all_quizzes'              => 'View all quizzes →',
-    'cmp_featured_quizzes_fallback'     => 'Featured quizzes',
+    'cmp_view_all_quizzes'              => 'View all exams →',
+    'cmp_featured_quizzes_fallback'     => 'Featured exams',
 
 ];

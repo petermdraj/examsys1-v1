@@ -654,7 +654,7 @@ document.addEventListener('alpine:init', () => {
                 <div x-show="saveMode==='quiz'" x-transition>
                     <span class="aig-label">{{ __('lecturer.aig_select_quiz') }}</span>
                     <select x-model="quizId" @change="negativeMarking = selectedQuiz?.negative_marking ?? false" class="aig-select">
-                        <option value="">— Choose a quiz —</option>
+                        <option value="">{{ __('lecturer.aig_choose_exam_placeholder') }}</option>
                         @foreach(\App\Models\Quiz::where('lecturer_id', auth()->id())->get(['id','title','total_questions','status']) as $q)
                             <option value="{{ $q->id }}">{{ $q->title }} ({{ $q->total_questions }}q)</option>
                         @endforeach

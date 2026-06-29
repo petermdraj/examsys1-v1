@@ -54,21 +54,25 @@ class QuizResource extends Resource
                             ->maxLength(255)
                             ->live(onBlur: true)
                             ->afterStateUpdated(fn($state, Forms\Set $set) =>
-                                $set('slug', Str::slug($state))),
+                                $set('slug', Str::slug($state)))
+                            ->hintIcon('heroicon-m-information-circle', __('lecturer.title_helper')),
                         Forms\Components\TextInput::make('slug')
                             ->label(__('lecturer.field_slug'))
                             ->required()
                             ->unique(Quiz::class, 'slug', ignoreRecord: true)
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->hintIcon('heroicon-m-information-circle', __('lecturer.slug_helper')),
                         Forms\Components\Select::make('category_id')
                             ->label(__('lecturer.field_category'))
                             ->options(Category::active()->pluck('name', 'id'))
                             ->searchable()
-                            ->required(),
+                            ->required()
+                            ->hintIcon('heroicon-m-information-circle', __('lecturer.category_helper')),
                         Forms\Components\Textarea::make('description')
                             ->label(__('lecturer.field_description'))
                             ->rows(4)
                             ->columnSpanFull()
+                            ->hintIcon('heroicon-m-information-circle', __('lecturer.description_helper'))
                             ->hintAction(
                                 Forms\Components\Actions\Action::make('ai_description')
                                     ->label(__('lecturer.ai_generate_description'))
@@ -261,25 +265,32 @@ class QuizResource extends Resource
                 Forms\Components\Wizard\Step::make(__('lecturer.step_settings'))
                     ->icon('heroicon-o-cog-6-tooth')
                     ->schema([
-                        Forms\Components\Section::make(__('lecturer.section_scheduling'))->schema([
+                        Forms\Components\Section::make(__('lecturer.section_scheduling'))
+                            ->description(__('lecturer.section_scheduling_desc'))
+                            ->schema([
                             Forms\Components\TextInput::make('duration_minutes')
                                 ->numeric()
                                 ->label(__('lecturer.field_duration_minutes'))
-                                ->placeholder(__('lecturer.duration_placeholder')),
+                                ->placeholder(__('lecturer.duration_placeholder'))
+                                ->hintIcon('heroicon-m-information-circle', __('lecturer.duration_minutes_helper')),
                             Forms\Components\TextInput::make('max_attempts')
                                 ->numeric()
                                 ->label(__('lecturer.field_max_attempts'))
-                                ->placeholder(__('lecturer.max_attempts_placeholder')),
+                                ->placeholder(__('lecturer.max_attempts_placeholder'))
+                                ->hintIcon('heroicon-m-information-circle', __('lecturer.max_attempts_helper')),
                         ])->columns(2),
 
-                        Forms\Components\Section::make(__('lecturer.section_exam_options'))->schema([
+                        Forms\Components\Section::make(__('lecturer.section_exam_options'))
+                            ->description(__('lecturer.section_exam_options_desc'))
+                            ->schema([
                             Forms\Components\TextInput::make('pass_percentage')
                                 ->label(__('lecturer.field_pass_percentage'))
                                 ->numeric()
                                 ->default(60)
                                 ->suffix('%')
                                 ->minValue(1)
-                                ->maxValue(100),
+                                ->maxValue(100)
+                                ->hintIcon('heroicon-m-information-circle', __('lecturer.pass_percentage_helper')),
                             Forms\Components\Select::make('visibility')
                                 ->label(__('lecturer.field_visibility'))
                                 ->options([
@@ -288,20 +299,42 @@ class QuizResource extends Resource
                                     'unlisted' => __('lecturer.visibility_unlisted'),
                                 ])
                                 ->default('public')
-                                ->required(),
-                            Forms\Components\Toggle::make('shuffle_questions')->label(__('lecturer.field_shuffle_questions'))->default(false),
-                            Forms\Components\Toggle::make('shuffle_options')->label(__('lecturer.field_shuffle_options'))->default(false),
-                            Forms\Components\Toggle::make('show_result_immediately')->label(__('lecturer.field_show_result'))->default(true),
-                            Forms\Components\Toggle::make('allow_review_after_submit')->label(__('lecturer.field_allow_review'))->default(true),
-                            Forms\Components\Toggle::make('negative_marking_enabled')->label(__('lecturer.field_negative_marking'))->default(false),
+                                ->required()
+                                ->hintIcon('heroicon-m-information-circle', __('lecturer.visibility_helper')),
+                            Forms\Components\Toggle::make('shuffle_questions')
+                                ->label(__('lecturer.field_shuffle_questions'))
+                                ->default(false)
+                                ->helperText(__('lecturer.shuffle_questions_helper')),
+                            Forms\Components\Toggle::make('shuffle_options')
+                                ->label(__('lecturer.field_shuffle_options'))
+                                ->default(false)
+                                ->helperText(__('lecturer.shuffle_options_helper')),
+                            Forms\Components\Toggle::make('show_result_immediately')
+                                ->label(__('lecturer.field_show_result'))
+                                ->default(true)
+                                ->helperText(__('lecturer.show_result_helper')),
+                            Forms\Components\Toggle::make('hold_results_until_published')
+                                ->label(__('lecturer.field_hold_results'))
+                                ->default(false)
+                                ->helperText(__('lecturer.hold_results_helper')),
+                            Forms\Components\Toggle::make('allow_review_after_submit')
+                                ->label(__('lecturer.field_allow_review'))
+                                ->default(true)
+                                ->helperText(__('lecturer.allow_review_helper')),
+                            Forms\Components\Toggle::make('negative_marking_enabled')
+                                ->label(__('lecturer.field_negative_marking'))
+                                ->default(false)
+                                ->helperText(__('lecturer.negative_marking_helper')),
                             Forms\Components\Toggle::make('certificate_enabled')
                                 ->label(__('lecturer.field_certificate'))
                                 ->default(false)
-                                ->live(),
+                                ->live()
+                                ->helperText(__('lecturer.certificate_helper')),
                             \App\Filament\Lecturer\Forms\Components\CertificateStylePicker::make('certificate_template')
                                 ->label(__('lecturer.field_certificate_style'))
                                 ->default('classic')
                                 ->visible(fn (Forms\Get $get) => (bool) $get('certificate_enabled'))
+                                ->hintIcon('heroicon-m-information-circle', __('lecturer.certificate_style_helper'))
                                 ->columnSpanFull(),
                         ])->columns(2),
                     ]),

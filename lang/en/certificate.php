@@ -12,7 +12,7 @@ return [
 
     // Right panel
     'presented_to'     => 'This certificate is proudly presented to',
-    'has_completed'    => 'for successfully completing the quiz',
+    'has_completed'    => 'for successfully completing the exam',
 
     // Score badges
     'badge_score'      => 'Score',
@@ -27,7 +27,7 @@ return [
     // Footer
     'sig_platform_name' => 'Platform Authority',
     'sig_platform_role' => 'ExamSys',
-    'sig_author_role'   => 'Quiz Author',
+    'sig_author_role'   => 'Exam Author',
     'cert_id_label'     => 'Certificate ID',
     'verify_prefix'     => 'Verify:',
     'verify_url_prefix' => 'Verify',
@@ -39,7 +39,7 @@ return [
     'verify_valid_body'     => 'This certificate is genuine and was issued by the platform.',
     'verify_invalid'        => 'Certificate not found or invalid.',
     'verify_recipient'      => 'Recipient',
-    'verify_quiz'           => 'Quiz',
+    'verify_quiz'           => 'Exam',
     'verify_score'          => 'Score',
     'verify_issued'         => 'Issued',
     'verify_download'       => 'Download PDF',

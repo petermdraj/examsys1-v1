@@ -5,7 +5,7 @@
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-top">
-      {{-- Brand + tagline + newsletter --}}
+      {{-- Brand + tagline --}}
       <div>
         <div class="brand" style="margin-bottom:12px;">
           @if($platformSettings->app_logo)
@@ -17,9 +17,6 @@
         </div>
         @if($platformSettings->footer_tagline)
           <p class="footer-tag">{{ $platformSettings->footer_tagline }}</p>
-        @endif
-        @if($platformSettings->footer_show_newsletter)
-        @livewire('newsletter-subscribe', ['source' => 'footer'])
         @endif
       </div>
 

@@ -1,0 +1,18 @@
+{
+  "DEPLOYPATH": "/home/testsub/public_html/scimeeducation/",
+  "task": {
+    "0": "index.php",
+    "1": "app",
+    "2": "bootstrap",
+    "3": "config",
+    "4": "database",
+    "5": "public",
+    "6": "resources",
+    "7": "routes",
+    "8": "storage",
+    "9": "vendor",
+    "10": "composer.json",
+    "11": "composer.lock",
+    "12": "artisan"
+  }
+}

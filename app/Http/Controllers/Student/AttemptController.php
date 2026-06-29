@@ -6,6 +6,7 @@ use App\Models\Attempt;
 use App\Models\AttemptAnswer;
 use App\Models\Quiz;
 use App\Models\QuizEnrollment;
+use App\Services\Exam\AttemptRiskAnalyzer;
 use App\Services\Exam\AttemptService;
 use App\Services\Exam\ScoringService;
 use App\Services\Quiz\QuizAssignmentService;
@@ -20,6 +21,7 @@ class AttemptController extends Controller
         private ScoringService $scoringService,
         private QuizPublishService $publishService,
         private QuizAssignmentService $assignmentService,
+        private AttemptRiskAnalyzer $riskAnalyzer,
     ) {}
 
     public function start(string $slug)
@@ -55,7 +57,7 @@ class AttemptController extends Controller
         // Abandon any in-progress attempt
         Attempt::where('quiz_id', $quiz->id)
             ->where('user_id', $user->id)
-            ->where('status', 'in_progress')
+            ->whereIn('status', ['in_progress', 'paused'])
             ->update(['status' => 'abandoned']);
 
         $attempt = $this->attemptService->startAttempt($enrollment);
@@ -65,7 +67,7 @@ class AttemptController extends Controller
     public function show(Attempt $attempt)
     {
         abort_unless($attempt->user_id === auth()->id(), 403);
-        abort_unless($attempt->status === 'in_progress', 404);
+        abort_unless(in_array($attempt->status, ['in_progress', 'paused'], true), 404);
 
         return view('student.quiz.exam', compact('attempt'));
     }
@@ -98,6 +100,35 @@ class AttemptController extends Controller
             ]
         );
 
+        $attempt->update(['last_activity_at' => now()]);
+
+        return response()->json(['ok' => true]);
+    }
+
+    public function logViolation(Request $request, Attempt $attempt)
+    {
+        abort_unless($attempt->user_id === auth()->id(), 403);
+        abort_unless($attempt->status === 'in_progress', 403);
+
+        $attempt->loadMissing('quiz');
+        abort_unless($attempt->quiz->proctoring_enabled, 403);
+
+        $validated = $request->validate([
+            'type'    => 'required|in:tab_switch,window_blur',
+            'message' => 'nullable|string|max:500',
+        ]);
+
+        $messages = [
+            'tab_switch'  => $validated['message'] ?? 'User switched browser tab or minimized window',
+            'window_blur' => $validated['message'] ?? 'Browser window lost focus',
+        ];
+
+        $this->riskAnalyzer->recordViolation(
+            $attempt,
+            $validated['type'],
+            $messages[$validated['type']]
+        );
+
         return response()->json(['ok' => true]);
     }
 
@@ -119,9 +150,13 @@ class AttemptController extends Controller
     public function result(Attempt $attempt)
     {
         abort_unless($attempt->user_id === auth()->id(), 403);
-        abort_unless(in_array($attempt->status, ['completed', 'timed_out', 'abandoned'], true), 404);
+        abort_unless(in_array($attempt->status, ['completed', 'timed_out', 'abandoned', 'terminated'], true), 404);
 
         $attempt->load(['quiz', 'answers.question.options', 'answers.question.fillBlankAnswers']);
+
+        if (! $attempt->quiz->resultsAreVisible()) {
+            return view('student.quiz.result-pending', compact('attempt'));
+        }
 
         return view('student.quiz.result', compact('attempt'));
     }

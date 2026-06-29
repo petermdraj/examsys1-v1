@@ -1,7 +1,7 @@
 @php
 $navItems = [
     ['route' => 'my.dashboard',    'label' => 'Dashboard',     'icon' => '<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'],
-    ['route' => 'my.quizzes',      'label' => 'My Quizzes',    'icon' => '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/>'],
+    ['route' => 'my.quizzes',      'label' => __('common.my_quizzes_heading'),    'icon' => '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/>'],
     ['route' => 'my.attempts',     'label' => 'Attempts',      'icon' => '<path d="M12 3a9 9 0 109 9"/><path d="M12 3v9l6-3"/>'],
     ['route' => 'my.certificates', 'label' => 'Certificates',  'icon' => '<circle cx="12" cy="9" r="5"/><path d="M9 13l-1 7 4-2 4 2-1-7"/>'],
     ['route' => 'my.favourites',   'label' => 'Favourites',    'icon' => '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>'],

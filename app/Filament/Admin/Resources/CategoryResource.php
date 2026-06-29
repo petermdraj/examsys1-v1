@@ -20,6 +20,7 @@ class CategoryResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-tag';
     protected static ?int $navigationSort = 1;
 
+    public static function getNavigationGroup(): ?string  { return __('admin.nav_group_content'); }
     public static function getNavigationLabel(): string   { return __('admin.nav_categories'); }
     public static function getModelLabel(): string        { return __('admin.category_model_label'); }
     public static function getPluralModelLabel(): string  { return __('admin.category_model_label_plural'); }

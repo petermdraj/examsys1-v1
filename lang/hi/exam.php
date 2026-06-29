@@ -78,8 +78,8 @@ return [
     'time_taken'               => 'लिया गया समय',
     'min_allowed'              => '/ :minutes मिनट अनुमत',
     'download_certificate'     => 'प्रमाणपत्र डाउनलोड करें',
-    'retry_quiz'               => 'क्विज़ फिर से करें',
-    'browse_more_quizzes'      => 'और क्विज़ देखें',
+    'retry_quiz'               => 'परीक्षा फिर से करें',
+    'browse_more_quizzes'      => 'और परीक्षा देखें',
 
     // Review section
     'question_review_heading'  => 'प्रश्न-दर-प्रश्न समीक्षा',
@@ -115,5 +115,5 @@ return [
     'passed_label'             => '✓ उत्तीर्ण',
     'failed_label'             => '✗ अनुत्तीर्ण',
     'no_attempts_found'        => 'इस फ़िल्टर के लिए कोई प्रयास नहीं मिला।',
-    'browse_quizzes'           => 'क्विज़ देखें',
+    'browse_quizzes'           => 'परीक्षा देखें',
 ];

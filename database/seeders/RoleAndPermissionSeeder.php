@@ -32,7 +32,8 @@ class RoleAndPermissionSeeder extends Seeder
 
             // Admin
             'admin.manage_users', 'admin.manage_settings',
-            'admin.view_all_reports',
+            'admin.view_all_reports', 'admin.monitor_live_exams',
+            'admin.send_bulk_notifications',
         ];
 
         foreach ($permissions as $perm) {

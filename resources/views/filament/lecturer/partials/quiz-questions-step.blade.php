@@ -255,7 +255,7 @@
                     <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
                     <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
                 </svg>
-                <span class="text-amber-800" style="font-size:12px;">{{ __('lecturer.complete_steps_first') }}, then return here to import questions into your quiz.</span>
+                <span class="text-amber-800" style="font-size:12px;">{{ __('lecturer.complete_steps_first') }}, {{ __('lecturer.complete_steps_import_hint') }}</span>
             </div>
             @endif
 
@@ -490,7 +490,7 @@
                             <svg x-show="!bankImporting" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
                                 <path d="M12 5v14M5 12l7 7 7-7"/>
                             </svg>
-                            <span x-text="bankImporting ? 'Adding…' : 'Add to Quiz'"></span>
+                            <span x-text="bankImporting ? @js(__('lecturer.bank_adding')) : @js(__('lecturer.bank_add_to_exam'))"></span>
                         </button>
                     </div>
                 </div>

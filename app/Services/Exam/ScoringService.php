@@ -8,7 +8,7 @@ use App\Models\Attempt;
 
 class ScoringService
 {
-    public function evaluate(Attempt $attempt, ?int $elapsedSeconds = null): Attempt
+    public function evaluate(Attempt $attempt, ?int $elapsedSeconds = null, string $finalStatus = 'completed'): Attempt
     {
         $attempt->load(['quiz', 'answers.question.options', 'answers.question.fillBlankAnswers']);
         // Use the quiz's total_marks so unvisited questions are counted in the denominator.
@@ -67,7 +67,7 @@ class ScoringService
             : $serverDiff;
 
         $attempt->update([
-            'status'             => 'completed',
+            'status'             => $finalStatus,
             'submitted_at'       => now(),
             'score'              => $score,
             'total_marks'        => $totalMarks,
@@ -80,11 +80,15 @@ class ScoringService
 
         $fresh = $attempt->fresh(['quiz', 'user']);
 
-        SendAttemptResultMailJob::dispatch($fresh->user, $fresh);
-        RecalculateQuizStatsJob::dispatch($fresh->quiz)->delay(now()->addMinutes(5));
+        if (! $fresh->quiz->hold_results_until_published) {
+            SendAttemptResultMailJob::dispatch($fresh->user, $fresh);
+            RecalculateQuizStatsJob::dispatch($fresh->quiz)->delay(now()->addMinutes(5));
 
-        if ($fresh->is_passed && $fresh->quiz->certificate_enabled) {
-            GenerateCertificateJob::dispatch($fresh);
+            if ($fresh->is_passed && $fresh->quiz->certificate_enabled) {
+                GenerateCertificateJob::dispatch($fresh);
+            }
+        } else {
+            RecalculateQuizStatsJob::dispatch($fresh->quiz)->delay(now()->addMinutes(5));
         }
 
         return $fresh;

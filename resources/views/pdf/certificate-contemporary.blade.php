@@ -170,7 +170,7 @@ body {
 
 {{-- Right: Body --}}
 <div class="r-body">
-    for successfully completing the <span class="quiz">{{ $quiz->title }}</span>
+    {{ __('certificate.has_completed') }} <span class="quiz">{{ $quiz->title }}</span>
     assessment, meeting all proficiency criteria set by the course author
     with a score of <strong>{{ number_format($attempt->percentage, 1) }}%</strong>
     ({{ $attempt->score }}/{{ $attempt->total_marks }} marks) &mdash; {{ $attempt->is_passed ? 'Distinction' : 'Completed' }}.
@@ -181,7 +181,7 @@ body {
     <div class="r-sig-mark">{{ $quiz->lecturer->name }}</div>
     <div class="r-sig-rule"></div>
     <div class="r-sig-name">{{ $quiz->lecturer->name }}</div>
-    <div class="r-sig-role">Quiz Author</div>
+    <div class="r-sig-role">{{ __('certificate.sig_author_role') }}</div>
 </div>
 
 {{-- Right: Meta divider --}}

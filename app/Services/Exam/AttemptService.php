@@ -16,6 +16,9 @@ class AttemptService
             'attempt_number' => $attemptNumber,
             'status' => 'in_progress',
             'started_at' => now(),
+            'last_activity_at' => now(),
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
         ]);
     }
 }

@@ -139,7 +139,7 @@
             <div style="position:relative;display:inline-block;max-width:480px;width:100%;">
                 <select wire:change="selectQuiz($event.target.value)"
                     style="width:100%;font-size:1.05rem;font-weight:700;background:transparent;border:none;outline:none;cursor:pointer;color:inherit;appearance:none;-webkit-appearance:none;-moz-appearance:none;background-image:none;padding-right:24px;">
-                    <option value="" disabled @selected(!$selectedQuizId)>— Select a quiz —</option>
+                    <option value="" disabled @selected(!$selectedQuizId)>{{ __('lecturer.aig_select_quiz') }}</option>
                     @foreach($quizzes as $q)
                         <option value="{{ $q->id }}" @selected($q->id === $selectedQuizId)>{{ $q->title }}</option>
                     @endforeach
@@ -148,9 +148,30 @@
             </div>
         </div>
         @if($quiz)
-        <div class="rp-sel-meta">
+        <div class="rp-sel-meta" style="flex-wrap:wrap;">
             <span class="badge-{{ $quiz->status === 'published' ? 'published' : 'draft' }}">{{ ucfirst($quiz->status) }}</span>
             <span class="rp-sel-count">{{ $quiz->total_questions }} questions</span>
+            @if($stats && $stats['total_attempts'] > 0)
+                <div style="position:relative;display:inline-block;">
+                    <select wire:model.live="attemptMode"
+                        style="font-size:.75rem;font-weight:600;background:rgba(156,163,175,.1);border:1px solid rgba(156,163,175,.2);border-radius:8px;padding:6px 28px 6px 10px;cursor:pointer;color:inherit;appearance:none;-webkit-appearance:none;">
+                        <option value="best">{{ __('lecturer.grade_attempt_best') }}</option>
+                        <option value="latest">{{ __('lecturer.grade_attempt_latest') }}</option>
+                        <option value="all">{{ __('lecturer.grade_attempt_all') }}</option>
+                    </select>
+                    <svg style="position:absolute;right:8px;top:50%;transform:translateY(-50%);pointer-events:none;" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.4"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+                <button type="button" wire:click="exportExcel"
+                    style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;font-size:.75rem;font-weight:700;border:1px solid rgba(108,46,99,.3);background:rgba(108,46,99,.08);color:#6C2E63;cursor:pointer;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    {{ __('lecturer.grade_export_excel') }}
+                </button>
+                <button type="button" wire:click="exportPdf"
+                    style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;font-size:.75rem;font-weight:700;border:1px solid rgba(108,46,99,.3);background:#6C2E63;color:#fff;cursor:pointer;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+                    {{ __('lecturer.grade_export_pdf') }}
+                </button>
+            @endif
         </div>
         @endif
     </div>
@@ -337,16 +358,16 @@
     @elseif(!$quizzes->count())
     <div class="rp-empty">
         <svg style="opacity:.3;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>
-        <p class="rp-empty-title">No quizzes yet</p>
-        <p class="rp-empty-sub">Create your first quiz to start seeing reports.</p>
+        <p class="rp-empty-title">{{ __('lecturer.dash_no_quizzes_title') }}</p>
+        <p class="rp-empty-sub">{{ __('lecturer.dash_no_quizzes_desc') }}</p>
         <a href="{{ route('filament.lecturer.resources.quizzes.create') }}" class="rp-empty-cta">
-            + Create Quiz
+            + {{ __('lecturer.dash_create_first_quiz') }}
         </a>
     </div>
     @else
     <div class="rp-empty">
         <svg style="opacity:.25;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>
-        <p class="rp-empty-sm">Select a quiz above to view its analytics.</p>
+        <p class="rp-empty-sm">{{ __('lecturer.rp_select_exam_hint') }}</p>
     </div>
     @endif
 

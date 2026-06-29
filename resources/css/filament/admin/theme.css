@@ -1,68 +1,375 @@
 @import '/vendor/filament/filament/resources/css/theme.css';
+@import './command-center.css';
 
-:root,
-.fi-sidebar {
-    --sidebar-bg: #1E1B4B;
+/* ═══════════════════════════════════════════════════════
+   ExamSys — Filament Panel Theme (Admin + Lecturer)
+   Sidebar: dark green · Brand primary #6C2E63 · accent #E0A431
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Shell ─────────────────────────────────────────────── */
+.fi-sidebar,
+.fi-sidebar-nav {
+    background: linear-gradient(180deg, #0F2318 0%, #122E22 100%) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
 }
 
-/* Sidebar background */
-.fi-sidebar {
-    background-color: #1E1B4B !important;
-}
-
-/* Sidebar header (brand area) */
 .fi-sidebar-header {
-    background-color: #1E1B4B !important;
-    border-bottom-color: rgba(255,255,255,.08) !important;
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+    padding: 1.25rem 1rem !important;
+    min-height: 4.5rem;
 }
 
-/* Brand name text */
-.fi-sidebar-header .fi-brand-name {
-    color: #fff !important;
+.fi-sidebar-header::after {
+    content: '';
+    display: block;
+    height: 1px;
+    margin-top: 0.75rem;
+    background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.35), transparent);
 }
 
-/* Nav item text & icons */
-.fi-sidebar-nav .fi-sidebar-item-label,
-.fi-sidebar-nav .fi-sidebar-group-label {
-    color: rgba(255,255,255,.75) !important;
+/* ── Brand ──────────────────────────────────────────────── */
+.fi-sidebar-header a,
+.fi-sidebar-header a *,
+.fi-brand-name,
+.fi-sidebar-header span,
+.fi-sidebar-header p {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em !important;
 }
 
-.fi-sidebar-nav svg {
-    color: rgba(255,255,255,.6) !important;
+.fi-sidebar-header .fi-logo {
+    border-radius: 0.5rem;
 }
 
-/* Active / hover nav item */
-.fi-sidebar-item-button:hover,
-.fi-sidebar-item-button.fi-active {
-    background-color: rgba(255,255,255,.10) !important;
-    border-radius: 8px;
+/* ── Group spacing ──────────────────────────────────────── */
+.fi-sidebar-group,
+.fi-sidebar-group > *,
+.fi-sidebar-nav > ul,
+.fi-sidebar-nav > div,
+.fi-sidebar-nav > nav {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    gap: 0 !important;
 }
 
-.fi-sidebar-item-button.fi-active .fi-sidebar-item-label,
-.fi-sidebar-item-button:hover   .fi-sidebar-item-label {
-    color: #fff !important;
+.fi-sidebar-group-items {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    gap: 2px !important;
 }
 
-.fi-sidebar-item-button.fi-active svg,
-.fi-sidebar-item-button:hover   svg {
-    color: #E0A431 !important;
+.fi-sidebar-nav ul,
+.fi-sidebar-nav ol {
+    gap: 0 !important;
+    row-gap: 0 !important;
 }
 
-/* Group label */
+.fi-sidebar-group + .fi-sidebar-group {
+    margin-top: 0.5rem !important;
+    padding-top: 0.5rem !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ── Group labels ───────────────────────────────────────── */
 .fi-sidebar-group-label {
-    color: rgba(255,255,255,.4) !important;
-    font-size: 11px;
-    letter-spacing: .06em;
-    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35) !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    padding: 12px 14px 6px !important;
 }
 
-/* Sidebar footer (user info) */
-.fi-sidebar-footer {
-    background-color: #1E1B4B !important;
-    border-top-color: rgba(255,255,255,.08) !important;
+.fi-sidebar-group > button svg,
+.fi-sidebar-group-label svg {
+    display: none !important;
+}
+
+/* ── Nav items — base ───────────────────────────────────── */
+.fi-sidebar-item-button {
+    border-radius: 10px !important;
+    margin: 2px 8px !important;
+    padding: 8px 10px !important;
+    transition: background 0.15s, color 0.15s, box-shadow 0.15s !important;
+    border-left: none !important;
+    gap: 0.625rem !important;
+}
+
+.fi-sidebar-item-label {
+    color: rgba(255, 255, 255, 0.65) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
+
+.fi-sidebar-item-button svg,
+.fi-sidebar-item-button .fi-sidebar-item-icon {
+    color: rgba(255, 255, 255, 0.45) !important;
+    width: 18px !important;
+    height: 18px !important;
+    flex-shrink: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-sizing: content-box;
+    transition: color 0.15s;
+}
+
+/* ── Hover ──────────────────────────────────────────────── */
+.fi-sidebar-item-button:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.fi-sidebar-item-button:hover .fi-sidebar-item-label {
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.fi-sidebar-item-button:hover svg,
+.fi-sidebar-item-button:hover .fi-sidebar-item-icon {
+    color: rgba(255, 255, 255, 0.85) !important;
+    background: transparent !important;
+}
+
+/* ── Active / current ───────────────────────────────────── */
+/* Filament adds semi-transparent bg on the link; keep one solid pill on the button only */
+.fi-sidebar-item.fi-active,
+.fi-sidebar-item-active {
+    background: transparent !important;
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-button,
+.fi-sidebar-item.fi-active > a.fi-sidebar-item-button,
+.fi-sidebar-item-active > .fi-sidebar-item-button,
+.fi-sidebar-item-active > a.fi-sidebar-item-button,
+.fi-sidebar-item-button[aria-current],
+.fi-sidebar-item > a.fi-sidebar-item-button[aria-current] {
+    background: #166534 !important;
+    box-shadow: none !important;
+    border-left: none !important;
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-button:hover,
+.fi-sidebar-item.fi-active > a.fi-sidebar-item-button:hover,
+.fi-sidebar-item.fi-active > .fi-sidebar-item-button:focus-visible,
+.fi-sidebar-item.fi-active > a.fi-sidebar-item-button:focus-visible {
+    background: #166534 !important;
+}
+
+.fi-sidebar-item.fi-active .fi-sidebar-item-label,
+.fi-sidebar-item-active .fi-sidebar-item-label,
+.fi-sidebar-item-button[aria-current] .fi-sidebar-item-label,
+.fi-sidebar-item > a.fi-sidebar-item-button[aria-current] .fi-sidebar-item-label {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+.fi-sidebar-item.fi-active .fi-sidebar-item-icon,
+.fi-sidebar-item.fi-active svg,
+.fi-sidebar-item-active .fi-sidebar-item-icon,
+.fi-sidebar-item-active svg,
+.fi-sidebar-item-button[aria-current] svg,
+.fi-sidebar-item-button[aria-current] .fi-sidebar-item-icon {
+    color: #4ADE80 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+
+/* ── Footer (user card) ─────────────────────────────────── */
+.fi-sidebar-footer,
+.fi-sidebar footer {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.07) !important;
+    padding: 0.75rem !important;
+    margin: 0.5rem !important;
+    border-radius: 12px !important;
+}
+
+.fi-sidebar-footer .fi-user-menu-trigger,
+.fi-sidebar-footer button {
+    border-radius: 10px !important;
+    padding: 0.5rem !important;
 }
 
 .fi-sidebar-footer .fi-user-name,
-.fi-sidebar-footer .fi-user-email {
-    color: rgba(255,255,255,.85) !important;
+.fi-sidebar-footer [class*="user-name"],
+.fi-sidebar-footer p {
+    color: rgba(255, 255, 255, 0.92) !important;
+    font-weight: 600 !important;
+    font-size: 0.8125rem !important;
+}
+
+.fi-sidebar-footer .fi-user-email,
+.fi-sidebar-footer [class*="user-email"] {
+    color: rgba(255, 255, 255, 0.55) !important;
+    font-size: 0.75rem !important;
+}
+
+.fi-sidebar-footer .fi-avatar {
+    box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.25);
+}
+
+/* ── Collapse toggle ─────────────────────────────────────── */
+.fi-sidebar-close-btn svg,
+.fi-topbar-sidebar-btn svg {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.fi-sidebar-close-btn:hover svg,
+.fi-topbar-sidebar-btn:hover svg {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* ── Topbar ──────────────────────────────────────────────── */
+.fi-topbar {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #e5e7eb !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.dark .fi-topbar {
+    background: rgba(17, 24, 39, 0.95) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ── Badges on nav items ─────────────────────────────────── */
+.fi-sidebar-item-badge {
+    background: rgba(255, 255, 255, 0.18) !important;
+    color: #ffffff !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    border-radius: 9999px !important;
+    padding: 2px 7px !important;
+    min-width: 1.25rem;
+    text-align: center;
+}
+
+/* Filament badge component inside sidebar — override light-theme colors */
+.fi-sidebar .fi-badge {
+    --tw-ring-shadow: 0 0 #0000 !important;
+    --tw-ring-color: transparent !important;
+    box-shadow: none !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    min-width: 1.375rem;
+    padding: 2px 7px !important;
+    border-radius: 9999px !important;
+    background: rgba(255, 255, 255, 0.18) !important;
+    color: #ffffff !important;
+}
+
+.fi-sidebar .fi-badge span,
+.fi-sidebar .fi-badge .grid,
+.fi-sidebar .fi-badge .truncate {
+    color: inherit !important;
+}
+
+.fi-sidebar .fi-badge.fi-color-primary {
+    background: rgba(34, 197, 94, 0.4) !important;
+    color: #dcfce7 !important;
+}
+
+.fi-sidebar .fi-badge.fi-color-success {
+    background: rgba(46, 158, 104, 0.5) !important;
+    color: #dcfce7 !important;
+}
+
+.fi-sidebar .fi-badge.fi-color-warning {
+    background: rgba(224, 164, 49, 0.5) !important;
+    color: #fef9c3 !important;
+}
+
+.fi-sidebar .fi-badge.fi-color-danger {
+    background: rgba(213, 68, 63, 0.5) !important;
+    color: #fee2e2 !important;
+}
+
+.fi-sidebar .fi-badge.fi-color-info {
+    background: rgba(59, 130, 246, 0.45) !important;
+    color: #dbeafe !important;
+}
+
+.fi-sidebar .fi-badge.fi-color-gray {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #f3f4f6 !important;
+}
+
+/* ── Collapsed state ─────────────────────────────────────── */
+[data-collapsed="true"] .fi-sidebar-item-button,
+.fi-sidebar-collapsed .fi-sidebar-item-button {
+    justify-content: center !important;
+    padding: 10px !important;
+    margin: 3px 8px !important;
+}
+
+[data-collapsed="true"] .fi-sidebar-item-button svg,
+.fi-sidebar-collapsed .fi-sidebar-item-button svg {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────── */
+.fi-sidebar-nav::-webkit-scrollbar {
+    width: 4px;
+}
+
+.fi-sidebar-nav::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.fi-sidebar-nav::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+}
+
+.fi-sidebar-nav::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+/* ── Hide group connector lines & dots ───────────────────── */
+.fi-sidebar-group-items::before,
+.fi-sidebar-group-items::after,
+.fi-sidebar-item::before,
+.fi-sidebar-item::after,
+.fi-sidebar-item > *::before,
+.fi-sidebar-item > *::after {
+    display: none !important;
+    content: none !important;
+}
+
+.fi-sidebar-item [class*="connector"],
+.fi-sidebar-item [class*="border-l"],
+.fi-sidebar-item > div:not([class*="fi-"]) {
+    border: none !important;
+    background: none !important;
+}
+
+.fi-sidebar-item-button > *:first-child:not(svg):not(span) {
+    display: none !important;
+}
+
+.fi-sidebar-item-grouped-border {
+    display: none !important;
+}
+
+/* Settings page — always show save bar at bottom of visible area */
+.settings-form-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    margin-bottom: -0.5rem;
+    padding-bottom: 1rem;
+    background: linear-gradient(to top, rgb(249 250 251) 70%, transparent);
+}
+
+.dark .settings-form-actions {
+    background: linear-gradient(to top, rgb(17 24 39) 70%, transparent);
+}
+
+.settings-form-actions .fi-form-actions {
+    margin: 0 !important;
 }

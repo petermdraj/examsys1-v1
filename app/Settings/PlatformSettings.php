@@ -57,7 +57,7 @@ class PlatformSettings extends Settings
 
     // SEO
     public string  $seo_title           = '';
-    public string  $seo_description     = 'Create, assign, and attempt AI-generated quizzes for your institution.';
+    public string  $seo_description     = 'Create, assign, and attempt AI-generated exams for your institution.';
     public string  $seo_keywords        = '';
     public string  $google_analytics_id = '';
     public ?string $og_image            = null;
@@ -71,8 +71,8 @@ class PlatformSettings extends Settings
 
     // Homepage — Hero
     public string $hero_title          = 'Test your knowledge. Earn your certificate.';
-    public string $hero_subtitle       = 'Browse expert-made quizzes assigned by your lecturers. Attempt exams and earn verified certificates.';
-    public string $hero_cta_text       = 'Browse Quizzes';
+    public string $hero_subtitle       = 'Browse expert-made exams assigned by your lecturers. Attempt exams and earn verified certificates.';
+    public string $hero_cta_text       = 'Browse Exams';
     public string $hero_cta_url        = '';
     public string $hero_secondary_text = 'See how it works';
 
@@ -81,17 +81,17 @@ class PlatformSettings extends Settings
     public string $hiw_subtitle = 'Three simple steps to boost your exam preparation';
     /** Array of how-it-works steps: [["num_label"=>"...","title"=>"...","desc"=>"..."]] */
     public array $hiw_steps = [
-        ['num_label' => '01 — DISCOVER', 'title' => 'Find Your Quiz',         'desc' => 'Browse thousands of quizzes across all exam categories. Filter by subject, difficulty, or exam type.'],
+        ['num_label' => '01 — DISCOVER', 'title' => 'Find Your Exam',         'desc' => 'Browse thousands of exams across all exam categories. Filter by subject, difficulty, or exam type.'],
         ['num_label' => '02 — ATTEMPT',  'title' => 'Take the Exam',          'desc' => 'IBPS-style interface — timed sections, question palette, negative marking.'],
         ['num_label' => '03 — CERTIFY',  'title' => 'Earn Your Certificate',  'desc' => 'Score well and get a verified PDF certificate with QR code. Share on LinkedIn.'],
     ];
 
-    // Homepage — Featured Quizzes
-    public string $featured_title = 'Featured quizzes';
+    // Homepage — Featured Exams
+    public string $featured_title = 'Featured exams';
 
     // Homepage — Creator CTA Strip
-    public string $lecturer_cta_title = 'Are you a quiz lecturer?';
-    public string $lecturer_cta_sub   = 'Create quizzes and assign them to your students.';
+    public string $lecturer_cta_title = 'Are you an exam lecturer?';
+    public string $lecturer_cta_sub   = 'Create exams and assign them to your students.';
     public string $lecturer_cta_btn   = 'Learn more →';
     public string $lecturer_cta_url   = '';
 
@@ -105,10 +105,9 @@ class PlatformSettings extends Settings
 
     // Footer
     public string $footer_tagline         = 'AI-powered exam platform for institutions. Generate, assign, and certify. Self-hosted.';
-    public bool   $footer_show_newsletter = true;
     /** Array of footer column groups: [["title"=>"...","items"=>[["label"=>"...","url"=>"..."]]]] */
     public array $footer_columns = [
-        ['title' => 'Product', 'items' => [['label' => 'Home', 'url' => '/'], ['label' => 'Discover Quizzes', 'url' => '/quizzes'], ['label' => 'Lecturer Portal', 'url' => '/lecturer']]],
+        ['title' => 'Product', 'items' => [['label' => 'Home', 'url' => '/'], ['label' => 'Discover Exams', 'url' => '/quizzes'], ['label' => 'Lecturer Portal', 'url' => '/lecturer']]],
         ['title' => 'Support', 'items' => [['label' => 'Help Center', 'url' => '#'], ['label' => 'Contact', 'url' => '#']]],
         ['title' => 'Legal',   'items' => [['label' => 'Privacy Policy', 'url' => '#'], ['label' => 'Terms of Use', 'url' => '#']]],
         ['title' => 'Company', 'items' => [['label' => 'About', 'url' => '#'], ['label' => 'Blog', 'url' => '#']]],

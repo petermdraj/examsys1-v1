@@ -12,7 +12,7 @@ return [
 
     // Right panel
     'presented_to'     => 'यह प्रमाणपत्र गर्व के साथ प्रदान किया जाता है',
-    'has_completed'    => 'को सफलतापूर्वक क्विज़ पूरा करने पर',
+    'has_completed'    => 'को सफलतापूर्वक परीक्षा पूरा करने पर',
 
     // Score badges
     'badge_score'      => 'स्कोर',
@@ -27,7 +27,7 @@ return [
     // Footer
     'sig_platform_name' => 'प्लेटफ़ॉर्म प्राधिकरण',
     'sig_platform_role' => 'ExamSys',
-    'sig_author_role'   => 'क्विज़ लेखक',
+    'sig_author_role'   => 'परीक्षा लेखक',
     'cert_id_label'     => 'प्रमाणपत्र ID',
     'verify_prefix'     => 'सत्यापित करें:',
     'verify_url_prefix' => 'सत्यापित करें',
@@ -39,7 +39,7 @@ return [
     'verify_valid_body'     => 'यह प्रमाणपत्र वास्तविक है और ExamSys द्वारा जारी किया गया था।',
     'verify_invalid'        => 'प्रमाणपत्र नहीं मिला या अमान्य है।',
     'verify_recipient'      => 'प्राप्तकर्ता',
-    'verify_quiz'           => 'क्विज़',
+    'verify_quiz'           => 'परीक्षा',
     'verify_score'          => 'स्कोर',
     'verify_issued'         => 'जारी',
     'verify_download'       => 'PDF डाउनलोड करें',

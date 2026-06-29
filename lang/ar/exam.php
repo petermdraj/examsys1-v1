@@ -78,8 +78,8 @@ return [
     'time_taken'               => 'Time taken',
     'min_allowed'              => '/ :minutes min allowed',
     'download_certificate'     => 'Download certificate',
-    'retry_quiz'               => 'Retry quiz',
-    'browse_more_quizzes'      => 'Browse more quizzes',
+    'retry_quiz'               => 'Retry exam',
+    'browse_more_quizzes'      => 'Browse more exams',
 
     // Review section
     'question_review_heading'  => 'Question-by-question review',
@@ -115,5 +115,5 @@ return [
     'passed_label'             => '✓ Passed',
     'failed_label'             => '✗ Failed',
     'no_attempts_found'        => 'No attempts found for this filter.',
-    'browse_quizzes'           => 'Browse quizzes',
+    'browse_quizzes'           => 'Browse exams',
 ];

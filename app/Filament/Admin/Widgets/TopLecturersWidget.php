@@ -9,7 +9,7 @@ use Filament\Tables\Table;
 
 class TopLecturersWidget extends BaseWidget
 {
-    protected static ?int $sort = 4;
+    protected static ?int $sort = 6;
 
     protected int|string|array $columnSpan = 'full';
 
@@ -27,7 +27,7 @@ class TopLecturersWidget extends BaseWidget
             )
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label(__('admin.col_lecturer'))
+                    ->label(__('admin.user_role_lecturer'))
                     ->searchable()
                     ->weight('semibold'),
 

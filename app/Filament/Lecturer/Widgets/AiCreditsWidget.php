@@ -12,6 +12,11 @@ class AiCreditsWidget extends Widget
 
     protected int|string|array $columnSpan = 1;
 
+    public static function canView(): bool
+    {
+        return false;
+    }
+
     public function getViewData(): array
     {
         $user = auth()->user();

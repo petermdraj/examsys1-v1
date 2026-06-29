@@ -1,0 +1,194 @@
+/* ═══════════════════════════════════════════════════════
+   ExamSys — Command Center Dashboard
+   ═══════════════════════════════════════════════════════ */
+
+.fi-page-dashboard .fi-wi-widget {
+    --cc-card-radius: 1rem;
+}
+
+.cc-card {
+    background: #ffffff;
+    border-radius: var(--cc-card-radius);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.dark .cc-card {
+    background: rgb(31 41 55);
+    border-color: rgba(255, 255, 255, 0.06);
+}
+
+.fi-page-dashboard .fi-main {
+    background: #f8f9fb !important;
+}
+
+.dark .fi-page-dashboard .fi-main {
+    background: rgb(17 24 39) !important;
+}
+
+/* Strip double Filament section chrome inside command-center widgets */
+.cc-widget .fi-section,
+.cc-widget .fi-section-content-ctn {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    --tw-ring-shadow: none !important;
+}
+
+.cc-widget .fi-section-header {
+    display: none;
+}
+
+.cc-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .cc-kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.cc-kpi-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    min-height: 5.5rem;
+}
+
+.cc-kpi-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #111827;
+    letter-spacing: -0.02em;
+}
+
+.dark .cc-kpi-value {
+    color: #f9fafb;
+}
+
+.cc-kpi-label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #6b7280;
+    margin-top: 0.25rem;
+}
+
+.cc-kpi-desc {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-top: 0.125rem;
+}
+
+.cc-kpi-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.75rem;
+    flex-shrink: 0;
+}
+
+.cc-kpi-icon--green {
+    background: rgba(46, 158, 104, 0.12);
+    color: #2e9e68;
+}
+
+.cc-kpi-icon--blue {
+    background: rgba(59, 130, 246, 0.12);
+    color: #3b82f6;
+}
+
+.cc-kpi-icon--amber {
+    background: rgba(224, 164, 49, 0.15);
+    color: #d97706;
+}
+
+.cc-donut {
+    position: relative;
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.cc-donut-hole {
+    position: absolute;
+    inset: 1.25rem;
+    border-radius: 50%;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.dark .cc-donut-hole {
+    background: rgb(31 41 55);
+}
+
+.cc-donut-pct {
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #111827;
+}
+
+.dark .cc-donut-pct {
+    color: #f9fafb;
+}
+
+.cc-donut-label {
+    font-size: 0.5625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #9ca3af;
+    margin-top: 0.125rem;
+}
+
+.cc-legend-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.cc-side-stack > * + * {
+    margin-top: 1rem;
+}
+
+/* Native selects: Filament forms + @tailwindcss/forms both add chevron backgrounds */
+.fi-main select:not(.choices) {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0.5rem center !important;
+    background-size: 1.25em 1.25em !important;
+    padding-right: 2.25rem !important;
+}
+
+.dark .fi-main select:not(.choices) {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E") !important;
+}
+
+/* Filament select inside input wrapper — chevron only on the select, not the wrapper */
+.fi-input-wrp .fi-select-input {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0.25rem center !important;
+    background-size: 1.25em 1.25em !important;
+}
+
+.dark .fi-input-wrp .fi-select-input {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E") !important;
+}

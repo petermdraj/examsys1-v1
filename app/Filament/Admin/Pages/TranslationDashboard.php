@@ -15,6 +15,11 @@ class TranslationDashboard extends Page
     protected static ?int    $navigationSort  = 99;
     protected static string  $view            = 'filament.admin.pages.translation-dashboard';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     public static function getNavigationGroup(): ?string
     {
         return __('admin.nav_group_configuration');
