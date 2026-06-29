@@ -33,10 +33,6 @@ class Settings extends Page
     protected const SECRET_FIELDS = [
         'openai_api_key',
         'google_client_secret',
-        'razorpay_secret',
-        'stripe_secret',
-        'stripe_webhook_secret',
-        'paypal_client_secret',
         'aws_secret',
         'mail_password',
     ];

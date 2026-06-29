@@ -180,8 +180,8 @@ body {
         <img src="{{ 'file://' . $logoUrl }}" alt="Logo"
              style="max-height:12mm;max-width:50mm;vertical-align:middle;object-fit:contain;">
     @else
-        <span class="crest-icon">{{ strtoupper(substr($quiz->creator->name, 0, 1)) }}</span>
-        <span class="crest-name">{{ $quiz->creator->name }}</span>
+        <span class="crest-icon">{{ strtoupper(substr($quiz->lecturer->name, 0, 1)) }}</span>
+        <span class="crest-name">{{ $quiz->lecturer->name }}</span>
     @endif
 </div>
 
@@ -234,9 +234,9 @@ body {
     <table width="100%" style="border-collapse:collapse;">
         <tr>
             <td width="60%" style="vertical-align:bottom; padding-right:8mm;">
-                <div class="sig-mark">{{ $quiz->creator->name }}</div>
+                <div class="sig-mark">{{ $quiz->lecturer->name }}</div>
                 <div class="sig-rule"></div>
-                <div class="sig-name">{{ $quiz->creator->name }}</div>
+                <div class="sig-name">{{ $quiz->lecturer->name }}</div>
                 <div class="sig-role">Quiz Author &amp; Instructor</div>
             </td>
             <td width="40%" style="vertical-align:bottom; text-align:center;">

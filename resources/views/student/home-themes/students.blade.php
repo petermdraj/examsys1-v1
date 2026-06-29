@@ -126,13 +126,12 @@
         <a href="{{ route('quizzes.show', $quiz->slug) }}" class="card quiz-card stu-card-link">
           <div class="qc-cover cov-{{ ($i % 9) + 1 }}" @if($quiz->cover_image) style="background-image:url('{{ Storage::url($quiz->cover_image) }}');background-size:cover;background-position:center;" @endif>
             <span class="qc-cat">{{ $quiz->category->name }}</span>
-            @if(!$quiz->isFree())<span class="badge badge-price">{{ $platformSettings->currency_symbol }}{{ number_format($quiz->price, 0) }}</span>@endif
           </div>
           <div class="qc-body">
             <div class="qc-title">{{ $quiz->title }}</div>
             <div class="qc-creator">
-              <span class="avatar stu-avatar">{{ strtoupper(substr($quiz->creator->name,0,2)) }}</span>
-              {{ $quiz->creator->name }}
+              <span class="avatar stu-avatar">{{ strtoupper(substr($quiz->lecturer->name,0,2)) }}</span>
+              {{ $quiz->lecturer->name }}
             </div>
             <div class="qc-meta">
               <span class="pill">{{ $quiz->total_questions }} {{ __('common.quiz_questions') }}</span>

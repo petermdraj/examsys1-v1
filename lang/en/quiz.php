@@ -42,7 +42,7 @@ return [
     'label_no_time_limit'      => 'No time limit',
     'label_attempts_allowed'   => 'Attempts allowed',
     'label_attempts_unlimited' => 'Unlimited',
-    'label_attempts_per_purchase' => ':count per purchase',
+    'label_attempts_per_purchase' => ':count',
     'label_negative_marking'   => 'Negative marking',
     'label_negative_enabled'   => 'Enabled',
     'label_negative_disabled'  => 'Disabled',

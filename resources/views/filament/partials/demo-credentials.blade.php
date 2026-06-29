@@ -3,7 +3,7 @@
     $creds = [
         'admin'   => ['email' => 'admin@quiz.com',  'password' => 'password', 'label' => 'Admin',   'color' => '#7c3aed'],
         'lecturer' => ['email' => 'priya@demo.quiz',    'password' => 'password', 'label' => 'Lecturer', 'color' => '#0ea5e9'],
-        'customer'=> ['email' => 'alice@demo.quiz',    'password' => 'password', 'label' => 'Student','color' => '#22c55e'],
+        'student' => ['email' => 'alice@demo.quiz',    'password' => 'password', 'label' => 'Student','color' => '#22c55e'],
     ];
     $role = $role ?? 'admin';
     $show = isset($roles) ? $roles : [$role];

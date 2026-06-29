@@ -2,6 +2,7 @@
 
 namespace App\Filament\Lecturer\Pages;
 
+use App\Filament\Lecturer\Widgets\AiCreditsWidget;
 use App\Filament\Lecturer\Widgets\LecturerStatsWidget;
 use App\Filament\Lecturer\Widgets\RecentQuizzesWidget;
 use Filament\Pages\Dashboard as BaseDashboard;
@@ -16,6 +17,7 @@ class Dashboard extends BaseDashboard
     {
         return [
             LecturerStatsWidget::class,
+            AiCreditsWidget::class,
             RecentQuizzesWidget::class,
         ];
     }

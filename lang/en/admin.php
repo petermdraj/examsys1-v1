@@ -89,7 +89,7 @@ return [
     // Quiz resource (admin)
     'quiz_heading'              => 'All Quizzes',
     'quiz_col_title'            => 'Title',
-    'quiz_col_creator'          => 'Creator',
+    'quiz_col_lecturer'         => 'Lecturer',
     'quiz_col_category'         => 'Category',
     'quiz_col_status'           => 'Status',
     'quiz_col_visibility'       => 'Visibility',
@@ -489,7 +489,7 @@ return [
     'widget_ai_no_usage'           => 'No AI usage yet',
 
     // Widget — Top Creators
-    'widget_top_lecturers_desc'     => 'Ranked by total earnings from quiz sales',
+    'widget_top_lecturers_desc'     => 'Ranked by number of published quizzes',
     'col_creator'                  => 'Creator',
     'col_email'                    => 'Email',
     'col_published'                => 'Published',

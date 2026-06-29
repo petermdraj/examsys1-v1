@@ -58,11 +58,6 @@ class Quiz extends Model
     public function scopePublished($q) { return $q->where('status', 'published'); }
     public function scopePublic($q) { return $q->where('visibility', 'public'); }
 
-    public function isFree(): bool
-    {
-        return true;
-    }
-
     protected static function booted(): void
     {
         static::updated(function (self $quiz) {

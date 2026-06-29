@@ -38,23 +38,6 @@ class PlatformSettings extends Settings
     public float  $ai_charge_per_gen_default    = 5.00;
     public int    $ai_max_questions_per_prompt  = 50;
 
-    // Commission
-    public float $platform_commission_default = 20.0;
-
-    // Subscription lifecycle
-    public int $subscription_renewal_reminder_days = 7;
-    public int $subscription_grace_period_days     = 3;
-
-    // Payments
-    public string $razorpay_key          = '';
-    public string $razorpay_secret       = '';
-    public string $stripe_key            = '';
-    public string $stripe_secret         = '';
-    public string $stripe_webhook_secret = '';
-    public string $paypal_client_id      = '';
-    public string $paypal_client_secret  = '';
-    public string $paypal_mode           = 'sandbox';
-
     // Storage
     public string $filesystem_disk = 'local';
     public string $aws_key         = '';
@@ -74,7 +57,7 @@ class PlatformSettings extends Settings
 
     // SEO
     public string  $seo_title           = '';
-    public string  $seo_description     = 'Create, share and attempt AI-generated quizzes.';
+    public string  $seo_description     = 'Create, assign, and attempt AI-generated quizzes for your institution.';
     public string  $seo_keywords        = '';
     public string  $google_analytics_id = '';
     public ?string $og_image            = null;
@@ -88,7 +71,7 @@ class PlatformSettings extends Settings
 
     // Homepage — Hero
     public string $hero_title          = 'Test your knowledge. Earn your certificate.';
-    public string $hero_subtitle       = 'Browse thousands of expert-made quizzes. Attempt free or buy premium quizzes.';
+    public string $hero_subtitle       = 'Browse expert-made quizzes assigned by your lecturers. Attempt exams and earn verified certificates.';
     public string $hero_cta_text       = 'Browse Quizzes';
     public string $hero_cta_url        = '';
     public string $hero_secondary_text = 'See how it works';
@@ -108,7 +91,7 @@ class PlatformSettings extends Settings
 
     // Homepage — Creator CTA Strip
     public string $lecturer_cta_title = 'Are you a quiz lecturer?';
-    public string $lecturer_cta_sub   = 'Sell your expertise.';
+    public string $lecturer_cta_sub   = 'Create quizzes and assign them to your students.';
     public string $lecturer_cta_btn   = 'Learn more →';
     public string $lecturer_cta_url   = '';
 
@@ -121,13 +104,13 @@ class PlatformSettings extends Settings
     public string $homepage_stat_3_value = '';
 
     // Footer
-    public string $footer_tagline         = 'AI-powered quiz marketplace. Generate, publish, and sell quizzes in minutes. Self-hosted.';
+    public string $footer_tagline         = 'AI-powered exam platform for institutions. Generate, assign, and certify. Self-hosted.';
     public bool   $footer_show_newsletter = true;
     /** Array of footer column groups: [["title"=>"...","items"=>[["label"=>"...","url"=>"..."]]]] */
     public array $footer_columns = [
-        ['title' => 'Product', 'items' => [['label' => 'Home', 'url' => '/'], ['label' => 'Discover Quizzes', 'url' => '/quizzes'], ['label' => 'Pricing', 'url' => '/pricing']]],
+        ['title' => 'Product', 'items' => [['label' => 'Home', 'url' => '/'], ['label' => 'Discover Quizzes', 'url' => '/quizzes'], ['label' => 'Lecturer Portal', 'url' => '/lecturer']]],
         ['title' => 'Support', 'items' => [['label' => 'Help Center', 'url' => '#'], ['label' => 'Contact', 'url' => '#']]],
-        ['title' => 'Legal',   'items' => [['label' => 'Privacy Policy', 'url' => '#'], ['label' => 'Terms of Use', 'url' => '#'], ['label' => 'Refund Policy', 'url' => '#']]],
+        ['title' => 'Legal',   'items' => [['label' => 'Privacy Policy', 'url' => '#'], ['label' => 'Terms of Use', 'url' => '#']]],
         ['title' => 'Company', 'items' => [['label' => 'About', 'url' => '#'], ['label' => 'Blog', 'url' => '#']]],
     ];
 

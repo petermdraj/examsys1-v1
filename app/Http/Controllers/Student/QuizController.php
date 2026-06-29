@@ -35,7 +35,7 @@ class QuizController extends Controller
     public function index()
     {
         $categories = Category::where('is_active', true)->orderBy('sort_order')->get();
-        $query = Quiz::with(['creator', 'category'])
+        $query = Quiz::with(['lecturer', 'category'])
             ->published()->public()
             ->when(request('q'), fn($query, $q) => $query->where('title', 'like', "%$q%"))
             ->when(request('category'), fn($query, $cat) => $query->whereHas('category', fn($q) => $q->where('slug', $cat)));
@@ -51,7 +51,7 @@ class QuizController extends Controller
 
     public function show(string $slug)
     {
-        $quiz = Quiz::with(['creator', 'category', 'questions.options'])->where('slug', $slug)->published()->firstOrFail();
+        $quiz = Quiz::with(['lecturer', 'category', 'questions.options'])->where('slug', $slug)->published()->firstOrFail();
         $user = auth()->user();
         $isAssigned = $user && $user->role === 'student'
             ? $this->assignmentService->isAssignedToStudent($quiz, $user)

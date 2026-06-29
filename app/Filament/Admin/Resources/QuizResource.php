@@ -6,7 +6,6 @@ use App\Traits\RestrictInDemoMode;
 
 use App\Models\Category;
 use App\Models\Quiz;
-use App\Settings\PlatformSettings;
 use Filament\Forms\Form;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
@@ -45,8 +44,6 @@ class QuizResource extends Resource
 
     public static function infolist(Infolist $infolist): Infolist
     {
-        $sym = app(PlatformSettings::class)->currency_symbol;
-
         return $infolist->schema([
             Infolists\Components\Section::make(__('admin.quiz_section_overview'))
                 ->columns(3)
@@ -58,8 +55,8 @@ class QuizResource extends Resource
                         ->defaultImageUrl(fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->title) . '&background=6366f1&color=fff&size=128'),
                     Infolists\Components\Group::make([
                         Infolists\Components\TextEntry::make('title')->label(__('admin.quiz_col_title'))->size('lg')->weight('bold'),
-                        Infolists\Components\TextEntry::make('creator.name')->label(__('admin.quiz_col_creator'))
-                            ->helperText(fn ($record) => $record->creator?->email),
+                        Infolists\Components\TextEntry::make('lecturer.name')->label(__('admin.quiz_col_lecturer'))
+                            ->helperText(fn ($record) => $record->lecturer?->email),
                         Infolists\Components\TextEntry::make('category.name')->label(__('admin.quiz_col_category'))->badge()->color('gray'),
                     ])->columnSpan(2),
                 ]),
@@ -70,9 +67,6 @@ class QuizResource extends Resource
                     Infolists\Components\TextEntry::make('total_questions')->label(__('admin.quiz_info_questions')),
                     Infolists\Components\TextEntry::make('total_attempts')->label(__('admin.quiz_col_attempts')),
                     Infolists\Components\TextEntry::make('average_score')->label(__('admin.quiz_info_avg_score'))->suffix('%'),
-                    Infolists\Components\TextEntry::make('price')
-                        ->label(__('admin.quiz_col_price'))
-                        ->formatStateUsing(fn ($state) => $state > 0 ? $sym . number_format((float) $state, 2) : __('admin.quiz_free_label')),
                     Infolists\Components\TextEntry::make('status')->label(__('admin.quiz_col_status'))->badge()
                         ->formatStateUsing(fn (string $state) => __('admin.quiz_status_' . $state))
                         ->color(fn ($state) => match ($state) {
@@ -94,8 +88,6 @@ class QuizResource extends Resource
 
     public static function table(Table $table): Table
     {
-        $sym = app(PlatformSettings::class)->currency_symbol;
-
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('cover_image')
@@ -111,10 +103,10 @@ class QuizResource extends Resource
                     ->limit(45)
                     ->description(fn ($record) => $record->meta_description ? \Str::limit($record->meta_description, 60) : null),
 
-                Tables\Columns\TextColumn::make('creator.name')
-                    ->label(__('admin.quiz_col_creator'))
+                Tables\Columns\TextColumn::make('lecturer.name')
+                    ->label(__('admin.quiz_col_lecturer'))
                     ->searchable()
-                    ->description(fn ($record) => $record->creator?->email),
+                    ->description(fn ($record) => $record->lecturer?->email),
 
                 Tables\Columns\TextColumn::make('category.name')
                     ->label(__('admin.quiz_col_category'))
@@ -125,12 +117,6 @@ class QuizResource extends Resource
                     ->label(__('admin.quiz_col_questions'))
                     ->alignCenter()
                     ->sortable(),
-
-                Tables\Columns\TextColumn::make('price')
-                    ->label(__('admin.quiz_col_price'))
-                    ->formatStateUsing(fn ($state) => $state > 0 ? $sym . number_format((float) $state, 2) : __('admin.quiz_free_label'))
-                    ->sortable()
-                    ->color(fn ($state) => $state > 0 ? 'warning' : 'success'),
 
                 Tables\Columns\TextColumn::make('total_attempts')
                     ->label(__('admin.quiz_col_attempts'))
@@ -186,12 +172,6 @@ class QuizResource extends Resource
                     ->relationship('category', 'name')
                     ->searchable()
                     ->preload(),
-                Tables\Filters\Filter::make('paid_only')
-                    ->label(__('admin.quiz_filter_paid_only'))
-                    ->query(fn (Builder $q) => $q->where('price', '>', 0)),
-                Tables\Filters\Filter::make('free_only')
-                    ->label(__('admin.quiz_filter_free_only'))
-                    ->query(fn (Builder $q) => $q->where('price', '=', 0)),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

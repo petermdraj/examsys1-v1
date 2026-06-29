@@ -119,7 +119,6 @@ Add to crontab:
 | Framework | Laravel 13 / PHP 8.3 |
 | Admin panels | FilamentPHP 3 |
 | AI | OpenAI GPT-4o via `openai-php/laravel` |
-| Payments | Razorpay, Stripe |
 | Queue / Cache | Redis |
 | PDF | barryvdh/laravel-dompdf |
 | Permissions | spatie/laravel-permission |

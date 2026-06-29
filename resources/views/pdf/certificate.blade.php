@@ -366,7 +366,7 @@ body {
 
             <div class="sig-block">
                 <div class="sig-line"></div>
-                <div class="sig-name">{{ $quiz->creator->name }}</div>
+                <div class="sig-name">{{ $quiz->lecturer->name }}</div>
                 <div class="sig-role">{{ __('certificate.sig_author_role') }}</div>
             </div>
         </div>

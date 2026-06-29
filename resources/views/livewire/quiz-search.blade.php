@@ -330,8 +330,8 @@
               @endif
             </div>
             <div class="qcard-author">
-              <div class="avatar qsr-avatar">{{ strtoupper(substr($quiz->creator->name, 0, 1)) }}</div>
-              {{ $quiz->creator->name }}
+              <div class="avatar qsr-avatar">{{ strtoupper(substr($quiz->lecturer->name, 0, 1)) }}</div>
+              {{ $quiz->lecturer->name }}
             </div>
           </div>
         </a>

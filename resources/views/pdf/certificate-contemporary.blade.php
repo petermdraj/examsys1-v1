@@ -127,8 +127,8 @@ body {
         <img src="{{ 'file://' . $logoUrl }}" alt="Logo"
              style="max-height:11mm;max-width:45mm;object-fit:contain;display:block;">
     @else
-        <span class="lb-icon">{{ strtoupper(substr($quiz->creator->name, 0, 1)) }}</span>
-        <span class="lb-name">{{ $quiz->creator->name }}</span>
+        <span class="lb-icon">{{ strtoupper(substr($quiz->lecturer->name, 0, 1)) }}</span>
+        <span class="lb-name">{{ $quiz->lecturer->name }}</span>
     @endif
 </div>
 
@@ -178,9 +178,9 @@ body {
 
 {{-- Right: Signature --}}
 <div class="r-sig">
-    <div class="r-sig-mark">{{ $quiz->creator->name }}</div>
+    <div class="r-sig-mark">{{ $quiz->lecturer->name }}</div>
     <div class="r-sig-rule"></div>
-    <div class="r-sig-name">{{ $quiz->creator->name }}</div>
+    <div class="r-sig-name">{{ $quiz->lecturer->name }}</div>
     <div class="r-sig-role">Quiz Author</div>
 </div>
 

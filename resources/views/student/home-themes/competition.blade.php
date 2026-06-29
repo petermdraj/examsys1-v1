@@ -202,15 +202,10 @@ $catIcons = [
           </div>
           <div class="qc2-foot">
             <div class="qc2-creator">
-              <span class="qc2-avatar">{{ strtoupper(substr($quiz->creator->name,0,2)) }}</span>
-              <span class="qc2-creator-name">{{ $quiz->creator->name }}</span>
+              <span class="qc2-avatar">{{ strtoupper(substr($quiz->lecturer->name,0,2)) }}</span>
+              <span class="qc2-creator-name">{{ $quiz->lecturer->name }}</span>
               <svg class="qc2-verified" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
-            @if(!$quiz->isFree())
-            <div class="qc2-price">
-                <span class="qc2-badge-price">{{ $platformSettings->currency_symbol }}{{ number_format($quiz->price, 0) }}</span>
-            </div>
-            @endif
           </div>
           <div class="qc2-stats">
             <span class="qc2-stat">

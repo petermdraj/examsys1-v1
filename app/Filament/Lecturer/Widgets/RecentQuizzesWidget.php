@@ -3,7 +3,6 @@
 namespace App\Filament\Lecturer\Widgets;
 
 use App\Models\Quiz;
-use App\Settings\PlatformSettings;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -17,8 +16,6 @@ class RecentQuizzesWidget extends BaseWidget
 
     public function table(Table $table): Table
     {
-        $sym = app(PlatformSettings::class)->currency_symbol;
-
         return $table
             ->query(
                 Quiz::where('lecturer_id', auth()->id())
@@ -39,10 +36,6 @@ class RecentQuizzesWidget extends BaseWidget
                 Tables\Columns\TextColumn::make('total_attempts')
                     ->label(__('lecturer.col_attempts'))
                     ->alignCenter(),
-
-                Tables\Columns\TextColumn::make('price')
-                    ->formatStateUsing(fn ($state) => $state > 0 ? $sym . number_format((float) $state, 2) : '')
-                    ->color(fn ($state) => $state > 0 ? 'warning' : 'gray'),
 
                 Tables\Columns\TextColumn::make('status')
                     ->label(__('lecturer.col_status'))

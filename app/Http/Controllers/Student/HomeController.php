@@ -12,7 +12,7 @@ class HomeController extends Controller
     public function index(PlatformSettings $platformSettings)
     {
         $categories = Category::where('is_active', true)->orderBy('sort_order')->take(12)->get();
-        $featuredQuery = Quiz::with(['creator', 'category'])
+        $featuredQuery = Quiz::with(['lecturer', 'category'])
             ->published()->public()
             ->orderByDesc('total_attempts');
 

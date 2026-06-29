@@ -49,10 +49,10 @@
       </div>
 
       <div class="card creator-card">
-        <span class="avatar avatar-lg" style="background:var(--brand-primary)">{{ strtoupper(substr($quiz->creator->name,0,2)) }}</span>
+        <span class="avatar avatar-lg" style="background:var(--brand-primary)">{{ strtoupper(substr($quiz->lecturer->name,0,2)) }}</span>
         <div class="creator-meta">
-          <div class="nm">{{ $quiz->creator->name }}</div>
-          <div class="sec qs-creator-sec">{{ __('quiz.lecturer_quizzes_published', ['count' => $quiz->creator->quizzes()->published()->count()]) }}</div>
+          <div class="nm">{{ $quiz->lecturer->name }}</div>
+          <div class="sec qs-creator-sec">{{ __('quiz.lecturer_quizzes_published', ['count' => $quiz->lecturer->quizzes()->published()->count()]) }}</div>
         </div>
       </div>
 
@@ -75,7 +75,7 @@
         @if($quiz->max_attempts)
         <div class="whats-item">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v16M4 8h16M9 4v16"/></svg>
-          <div><div class="l">{{ __('quiz.label_attempts_allowed') }}</div><div class="v">{{ __('quiz.label_attempts_per_purchase', ['count' => $quiz->max_attempts]) }}</div></div>
+          <div><div class="l">{{ __('quiz.label_attempts_allowed') }}</div><div class="v">{{ $quiz->max_attempts }}</div></div>
         </div>
         @endif
         @if($quiz->negative_marking_enabled)
@@ -157,10 +157,6 @@
       @endif
 
       <div class="card buy">
-        @if($quiz->price > 0)
-        <div class="buy-price">{{ $platformSettings->currency_symbol }}{{ number_format($quiz->price, 0) }}</div>
-        @endif
-
         @if($isEnrolled || ($isAssigned ?? false))
           <form method="POST" action="{{ route('attempt.start', $quiz->slug) }}" class="qs-mt20">@csrf
             <button type="submit" class="btn btn-primary btn-lg btn-block">{{ __('quiz.start_exam') }}</button>

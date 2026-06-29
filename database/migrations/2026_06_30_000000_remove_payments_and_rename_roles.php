@@ -78,16 +78,27 @@ return new class extends Migration
 
     private function renameCreatorIdColumn(string $table): void
     {
-        if (! Schema::hasTable($table) || ! Schema::hasColumn($table, 'lecturer_id')) {
+        if (! Schema::hasTable($table)) {
             return;
         }
 
-        Schema::table($table, function (Blueprint $blueprint) {
-            $blueprint->dropForeign(['lecturer_id']);
-        });
+        if (Schema::hasColumn($table, 'creator_id') && ! Schema::hasColumn($table, 'lecturer_id')) {
+            Schema::table($table, function (Blueprint $blueprint) {
+                $blueprint->renameColumn('creator_id', 'lecturer_id');
+            });
+        }
 
-        Schema::table($table, function (Blueprint $blueprint) {
-            $blueprint->renameColumn('lecturer_id', 'lecturer_id');
+        if (! Schema::hasColumn($table, 'lecturer_id')) {
+            return;
+        }
+
+        Schema::table($table, function (Blueprint $blueprint) use ($table) {
+            $foreignName = "{$table}_lecturer_id_foreign";
+            try {
+                $blueprint->dropForeign(['lecturer_id']);
+            } catch (\Throwable) {
+                // Foreign key may not exist on fresh installs.
+            }
         });
 
         Schema::table($table, function (Blueprint $blueprint) {

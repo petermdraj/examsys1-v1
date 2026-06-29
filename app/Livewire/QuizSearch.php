@@ -48,7 +48,7 @@ class QuizSearch extends Component
     {
         $query = Quiz::where('status', 'published')
             ->where('visibility', 'public')
-            ->with('category', 'creator');
+            ->with('category', 'lecturer');
 
         if (auth()->check() && auth()->user()->role === 'student') {
             app(QuizAssignmentService::class)->scopeAssignedToStudent($query, auth()->user());

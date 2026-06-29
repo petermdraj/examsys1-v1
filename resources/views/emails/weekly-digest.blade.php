@@ -64,11 +64,7 @@ body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #F3F0FF; pa
               @if($quiz->total_questions) · {{ $quiz->total_questions }} questions @endif
               @if($quiz->duration_minutes) · {{ $quiz->duration_minutes }} min @endif
             </div>
-            @if($quiz->price > 0)
-              <span class="quiz-badge badge-paid">{{ $sym }}{{ number_format($quiz->price, 0) }}</span>
-            @else
-              <span class="quiz-badge badge-free">{{ __('quiz.card_free') }}</span>
-            @endif
+            <span class="quiz-badge badge-free">{{ __('quiz.card_free') }}</span>
           </div>
         </div>
         @endforeach

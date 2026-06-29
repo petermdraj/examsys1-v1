@@ -63,9 +63,6 @@
             @if($quiz->category)
               <span class="myf-cat-badge">{{ $quiz->category->name }}</span>
             @endif
-            @if($quiz->price > 0)
-              <span class="myf-paid-badge">{{ $sym }}{{ number_format($quiz->price, 0) }}</span>
-            @endif
           </div>
 
           <a href="{{ route('quizzes.show', $quiz->slug) }}"

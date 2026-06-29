@@ -151,10 +151,6 @@
         <div class="rp-sel-meta">
             <span class="badge-{{ $quiz->status === 'published' ? 'published' : 'draft' }}">{{ ucfirst($quiz->status) }}</span>
             <span class="rp-sel-count">{{ $quiz->total_questions }} questions</span>
-            @if($quiz->price > 0)
-            <span class="rp-sel-dot">·</span>
-            <span class="rp-sel-count">{{ $sym.$quiz->price }}</span>
-            @endif
         </div>
         @endif
     </div>
@@ -320,7 +316,6 @@
                     ['label'=>__('lecturer.rp_meta_pass_pct'),     'value'=>$quiz->pass_percentage.'%',      'color'=>'#10b981', 'icon'=>'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
                     ['label'=>__('lecturer.rp_meta_duration'),     'value'=>$quiz->duration_minutes ? $quiz->duration_minutes.' min' : __('lecturer.rp_unlimited'),'color'=>'#3b82f6','icon'=>'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
                     ['label'=>__('lecturer.rp_meta_max_attempts'), 'value'=>$quiz->max_attempts ?? __('lecturer.rp_unlimited'),'color'=>'#6366f1','icon'=>'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15'],
-                    $quiz->price > 0 ? ['label'=>__('lecturer.rp_meta_price'), 'value'=>$sym.$quiz->price, 'color'=>'#ec4899', 'icon'=>'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z'] : null,
                 ]));
             @endphp
             @foreach($meta as $m)

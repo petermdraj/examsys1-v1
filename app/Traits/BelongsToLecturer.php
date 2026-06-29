@@ -14,6 +14,12 @@ trait BelongsToLecturer
         });
     }
 
+    public function scopeByLecturer($query, $userId = null)
+    {
+        return $query->where('lecturer_id', $userId ?? Auth::id());
+    }
+
+    /** @deprecated Use scopeByLecturer() */
     public function scopeByCreator($query, $userId = null)
     {
         return $query->where('lecturer_id', $userId ?? Auth::id());
