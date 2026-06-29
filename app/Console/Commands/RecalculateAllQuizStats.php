@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 
 class RecalculateAllQuizStats extends Command
 {
-    protected $signature   = 'quizora:recalculate-stats {--published : Only published quizzes}';
+    protected $signature   = 'examsys:recalculate-stats {--published : Only published quizzes}';
     protected $description = 'Recalculate attempt stats for all quizzes';
 
     public function handle(): void

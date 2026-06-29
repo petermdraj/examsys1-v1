@@ -20,7 +20,7 @@ return [
     'top_scores'=>'Topresultater','anonymous'=>'Anonym','rank'=>'Placering','score'=>'Score',
     'certificate_verified'=>'Verificeret certifikat','certificate_pass_earn'=>'Bestå og få et delbart certifikat med QR-verificering',
     'save_to_favourites'=>'Tilføj til favoritter','remove_from_favourites'=>'Fjern fra favoritter','share_this_quiz'=>'Del denne quiz','copy_link'=>'Kopiér link','link_copied'=>'Link kopieret!',
-    'creator_quizzes_published'=>':count quizzer udgivet','more_by_creator'=>'Mere fra denne skaber',
+    'lecturer_quizzes_published'=>':count quizzer udgivet','more_by_lecturer'=>'Mere fra denne skaber',
     'result_heading'=>'Eksamensresultat','result_score'=>'Din score','result_passed'=>'Bestået!','result_failed'=>'Ikke bestået',
     'result_percentage'=>':percent%','result_time_taken'=>'Brugt tid','result_questions_correct'=>'Korrekte','result_questions_wrong'=>'Forkerte','result_questions_skipped'=>'Sprunget over',
     'result_marks_earned'=>'Optjente point','result_total_marks'=>'af :total','result_pass_percentage'=>'Beståelsesprocent',

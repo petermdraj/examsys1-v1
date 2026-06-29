@@ -2,7 +2,7 @@
 
 return [
     // Top bar
-    'brand'                    => 'QUIZORA',
+    'brand'                    => 'EXAMSYS',
     'time_left'                => 'TIME LEFT',
     'time_unlimited'           => '∞',
     'end_test'                 => 'End test',

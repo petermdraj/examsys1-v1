@@ -98,8 +98,8 @@ return [
     'link_copied'              => 'लिंक कॉपी हो गया!',
 
     // Creator card on quiz detail
-    'creator_quizzes_published'  => ':count क्विज़ प्रकाशित',
-    'more_by_creator'            => 'इस क्रिएटर के और क्विज़',
+    'lecturer_quizzes_published'  => ':count क्विज़ प्रकाशित',
+    'more_by_lecturer'            => 'इस क्रिएटर के और क्विज़',
 
     // Attempt / result page
     'result_heading'           => 'परीक्षा परिणाम',

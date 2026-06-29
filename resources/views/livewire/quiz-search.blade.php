@@ -190,32 +190,17 @@
 </script>
 @endscript
 
-      {{-- Price --}}
-      <div class="qs-field">
-        <label class="qs-label">{{ __('quiz.filter_price') }}</label>
-        <div class="qs-seg">
-          @foreach(['' => __('quiz.filter_all'), 'free' => __('quiz.filter_free'), 'paid' => __('quiz.filter_paid')] as $val => $label)
-          <label class="qs-seg-btn {{ $price === $val ? 'on' : '' }}">
-            <input type="radio" wire:model.live="price" value="{{ $val }}" class="qsr-hidden">
-            {{ $label }}
-          </label>
-          @endforeach
-        </div>
-      </div>
-
       {{-- Sort (mobile only inside drawer) --}}
       <div class="qs-field qs-mobile-only">
         <label class="qs-label">{{ __('quiz.sort_by') }}</label>
         <select wire:model.live="sort" class="qs-select">
           <option value="newest">{{ __('quiz.sort_newest') }}</option>
           <option value="popular">{{ __('quiz.sort_popular') }}</option>
-          <option value="price_asc">{{ __('quiz.sort_price_asc') }}</option>
-          <option value="price_desc">{{ __('quiz.sort_price_desc') }}</option>
         </select>
       </div>
 
       {{-- Active filters clear --}}
-      @if($search || $category || $price)
+      @if($search || $category)
       <button onclick="catClearAll()" class="qs-clear-btn">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
         {{ __('quiz.clear_all_filters') }}
@@ -235,8 +220,6 @@
         <select wire:model.live="sort" class="qs-select qs-desktop-only qsr-sort-select">
           <option value="newest">{{ __('quiz.sort_newest') }}</option>
           <option value="popular">{{ __('quiz.sort_popular') }}</option>
-          <option value="price_asc">{{ __('quiz.sort_price_asc') }}</option>
-          <option value="price_desc">{{ __('quiz.sort_price_desc') }}</option>
         </select>
       </div>
 
@@ -278,24 +261,24 @@
       @endif
 
       {{-- Loading overlay --}}
-      <div wire:loading wire:target="search,category,price,sort" class="qs-loading">
+      <div wire:loading wire:target="search,category,sort" class="qs-loading">
         <div class="qs-spinner"></div>
       </div>
 
       {{-- Empty state --}}
       @if($quizzes->isEmpty())
-      <div class="qs-empty" wire:loading.remove wire:target="search,category,price,sort">
+      <div class="qs-empty" wire:loading.remove wire:target="search,category,sort">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         <h3 class="qsr-empty-title">{{ __('quiz.no_results') }}</h3>
         <p class="sec">{{ __('quiz.no_results_desc') }}</p>
-        @if($search || $category || $price)
+        @if($search || $category)
         <button wire:click="clearFilters" class="btn btn-ghost qsr-clear-filters-btn">{{ __('quiz.clear_filters') }}</button>
         @endif
       </div>
 
       @else
       {{-- Quiz grid --}}
-      <div class="qs-grid" wire:loading.class="qs-grid-loading" wire:target="search,category,price,sort">
+      <div class="qs-grid" wire:loading.class="qs-grid-loading" wire:target="search,category,sort">
         @foreach($quizzes as $quiz)
         @php $idx = ($loop->index % 9) + 1; @endphp
         <div class="qcard-wrap qsr-qcard-wrap">
@@ -313,11 +296,6 @@
           >
             <div class="qcard-cover-top">
               <span class="qcard-cat">{{ $quiz->category->name }}</span>
-              @if($quiz->price > 0)
-                <span class="qcard-price">{{ $sym }}{{ number_format($quiz->price, 0) }}</span>
-              @else
-                <span class="qcard-free">{{ __('quiz.card_free') }}</span>
-              @endif
             </div>
             <div class="qcard-title-overlay" style="{{ ($quiz->start_at || $quiz->end_at) ? 'padding-bottom:36px;' : '' }}">
               <h3 class="qcard-title">{{ $quiz->title }}</h3>

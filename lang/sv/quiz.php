@@ -20,7 +20,7 @@ return [
     'top_scores'=>'Toppoäng','anonymous'=>'Anonym','rank'=>'Placering','score'=>'Poäng',
     'certificate_verified'=>'Verifierat certifikat','certificate_pass_earn'=>'Klara och få ett delbart certifikat med QR-verifiering',
     'save_to_favourites'=>'Lägg till i favoriter','remove_from_favourites'=>'Ta bort från favoriter','share_this_quiz'=>'Dela detta quiz','copy_link'=>'Kopiera länk','link_copied'=>'Länk kopierad!',
-    'creator_quizzes_published'=>':count quiz publicerade','more_by_creator'=>'Mer från denna skapare',
+    'lecturer_quizzes_published'=>':count quiz publicerade','more_by_lecturer'=>'Mer från denna skapare',
     'result_heading'=>'Examensresultat','result_score'=>'Ditt resultat','result_passed'=>'Godkänd!','result_failed'=>'Underkänd',
     'result_percentage'=>':percent%','result_time_taken'=>'Åtgången tid','result_questions_correct'=>'Rätt','result_questions_wrong'=>'Fel','result_questions_skipped'=>'Hoppade över',
     'result_marks_earned'=>'Intjänade poäng','result_total_marks'=>'av :total','result_pass_percentage'=>'Godkändgräns',

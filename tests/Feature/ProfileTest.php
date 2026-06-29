@@ -140,14 +140,12 @@ class ProfileTest extends TestCase
             ->post('/profile/notifications', [
                 'notify_quiz_results'  => '1',
                 'notify_weekly_digest' => '1',
-                // notify_purchases intentionally omitted → should be false
             ])
             ->assertRedirect()
             ->assertSessionHas('success');
 
         $prefs = $user->fresh()->notification_preferences;
         $this->assertTrue($prefs['notify_quiz_results']);
-        $this->assertFalse($prefs['notify_purchases']);
         $this->assertTrue($prefs['notify_weekly_digest']);
     }
 
@@ -416,7 +414,6 @@ class ProfileTest extends TestCase
         $prefs = $user->notification_preferences;
 
         $this->assertTrue($prefs['notify_quiz_results']);
-        $this->assertTrue($prefs['notify_purchases']);
         $this->assertFalse($prefs['notify_weekly_digest']);
     }
 }

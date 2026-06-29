@@ -22,7 +22,7 @@ return [
     'widget_total_quizzes'      => 'कुल क्विज़',
     'widget_total_orders'       => 'कुल ऑर्डर',
     'widget_ai_usage'           => 'आज की AI जनरेशन',
-    'widget_top_creators'       => 'शीर्ष क्रिएटर',
+    'widget_top_lecturers'       => 'शीर्ष क्रिएटर',
 
     // User resource
     'user_heading'                  => 'उपयोगकर्ता',
@@ -38,8 +38,8 @@ return [
     'user_col_ai_credits'           => 'AI क्रेडिट',
     'user_col_active'               => 'सक्रिय',
     'user_role_super_admin'         => 'सुपर व्यवस्थापक',
-    'user_role_creator'             => 'निर्माता',
-    'user_role_customer'            => 'ग्राहक',
+    'user_role_lecturer'            => 'प्रशिक्षक',
+    'user_role_student'             => 'छात्र',
     'user_action_activate'          => 'सक्रिय करें',
     'user_action_deactivate'        => 'निष्क्रिय करें',
     'user_action_suspend'           => 'निलंबित करें',
@@ -257,7 +257,7 @@ return [
     'settings_desc_footer_columns'  => 'फ़ुटर में अधिकतम 4 लिंक कॉलम जोड़ें। प्रत्येक कॉलम में एक शीर्षक और लिंक की सूची होती है।',
     'settings_desc_renewal'         => 'सदस्यता समाप्त होने से पहले क्रिएटर को स्वचालित ईमेल भेजे जाते हैं।',
     'settings_desc_grace'           => 'समाप्ति के बाद की वह अवधि जिसमें प्रीमियम सुविधाएं सक्रिय रहती हैं, जिससे क्रिएटर को नवीनीकरण का समय मिलता है।',
-    'settings_desc_cron'            => 'Quizora स्वचालित बैकग्राउंड कार्यों के लिए Laravel टास्क शेड्यूलर पर निर्भर करता है। इन सुविधाओं के काम करने के लिए आपको अपने सर्वर पर निम्नलिखित cron प्रविष्टि जोड़नी होगी।',
+    'settings_desc_cron'            => 'ExamSys स्वचालित बैकग्राउंड कार्यों के लिए Laravel टास्क शेड्यूलर पर निर्भर करता है। इन सुविधाओं के काम करने के लिए आपको अपने सर्वर पर निम्नलिखित cron प्रविष्टि जोड़नी होगी।',
     'settings_desc_razorpay'        => 'Razorpay केवल INR का समर्थन करता है। यदि आपकी प्लेटफ़ॉर्म मुद्रा INR नहीं है, तो Stripe का उपयोग करें।',
 
     // Settings — field labels
@@ -499,7 +499,7 @@ return [
     'order_filter_paid_today'        => 'आज भुगतान',
     'order_filter_paid_this_month'   => 'इस माह भुगतान',
     'order_modal_refund_heading'     => 'वापसी के रूप में चिह्नित करें?',
-    'order_modal_refund_desc'        => 'यह Quizora में ऑर्डर को वापस किया हुआ चिह्नित करता है। वास्तविक वापसी आपके भुगतान गेटवे में अलग से करनी होगी।',
+    'order_modal_refund_desc'        => 'यह ExamSys में ऑर्डर को वापस किया हुआ चिह्नित करता है। वास्तविक वापसी आपके भुगतान गेटवे में अलग से करनी होगी।',
     'order_notif_refunded'           => 'ऑर्डर वापस किया हुआ चिह्नित',
     'order_bulk_export_csv'          => 'CSV में निर्यात करें',
 
@@ -675,7 +675,7 @@ return [
     'widget_ai_no_usage'           => 'अभी तक कोई AI उपयोग नहीं',
 
     // Widget — Top Creators
-    'widget_top_creators_desc'     => 'क्विज़ बिक्री से कुल कमाई के आधार पर',
+    'widget_top_lecturers_desc'     => 'क्विज़ बिक्री से कुल कमाई के आधार पर',
     'col_creator'                  => 'क्रिएटर',
     'col_email'                    => 'ईमेल',
     'col_published'                => 'प्रकाशित',
@@ -708,7 +708,7 @@ return [
 
     // Settings page placeholders
     'settings_ph_quizzes_url'   => '/quizzes के लिए खाली छोड़ें',
-    'settings_ph_creators_url'  => '/for-creators के लिए खाली छोड़ें',
+    'settings_ph_creators_url'  => '/for-lecturers के लिए खाली छोड़ें',
     'settings_ph_stat_1_value'  => '50,000+',
     'settings_ph_stat_1_label'  => 'मॉक टेस्ट दिए गए',
     'settings_ph_stat_2_value'  => '94%',

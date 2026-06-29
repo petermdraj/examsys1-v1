@@ -14,7 +14,7 @@ return [
     'result_status_passed'      => 'PASSED',
     'result_status_failed'      => 'FAILED',
     'result_cta'                => 'View Full Results',
-    'footer_copyright'          => '© :year Quizora. All rights reserved.',
+    'footer_copyright'          => '© :year ExamSys. All rights reserved.',
     'footer_rights'             => 'All rights reserved.',
 
     // Shared
@@ -45,7 +45,7 @@ return [
     'digest_heading'            => 'New quizzes dropped this week 🎯',
     'digest_date_range'         => ':from – :to',
     'digest_greeting'           => 'Hi :name,',
-    'digest_intro'              => "Here's what's new on Quizora this week. Jump in and test your knowledge!",
+    'digest_intro'              => "Here's what's new on ExamSys this week. Jump in and test your knowledge!",
     'digest_section_label'      => "This week's quizzes",
     'digest_questions_count'    => '· :count questions',
     'digest_duration'           => '· :minutes min',
@@ -56,7 +56,7 @@ return [
     'digest_manage_prefs'       => 'Manage notification preferences',
 
     // OTP verification email
-    'otp_subject'               => 'Your Quizora verification code',
+    'otp_subject'               => 'Your ExamSys verification code',
     'otp_greeting'              => 'Hi :name',
     'otp_intro'                 => 'Thanks for signing up! Use the code below to verify your email address and activate your account.',
     'otp_label'                 => 'Your verification code',

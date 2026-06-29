@@ -13,15 +13,13 @@ class QuizFactory extends Factory
     {
         $title = $this->faker->sentence(4);
         return [
-            'creator_id'               => User::factory(),
+            'lecturer_id'               => User::factory(),
             'category_id'              => Category::factory(),
             'title'                    => $title,
             'slug'                     => Str::slug($title) . '-' . Str::random(4),
             'description'              => $this->faker->paragraph(),
             'status'                   => 'published',
             'visibility'               => 'public',
-            'price'                    => 0,
-            'currency'                 => 'INR',
             'pass_percentage'          => 60,
             'shuffle_questions'        => false,
             'shuffle_options'          => false,

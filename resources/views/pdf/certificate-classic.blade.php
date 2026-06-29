@@ -189,7 +189,7 @@ body {
 <div class="title">Certificate of Achievement</div>
 
 {{-- Subtitle --}}
-<div class="title-sub">Verified proficiency in a Quizora assessment</div>
+<div class="title-sub">Verified proficiency in a platform assessment</div>
 
 {{-- Flourish —◆— --}}
 <div class="fl-wrap">

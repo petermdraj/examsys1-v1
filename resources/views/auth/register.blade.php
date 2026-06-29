@@ -59,46 +59,20 @@
         <input class="input" type="password" name="password" required placeholder="{{ __('auth.register_password_placeholder') }}">
       </div>
 
-      {{-- Creator toggle — only visible when creator registration is open --}}
-      @if($platformSettings->creator_registration_open)
-      <div class="reg-creator-box"
-           onclick="document.getElementById('creator_toggle').click()">
+      {{-- Lecturer registration only — students are added by admin --}}
+      @if($platformSettings->lecturer_registration_open)
+      <input type="hidden" name="role" value="lecturer">
+      <div class="reg-creator-box" style="border-color:var(--brand-primary);background:color-mix(in srgb,var(--brand-primary) 8%,white);cursor:default;">
         <div>
-          <div class="reg-creator-label-title">{{ __('auth.register_creator_toggle_label') }}</div>
-          <div class="reg-creator-label-desc">{{ __('auth.register_creator_toggle_desc') }}</div>
+          <div class="reg-creator-label-title">{{ __('auth.register_lecturer_only_title') }}</div>
+          <div class="reg-creator-label-desc">{{ __('auth.register_lecturer_only_desc') }}</div>
         </div>
-        <label class="reg-toggle" onclick="event.stopPropagation()">
-          <input type="checkbox" id="creator_toggle" name="role" value="creator"
-                 class="reg-toggle-input"
-                 {{ old('role') === 'creator' ? 'checked' : '' }}
-                 onchange="this.closest('.reg-creator-box').style.borderColor=this.checked?'var(--brand-primary)':'var(--border)';
-                           this.closest('.reg-creator-box').style.background=this.checked?'color-mix(in srgb,var(--brand-primary) 8%,white)':'var(--surface-soft,#f5f4ff)'">
-          <span class="reg-toggle-track"></span>
-          <span class="reg-toggle-thumb"></span>
-        </label>
       </div>
-      <script>
-        (function(){
-          'use strict';
-          var cb = document.getElementById('creator_toggle');
-          var track = cb.nextElementSibling;
-          var thumb = track.nextElementSibling;
-          var card  = cb.closest('.reg-creator-box');
-          function sync(){
-            track.style.background = cb.checked ? 'var(--brand-primary)' : '#CBD5E1';
-            thumb.style.transform  = cb.checked ? 'translateX(20px)' : 'translateX(0)';
-            card.style.borderColor = cb.checked ? 'var(--brand-primary)' : 'var(--border)';
-            card.style.background  = cb.checked ? 'color-mix(in srgb,var(--brand-primary) 8%,white)' : 'var(--surface-soft,#f5f4ff)';
-          }
-          cb.addEventListener('change', sync);
-          sync();
-        })();
-      </script>
       @endif
 
       {{-- Hidden field so unchecked checkbox still submits "customer" --}}
-      @if(!$platformSettings->creator_registration_open)
-        <input type="hidden" name="role" value="customer">
+      @if(!$platformSettings->lecturer_registration_open)
+        {{-- Registration page should not render when closed; kept for safety --}}
       @endif
 
       <div class="field reg-field-last">

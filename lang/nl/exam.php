@@ -1,6 +1,6 @@
 <?php
 return [
-    'brand'=>'QUIZORA','time_left'=>'RESTERENDE TIJD','time_unlimited'=>'∞','end_test'=>'Test beëindigen','questions_count'=>'Vragen',
+    'brand'=>'EXAMSYS','time_left'=>'RESTERENDE TIJD','time_unlimited'=>'∞','end_test'=>'Test beëindigen','questions_count'=>'Vragen',
     'saving'=>'Opslaan…','saved'=>'✓ Opgeslagen','not_saved'=>'! Niet opgeslagen','save_failed_connection'=>'Opslaan mislukt. Controleer verbinding.',
     'question_of'=>'V :current / :total','mark_singular'=>'punt','mark_plural'=>'punten','negative_wrong'=>'−:marks fout',
     'fill_blank_placeholder'=>'Typ uw antwoord…','show_hint'=>'Hint weergeven','hide_hint'=>'Hint verbergen',

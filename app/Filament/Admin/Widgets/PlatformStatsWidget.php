@@ -16,7 +16,7 @@ class PlatformStatsWidget extends BaseWidget
     {
         $totalUsers    = User::count();
         $newUsersToday = User::whereDate('created_at', today())->count();
-        $creators      = User::where('role', 'creator')->count();
+        $creators      = User::where('role', 'lecturer')->count();
         $published     = Quiz::where('status', 'published')->count();
         $totalQuizzes  = Quiz::count();
         $attempts      = Attempt::count();

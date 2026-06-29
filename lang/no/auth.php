@@ -1,9 +1,9 @@
 <?php
 return [
     'failed'                     => 'Disse legitimasjonsdataene samsvarer ikke med våre registreringer.',
-    'login_title'                => 'Logg inn — Quizora',
+    'login_title'                => 'Logg inn — ExamSys',
     'login_heading'              => 'Velkommen tilbake',
-    'login_subheading'           => 'Logg inn på din Quizora-konto',
+    'login_subheading'           => 'Logg inn på din ExamSys-konto',
     'login_email_label'          => 'E-post',
     'login_email_placeholder'    => 'deg@eksempel.no',
     'login_password_label'       => 'Passord',
@@ -23,8 +23,8 @@ return [
     'register_submit'                => 'Opprett konto',
     'register_have_account'          => 'Har du allerede en konto?',
     'register_login_link'            => 'Logg inn →',
-    'register_creator_toggle_label'  => 'Er du en quiz-skaper?',
-    'register_creator_toggle_desc'   => 'Aktiver dette for å publisere og selge dine egne quizer',
+    'register_lecturer_toggle_label'  => 'Er du en quiz-skaper?',
+    'register_lecturer_toggle_desc'   => 'Aktiver dette for å publisere og selge dine egne quizer',
     'or_divider'              => 'eller',
     'continue_with_google'    => 'Fortsett med Google',
     'otp_title'               => 'Bekreft e-posten din',

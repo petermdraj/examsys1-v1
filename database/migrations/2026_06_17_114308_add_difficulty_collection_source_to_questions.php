@@ -13,8 +13,8 @@ return new class extends Migration {
                 ->constrained('question_collections')->nullOnDelete();
             $table->foreignUuid('source_bank_question_id')->nullable()->after('collection_id')
                 ->constrained('questions')->nullOnDelete();
-            // composite index for bank queries: WHERE creator_id=? AND quiz_id IS NULL
-            $table->index(['creator_id', 'quiz_id']);
+            // composite index for bank queries: WHERE lecturer_id=? AND quiz_id IS NULL
+            $table->index(['lecturer_id', 'quiz_id']);
         });
     }
 
@@ -23,7 +23,7 @@ return new class extends Migration {
         Schema::table('questions', function (Blueprint $table) {
             $table->dropForeign(['source_bank_question_id']);
             $table->dropForeign(['collection_id']);
-            $table->dropIndex(['creator_id', 'quiz_id']);
+            $table->dropIndex(['lecturer_id', 'quiz_id']);
             $table->dropColumn(['difficulty', 'collection_id', 'source_bank_question_id']);
         });
     }

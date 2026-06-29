@@ -1,9 +1,9 @@
 <?php
 return [
     'failed'                     => 'Ces identifiants ne correspondent pas à nos enregistrements.',
-    'login_title'                => 'Connexion — Quizora',
+    'login_title'                => 'Connexion — ExamSys',
     'login_heading'              => 'Bon retour',
-    'login_subheading'           => 'Connectez-vous à votre compte Quizora',
+    'login_subheading'           => 'Connectez-vous à votre compte ExamSys',
     'login_email_label'          => 'E-mail',
     'login_email_placeholder'    => 'vous@exemple.fr',
     'login_password_label'       => 'Mot de passe',
@@ -23,8 +23,8 @@ return [
     'register_submit'                => 'Créer un compte',
     'register_have_account'          => 'Déjà un compte ?',
     'register_login_link'            => 'Se connecter →',
-    'register_creator_toggle_label'  => 'Êtes-vous un créateur de quiz ?',
-    'register_creator_toggle_desc'   => 'Activez ceci pour publier et vendre vos propres quiz',
+    'register_lecturer_toggle_label'  => 'Êtes-vous un créateur de quiz ?',
+    'register_lecturer_toggle_desc'   => 'Activez ceci pour publier et vendre vos propres quiz',
     'or_divider'              => 'ou',
     'continue_with_google'    => 'Continuer avec Google',
     'otp_title'               => 'Vérifier votre e-mail',

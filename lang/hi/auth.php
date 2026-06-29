@@ -3,9 +3,9 @@
 return [
 
     // Login page
-    'login_title'                => 'लॉग इन — Quizora',
+    'login_title'                => 'लॉग इन — ExamSys',
     'login_heading'              => 'वापस स्वागत है',
-    'login_subheading'           => 'अपने Quizora खाते में लॉग इन करें',
+    'login_subheading'           => 'अपने ExamSys खाते में लॉग इन करें',
     'login_email_label'          => 'ईमेल',
     'login_email_placeholder'    => 'aap@example.com',
     'login_password_label'       => 'पासवर्ड',
@@ -27,8 +27,8 @@ return [
     'register_submit'                => 'खाता बनाएं',
     'register_have_account'          => 'पहले से खाता है?',
     'register_login_link'            => 'लॉग इन करें →',
-    'register_creator_toggle_label'  => 'क्या आप क्विज़ क्रिएटर हैं?',
-    'register_creator_toggle_desc'   => 'अपने क्विज़ प्रकाशित और बेचने के लिए इसे सक्षम करें',
+    'register_lecturer_toggle_label'  => 'क्या आप क्विज़ क्रिएटर हैं?',
+    'register_lecturer_toggle_desc'   => 'अपने क्विज़ प्रकाशित और बेचने के लिए इसे सक्षम करें',
 
     // Social login
     'or_divider'              => 'या',

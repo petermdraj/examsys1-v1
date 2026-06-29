@@ -21,7 +21,7 @@ return new class extends SettingsMigration
         $this->migrator->add('platform.allow_social_login', false);
         $this->migrator->add('platform.google_client_id', '');
         $this->migrator->add('platform.google_client_secret', '');
-        $this->migrator->add('platform.creator_registration_open', true);
+        $this->migrator->add('platform.lecturer_registration_open', true);
 
         // AI / OpenAI
         $this->migrator->add('platform.openai_api_key', '');
@@ -46,7 +46,7 @@ return new class extends SettingsMigration
         $this->migrator->add('platform.mail_encryption', 'tls');
 
         // SEO
-        $this->migrator->add('platform.seo_title', 'Quizora — AI-Powered Quiz Platform');
+        $this->migrator->add('platform.seo_title', 'ExamSys — AI-Powered Quiz Platform');
         $this->migrator->add('platform.seo_description', 'Create, share and attempt AI-generated quizzes.');
         $this->migrator->add('platform.seo_keywords', '');
         $this->migrator->add('platform.google_analytics_id', '');
@@ -70,7 +70,7 @@ return new class extends SettingsMigration
             'app_favicon','default_currency','currency_symbol',
             'primary_color','accent_color',
             'allow_registration','require_email_verification','allow_social_login',
-            'google_client_id','google_client_secret','creator_registration_open',
+            'google_client_id','google_client_secret','lecturer_registration_open',
             'openai_api_key','openai_organization','openai_model','ai_max_questions_per_prompt',
             'paypal_client_id','paypal_client_secret','paypal_mode',
             'filesystem_disk','aws_key','aws_secret','aws_region','aws_bucket','aws_url',

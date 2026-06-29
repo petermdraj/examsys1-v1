@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Settings\PlatformSettings;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller
@@ -30,26 +29,19 @@ class SocialAuthController extends Controller
 
         try {
             $googleUser = Socialite::driver('google')->user();
-        } catch (\Exception) {
+        } catch (\Exception $e) {
+            Log::warning('Google authentication failed', ['error' => $e->getMessage()]);
+
             return redirect()->route('login')->with('error', 'Google authentication failed. Please try again.');
         }
 
         $user = User::where('email', $googleUser->getEmail())->first();
 
         if (! $user) {
-            if (! $this->settings->allow_registration) {
-                return redirect()->route('login')->with('error', 'New registrations are currently closed.');
-            }
-
-            $user = User::create([
-                'name'              => $googleUser->getName(),
-                'email'             => $googleUser->getEmail(),
-                'password'          => Hash::make(Str::random(32)),
-                'email_verified_at' => now(),
-                'avatar'            => $googleUser->getAvatar(),
-            ]);
-
-            $user->assignRole('customer');
+            return redirect()->route('login')->with(
+                'error',
+                'No account found for this email. Students are added by an administrator; lecturers must register with email and password.'
+            );
         }
 
         auth()->login($user, true);

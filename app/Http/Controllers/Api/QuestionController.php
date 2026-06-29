@@ -9,7 +9,7 @@ class QuestionController extends Controller
 {
     public function destroy(Question $question)
     {
-        abort_if($question->quiz->creator_id !== auth()->id(), 403);
+        abort_if($question->quiz->lecturer_id !== auth()->id(), 403);
 
         $question->delete();
 

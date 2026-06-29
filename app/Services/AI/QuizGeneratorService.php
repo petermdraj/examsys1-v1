@@ -2,14 +2,12 @@
 
 namespace App\Services\AI;
 
-use App\Exceptions\PlanLimitExceededException;
 use App\Models\AiGenerationLog;
 use App\Models\FillBlankAnswer;
 use App\Models\Question;
 use App\Models\QuestionOption;
 use App\Models\Quiz;
 use App\Models\User;
-use App\Services\Quiz\PlanLimitService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Laravel\Facades\OpenAI;
@@ -32,7 +30,7 @@ class QuizGeneratorService
             'tokens_used'         => 0,
             'model'               => 'gpt-4o',
             'status'              => 'success',
-            'was_free'            => $user->ai_credits_free_remaining > 0,
+            'was_free'            => true,
         ]);
 
         try {
@@ -47,7 +45,10 @@ class QuizGeneratorService
 
             $raw        = $response->choices[0]->message->content;
             $tokensUsed = $response->usage->totalTokens ?? 0;
-            $questions  = array_slice($this->parser->parse($raw), 0, (int)($options['count'] ?? 50));
+            $questions  = $this->parser->parse($raw);
+            if (! empty($options['count'])) {
+                $questions = array_slice($questions, 0, (int) $options['count']);
+            }
 
             $saved = $this->saveQuestions($quiz, $questions);
 
@@ -76,7 +77,7 @@ class QuizGeneratorService
             'tokens_used'         => 0,
             'model'               => 'gpt-4o',
             'status'              => 'success',
-            'was_free'            => $user->ai_credits_free_remaining > 0,
+            'was_free'            => true,
         ]);
 
         $buffer = '';
@@ -97,7 +98,10 @@ class QuizGeneratorService
                 $onChunk($delta);
             }
 
-            $questions = array_slice($this->parser->parse($buffer), 0, (int)($options['count'] ?? 50));
+            $questions = $this->parser->parse($buffer);
+            if (! empty($options['count'])) {
+                $questions = array_slice($questions, 0, (int) $options['count']);
+            }
             $saved     = $this->saveQuestions($user, $quiz, $questions, $collectionId);
 
             $log->update([
@@ -116,23 +120,12 @@ class QuizGeneratorService
     {
         $saved     = [];
         $sortOrder = $quiz ? ($quiz->questions()->max('sort_order') ?? 0) : 0;
-        $limitService = app(PlanLimitService::class);
 
-        DB::transaction(function () use ($user, $quiz, $questions, $collectionId, $limitService, &$saved, &$sortOrder) {
+        DB::transaction(function () use ($user, $quiz, $questions, $collectionId, &$saved, &$sortOrder) {
             foreach ($questions as $q) {
-                // Enforce per-quiz limit when saving to a quiz (not to the bank)
-                if ($quiz) {
-                    try {
-                        $limitService->assertCanAddQuestion($user, $quiz->id);
-                    } catch (PlanLimitExceededException $e) {
-                        // Stop adding; already-saved questions in this loop are kept
-                        break;
-                    }
-                }
-
                 $question = Question::create([
                     'quiz_id'         => $quiz?->id,
-                    'creator_id'      => $user->id,
+                    'lecturer_id'      => $user->id,
                     'collection_id'   => $collectionId,
                     'type'            => $q['type'],
                     'content'         => $q['content'],

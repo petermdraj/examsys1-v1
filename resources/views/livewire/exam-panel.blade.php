@@ -18,7 +18,7 @@ $letters = ['A','B','C','D','E','F'];
 
   {{-- TOP BAR --}}
   <div class="exam-top">
-    <div class="exam-brand"><span class="m">Q</span> {{ __('exam.brand') }}</div>
+    <div class="exam-brand"><span class="m">{{ strtoupper(substr(config('app.name'), 0, 1)) }}</span> {{ strtoupper(config('app.name')) }}</div>
     <div class="exam-title" x-text="'{{ $quiz->title }}'"></div>
 
     <div class="exam-timer">

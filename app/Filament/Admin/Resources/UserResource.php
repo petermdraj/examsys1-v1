@@ -3,9 +3,6 @@
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\UserResource\Pages;
-use App\Traits\RestrictInDemoMode;
-use App\Models\Plan;
-use App\Models\Subscription;
 use App\Models\User;
 use App\Settings\PlatformSettings;
 use Filament\Forms;
@@ -19,7 +16,7 @@ use STS\FilamentImpersonate\Tables\Actions\Impersonate;
 
 class UserResource extends Resource
 {
-    use RestrictInDemoMode;
+    use \App\Traits\RestrictInDemoMode;
     protected static ?string $model = User::class;
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?int $navigationSort = 1;
@@ -41,8 +38,6 @@ class UserResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $sym = app(PlatformSettings::class)->currency_symbol;
-
         return $form->schema([
             Forms\Components\Section::make(__('admin.user_section_identity'))
                 ->columns(2)
@@ -68,10 +63,19 @@ class UserResource extends Resource
                         ->label(__('admin.user_col_role'))
                         ->options([
                             'super_admin' => __('admin.user_role_super_admin'),
-                            'creator'     => __('admin.user_role_creator'),
-                            'customer'    => __('admin.user_role_customer'),
+                            'lecturer'    => __('admin.user_role_lecturer'),
+                            'student'     => __('admin.user_role_student'),
                         ])
-                        ->required(),
+                        ->required()
+                        ->live(),
+                    Forms\Components\Select::make('student_batch_id')
+                        ->label(__('admin.user_field_student_batch'))
+                        ->relationship('studentBatch', 'name', fn ($query) => $query->where('is_active', true)->orderBy('name'))
+                        ->searchable()
+                        ->preload()
+                        ->required(fn (Forms\Get $get) => $get('role') === 'student')
+                        ->visible(fn (Forms\Get $get) => $get('role') === 'student')
+                        ->helperText(__('admin.user_student_batch_helper')),
                     Forms\Components\TextInput::make('phone')->label(__('admin.user_field_phone'))->maxLength(30),
                     Forms\Components\TextInput::make('country_code')->maxLength(5)->label(__('admin.user_field_country_code')),
                     Forms\Components\Toggle::make('is_active')
@@ -96,20 +100,12 @@ class UserResource extends Resource
                         ->label(__('admin.user_field_ai_credits_used'))
                         ->disabled()
                         ->dehydrated(false),
-                    Forms\Components\TextInput::make('wallet_balance')
-                        ->numeric()
-                        ->minValue(0)
-                        ->default(0)
-                        ->prefix($sym)
-                        ->label(__('admin.user_field_wallet_balance')),
                 ]),
         ]);
     }
 
     public static function table(Table $table): Table
     {
-        $sym = app(PlatformSettings::class)->currency_symbol;
-
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('avatar')
@@ -129,17 +125,20 @@ class UserResource extends Resource
                     ->badge()
                     ->color(fn ($state) => match ($state) {
                         'super_admin' => 'danger',
-                        'creator'     => 'success',
+                        'lecturer'     => 'success',
                         default       => 'gray',
                     })
-                    ->formatStateUsing(fn ($state) => ucfirst(str_replace('_', ' ', $state))),
+                    ->formatStateUsing(fn ($state) => match ($state) {
+                        'super_admin' => __('admin.user_role_super_admin'),
+                        'lecturer'    => __('admin.user_role_lecturer'),
+                        'student'     => __('admin.user_role_student'),
+                        default       => ucfirst(str_replace('_', ' ', $state)),
+                    }),
 
-                Tables\Columns\TextColumn::make('activeSubscription.plan.name')
-                    ->label(__('admin.user_col_plan'))
-                    ->badge()
-                    ->color('primary')
-                    ->default('—')
-                    ->visible(fn () => true),
+                Tables\Columns\TextColumn::make('studentBatch.name')
+                    ->label(__('admin.user_col_batch'))
+                    ->placeholder('—')
+                    ->toggleable(),
 
                 Tables\Columns\TextColumn::make('quizzes_count')
                     ->counts('quizzes')
@@ -152,12 +151,6 @@ class UserResource extends Resource
                     ->label(__('admin.user_col_attempts'))
                     ->sortable()
                     ->alignCenter(),
-
-                Tables\Columns\TextColumn::make('wallet_balance')
-                    ->label(__('admin.user_col_wallet'))
-                    ->formatStateUsing(fn ($state) => $sym . number_format((float) $state, 2))
-                    ->sortable()
-                    ->color(fn ($state) => $state > 0 ? 'success' : 'gray'),
 
                 Tables\Columns\TextColumn::make('ai_credits_free_remaining')
                     ->label(__('admin.user_col_ai_credits'))
@@ -178,23 +171,20 @@ class UserResource extends Resource
                 Tables\Filters\SelectFilter::make('role')
                     ->options([
                         'super_admin' => __('admin.user_role_super_admin'),
-                        'creator'     => __('admin.user_role_creator'),
-                        'customer'    => __('admin.user_role_customer'),
+                        'lecturer'    => __('admin.user_role_lecturer'),
+                        'student'     => __('admin.user_role_student'),
                     ]),
                 Tables\Filters\TernaryFilter::make('is_active')
                     ->label(__('admin.user_filter_account_status'))
                     ->trueLabel(__('admin.user_filter_active_only'))
                     ->falseLabel(__('admin.user_filter_suspended_only')),
-                Tables\Filters\Filter::make('has_wallet')
-                    ->label(__('admin.user_filter_has_wallet'))
-                    ->query(fn (Builder $q) => $q->where('wallet_balance', '>', 0)),
             ])
             ->actions([
                 Impersonate::make()
                     ->label(__('admin.user_action_login_as'))
                     ->icon('heroicon-o-arrow-right-on-rectangle')
                     ->redirectTo(fn ($record) => match ($record->role) {
-                        'creator'     => route('filament.creator.pages.dashboard'),
+                        'lecturer'     => route('filament.lecturer.pages.dashboard'),
                         'super_admin' => route('filament.admin.pages.dashboard'),
                         default       => route('home'),
                     })
@@ -217,7 +207,7 @@ class UserResource extends Resource
                     ->label(__('admin.user_action_grant_credits'))
                     ->icon('heroicon-o-sparkles')
                     ->color('warning')
-                    ->visible(fn ($record) => in_array($record->role, ['creator', 'super_admin']))
+                    ->visible(fn ($record) => in_array($record->role, ['lecturer', 'super_admin']))
                     ->form([
                         Forms\Components\TextInput::make('credits')
                             ->label(__('admin.user_credits_to_add'))

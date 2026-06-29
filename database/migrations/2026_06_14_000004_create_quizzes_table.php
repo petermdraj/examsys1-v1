@@ -6,7 +6,7 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('quizzes', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('creator_id');
+            $table->uuid('lecturer_id');
             $table->uuid('category_id');
             $table->string('title');
             $table->string('slug')->unique();
@@ -14,8 +14,6 @@ return new class extends Migration {
             $table->string('cover_image')->nullable();
             $table->enum('status', ['draft','published','archived','scheduled'])->default('draft');
             $table->enum('visibility', ['public','private','unlisted'])->default('public');
-            $table->decimal('price', 8, 2)->default(0.00);
-            $table->char('currency', 3)->default('USD');
             $table->integer('duration_minutes')->nullable();
             $table->timestamp('start_at')->nullable();
             $table->timestamp('end_at')->nullable();
@@ -37,10 +35,10 @@ return new class extends Migration {
             $table->decimal('average_score', 5, 2)->default(0);
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('creator_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('lecturer_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('category_id')->references('id')->on('categories')->restrictOnDelete();
             $table->index(['status', 'visibility', 'category_id']);
-            $table->index(['creator_id', 'status']);
+            $table->index(['lecturer_id', 'status']);
             $table->index(['start_at', 'end_at']);
         });
     }

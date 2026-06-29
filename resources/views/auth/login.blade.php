@@ -21,10 +21,10 @@
       <div class="lgn-title">{{ __('auth.login_heading') }}</div>
       <div class="muted lgn-subhead">{{ __('auth.login_subheading') }}</div>
     </div>
-    @if(config('quizora.demo_mode'))
+    @if(config('examsys.demo_mode'))
     @php
       $demoCreds = [
-        ['label'=>'Admin',   'email'=>'admin@quizora.app','password'=>'password','color'=>'#7c3aed'],
+        ['label'=>'Admin',   'email'=>'admin@quiz.com','password'=>'password','color'=>'#7c3aed'],
         ['label'=>'Creator', 'email'=>'priya@demo.quiz',  'password'=>'password','color'=>'#0ea5e9'],
         ['label'=>'Customer','email'=>'alice@demo.quiz',   'password'=>'password','color'=>'#22c55e'],
       ];

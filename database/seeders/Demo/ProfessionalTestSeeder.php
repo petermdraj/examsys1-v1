@@ -50,52 +50,30 @@ class ProfessionalTestSeeder extends Seeder
             }
         }
 
-        // ── Plans ────────────────────────────────────────────────────────
-        $freePlan     = \App\Models\Plan::where('slug', 'free')->first();
-        $proPlan      = \App\Models\Plan::where('slug', 'pro')->first();
-        $businessPlan = \App\Models\Plan::where('slug', 'business')->first();
-
+        // ── Lecturers ─────────────────────────────────────────────────────
         // ── Creators ─────────────────────────────────────────────────────
-        $techCreator = User::firstOrCreate(
-            ['email' => 'alex.tech@quizora.demo'],
-            ['name' => 'Alex Rivera', 'password' => Hash::make('password'), 'role' => 'creator',
-             'is_active' => true, 'ai_credits_free_remaining' => $freePlan?->ai_free_generations ?? 10, 'email_verified_at' => now()]
+        $techLecturer = User::firstOrCreate(
+            ['email' => 'alex.tech@demo.local'],
+            ['name' => 'Alex Rivera', 'password' => Hash::make('password'), 'role' => 'lecturer',
+             'is_active' => true, 'ai_credits_free_remaining' => 10, 'email_verified_at' => now()]
         );
-        $techCreator->assignRole('creator');
-        if ($freePlan) {
-            \App\Models\Subscription::updateOrCreate(['user_id' => $techCreator->id], [
-                'plan_id' => $freePlan->id, 'status' => 'active', 'billing_cycle' => 'yearly',
-                'current_period_start' => now(), 'current_period_end' => now()->addYear(), 'gateway' => 'manual',
-            ]);
-        }
+        $techLecturer->assignRole('lecturer');
 
-        $bizCreator = User::firstOrCreate(
-            ['email' => 'natasha.biz@quizora.demo'],
-            ['name' => 'Natasha Kowalski', 'password' => Hash::make('password'), 'role' => 'creator',
-             'is_active' => true, 'ai_credits_free_remaining' => $proPlan?->ai_free_generations ?? 100, 'email_verified_at' => now()]
+        $bizLecturer = User::firstOrCreate(
+            ['email' => 'natasha.biz@demo.local'],
+            ['name' => 'Natasha Kowalski', 'password' => Hash::make('password'), 'role' => 'lecturer',
+             'is_active' => true, 'ai_credits_free_remaining' => 10, 'email_verified_at' => now()]
         );
-        $bizCreator->assignRole('creator');
-        if ($proPlan) {
-            \App\Models\Subscription::updateOrCreate(['user_id' => $bizCreator->id], [
-                'plan_id' => $proPlan->id, 'status' => 'active', 'billing_cycle' => 'yearly',
-                'current_period_start' => now(), 'current_period_end' => now()->addYear(), 'gateway' => 'manual',
-            ]);
-        }
+        $bizLecturer->assignRole('lecturer');
 
-        $hrCreator = User::firstOrCreate(
-            ['email' => 'james.hr@quizora.demo'],
-            ['name' => 'James Okonkwo', 'password' => Hash::make('password'), 'role' => 'creator',
-             'is_active' => true, 'ai_credits_free_remaining' => $businessPlan?->ai_free_generations ?? 500, 'email_verified_at' => now()]
+        $hrLecturer = User::firstOrCreate(
+            ['email' => 'james.hr@demo.local'],
+            ['name' => 'James Okonkwo', 'password' => Hash::make('password'), 'role' => 'lecturer',
+             'is_active' => true, 'ai_credits_free_remaining' => 10, 'email_verified_at' => now()]
         );
-        $hrCreator->assignRole('creator');
-        if ($businessPlan) {
-            \App\Models\Subscription::updateOrCreate(['user_id' => $hrCreator->id], [
-                'plan_id' => $businessPlan->id, 'status' => 'active', 'billing_cycle' => 'yearly',
-                'current_period_start' => now(), 'current_period_end' => now()->addYear(), 'gateway' => 'manual',
-            ]);
-        }
+        $hrLecturer->assignRole('lecturer');
 
-        // ── Candidates (Customers) ────────────────────────────────────────
+        // ── Students ────────────────────────────────────────
         foreach ([
             ['Lucas Martin',     'lucas@candidate.demo'],
             ['Priya Kapoor',     'priya.k@candidate.demo'],
@@ -107,37 +85,37 @@ class ProfessionalTestSeeder extends Seeder
             $u = User::firstOrCreate(
                 ['email' => $email],
                 ['name' => $name, 'password' => Hash::make('password'),
-                 'role' => 'customer', 'is_active' => true, 'email_verified_at' => now()]
+                 'role' => 'student', 'is_active' => true, 'email_verified_at' => now()]
             );
-            $u->assignRole('customer');
+            $u->assignRole('student');
         }
 
         // ── Quizzes ───────────────────────────────────────────────────────
         // Free quizzes (entry-level / tasters)
-        $this->createQuiz($techCreator, $subs['PHP & Laravel'], 'PHP Developer Skills Assessment',
+        $this->createQuiz($techLecturer, $subs['PHP & Laravel'], 'PHP Developer Skills Assessment',
             'Evaluate PHP fundamentals, OOP concepts, design patterns, and Laravel-specific knowledge. Suitable for mid-level backend developer screening.',
             $this->phpQuestions(), 0);
 
-        $this->createQuiz($hrCreator, $subs['Digital Marketing'], 'Digital Marketing Fundamentals',
+        $this->createQuiz($hrLecturer, $subs['Digital Marketing'], 'Digital Marketing Fundamentals',
             'Assess knowledge of SEO, SEM, social media marketing, email campaigns, content strategy, analytics, and digital advertising.',
             $this->digitalMarketingQuestions(), 0);
 
         // Paid quizzes
-        $this->createQuiz($techCreator, $subs['JavaScript & Node.js'], 'JavaScript & ES6+ Proficiency Test',
+        $this->createQuiz($techLecturer, $subs['JavaScript & Node.js'], 'JavaScript & ES6+ Proficiency Test',
             'Tests modern JavaScript concepts: closures, promises, async/await, prototypes, ES6+ features, and common DOM manipulation patterns.',
-            $this->jsQuestions(), 9.99);
+            $this->jsQuestions(), 0);
 
-        $this->createQuiz($bizCreator, $subs['Project Management'], 'Project Management Professional (PMP) Mock Test',
+        $this->createQuiz($bizLecturer, $subs['Project Management'], 'Project Management Professional (PMP) Mock Test',
             'Practice questions covering project lifecycle, scope management, risk assessment, stakeholder engagement, and agile methodologies per PMBOK guidelines.',
-            $this->pmpQuestions(), 14.99);
+            $this->pmpQuestions(), 0);
 
-        $this->createQuiz($bizCreator, $subs['Agile & Scrum'], 'Scrum Master Certification Prep',
+        $this->createQuiz($bizLecturer, $subs['Agile & Scrum'], 'Scrum Master Certification Prep',
             'Covers the Scrum framework: roles, ceremonies, artifacts, sprint planning, retrospectives, and scaling Scrum. Based on the Scrum Guide.',
-            $this->scrumQuestions(), 12.99);
+            $this->scrumQuestions(), 0);
 
-        $this->createQuiz($hrCreator, $subs['HR Fundamentals'], 'HR Professional Skills Assessment',
+        $this->createQuiz($hrLecturer, $subs['HR Fundamentals'], 'HR Professional Skills Assessment',
             'Covers HR fundamentals including recruitment, onboarding, performance management, compensation, employee relations, and HR compliance.',
-            $this->hrQuestions(), 9.99);
+            $this->hrQuestions(), 0);
 
         // ── Theme: Slate Corporate — dark indigo + violet, Space Grotesk + IBM Plex Sans ──
         $settings = app(\App\Settings\PlatformSettings::class);
@@ -149,18 +127,16 @@ class ProfessionalTestSeeder extends Seeder
         $settings->save();
     }
 
-    private function createQuiz(User $creator, Category $category, string $title, string $desc, array $questions, float $price = 0): void
+    private function createQuiz(User $creator, Category $category, string $title, string $desc, array $questions): void
     {
         $quiz = Quiz::create([
-            'creator_id'              => $creator->id,
+            'lecturer_id'              => $creator->id,
             'category_id'             => $category->id,
             'title'                   => $title,
             'slug'                    => Str::slug($title) . '-' . Str::random(4),
             'description'             => $desc,
             'status'                  => 'published',
             'visibility'              => 'public',
-            'price'                   => $price,
-            'currency'                => 'USD',
             'duration_minutes'        => 45,
             'max_attempts'            => 3,
             'pass_percentage'         => 70,
@@ -176,7 +152,7 @@ class ProfessionalTestSeeder extends Seeder
         foreach ($questions as $i => $q) {
             $question = Question::create([
                 'quiz_id'       => $quiz->id,
-                'creator_id'    => $creator->id,
+                'lecturer_id'    => $creator->id,
                 'type'          => 'mcq_single',
                 'content'       => $q['q'],
                 'explanation'   => $q['exp'] ?? null,
@@ -333,7 +309,7 @@ class ProfessionalTestSeeder extends Seeder
              'options' => [['text'=>'To conduct performance reviews','correct'=>false],['text'=>'To help new hires integrate and become productive faster','correct'=>true],['text'=>'To handle disciplinary procedures','correct'=>false],['text'=>'To process payroll for new employees','correct'=>false]]],
             ['q' => 'The "halo effect" in performance appraisals refers to:', 'exp' => 'The halo effect occurs when a rater\'s overall positive impression of an employee causes them to rate all aspects positively, even where performance may differ.',
              'options' => [['text'=>'Rating all employees the same','correct'=>false],['text'=>'Bias where one positive trait influences all ratings','correct'=>true],['text'=>'Rating recent performance more heavily','correct'=>false],['text'=>'Comparing employees against each other','correct'=>false]]],
-            ['q' => 'Which international framework provides the foundation for fair minimum wage standards globally?', 'exp' => 'The ILO Minimum Wage Fixing Convention (No. 131, 1970) establishes international standards for setting minimum wages, covering workers in all sectors globally.',
+            ['q' => 'Which international framework provides the foundation for fair minimum wage standards globally?', 'exp' => 'The ILO Minimum Wage Fixing Convention (No. 131, 0) establishes international standards for setting minimum wages, covering workers in all sectors globally.',
              'options' => [['text'=>'UN Global Compact','correct'=>false],['text'=>'ILO Minimum Wage Fixing Convention (No. 131)','correct'=>true],['text'=>'ISO 9001 Standard','correct'=>false],['text'=>'OECD Labour Framework','correct'=>false]]],
             ['q' => '360-degree feedback involves collecting feedback from:', 'exp' => '360-degree feedback gathers input from multiple sources including self-assessment, peers, direct reports, supervisors, and sometimes customers.',
              'options' => [['text'=>'Only the direct manager','correct'=>false],['text'=>'The HR department only','correct'=>false],['text'=>'Multiple sources: self, peers, reports, managers, and customers','correct'=>true],['text'=>'External consultants only','correct'=>false]]],

@@ -20,7 +20,7 @@ return new class extends Migration {
 
         Schema::create('creator_payouts', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('creator_id');
+            $table->uuid('lecturer_id');
             $table->decimal('amount', 8, 2);
             $table->enum('status', ['pending','processing','paid','failed'])->default('pending');
             $table->string('gateway')->nullable();
@@ -29,7 +29,7 @@ return new class extends Migration {
             $table->timestamp('requested_at')->useCurrent();
             $table->timestamp('processed_at')->nullable();
             $table->timestamps();
-            $table->foreign('creator_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('lecturer_id')->references('id')->on('users')->cascadeOnDelete();
         });
     }
     public function down(): void {

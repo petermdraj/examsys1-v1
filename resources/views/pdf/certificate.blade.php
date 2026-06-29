@@ -309,7 +309,7 @@ body {
 
     <!-- Left panel -->
     <div class="left-panel">
-        <div class="brand-name">Quizora</div>
+        <div class="brand-name">{{ config('app.name') }}</div>
 
         <div class="medal">
             <div class="medal-inner">

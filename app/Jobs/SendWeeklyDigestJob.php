@@ -25,7 +25,7 @@ class SendWeeklyDigestJob implements ShouldQueue
     {
         // Fetch the 6 newest published quizzes from the past 7 days
         $newQuizzes = Quiz::published()
-            ->with('category', 'creator')
+            ->with('category', 'lecturer')
             ->where('created_at', '>=', now()->subWeek())
             ->orderByDesc('created_at')
             ->limit(6)

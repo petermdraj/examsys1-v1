@@ -33,12 +33,15 @@ class ScoringService
                 $correctIds = $question->options->where('is_correct', true)->pluck('id')->sort()->values()->toArray();
                 $selected = collect($answer->selected_options ?? [])->sort()->values()->toArray();
                 $correct = $selected === $correctIds;
-            } elseif ($question->type === 'fill_blank') {
+            } elseif (in_array($question->type, ['fill_blank', 'short_answer'])) {
                 $textAnswer = strtolower(trim($answer->text_answer ?? ''));
                 $correct = $question->fillBlankAnswers->contains(function ($fb) use ($textAnswer) {
                     if ($fb->is_regex) {
-                        return @preg_match('/' . $fb->answer . '/i', $textAnswer) === 1;
+                        $result = @preg_match('/' . $fb->answer . '/i', $textAnswer);
+
+                        return $result === 1;
                     }
+
                     return strtolower(trim($fb->answer)) === $textAnswer;
                 });
             }

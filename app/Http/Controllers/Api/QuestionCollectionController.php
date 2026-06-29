@@ -13,7 +13,7 @@ class QuestionCollectionController extends Controller
         $data = $request->validate(['name' => 'required|string|max:255']);
 
         $collection = QuestionCollection::create([
-            'creator_id' => auth()->id(),
+            'lecturer_id' => auth()->id(),
             'name'       => trim($data['name']),
         ]);
 

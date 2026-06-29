@@ -1,9 +1,9 @@
 <?php
 return [
     'failed'                     => 'Dessa uppgifter stämmer inte överens med våra register.',
-    'login_title'                => 'Logga in — Quizora',
+    'login_title'                => 'Logga in — ExamSys',
     'login_heading'              => 'Välkommen tillbaka',
-    'login_subheading'           => 'Logga in på ditt Quizora-konto',
+    'login_subheading'           => 'Logga in på ditt ExamSys-konto',
     'login_email_label'          => 'E-post',
     'login_email_placeholder'    => 'du@exempel.se',
     'login_password_label'       => 'Lösenord',
@@ -23,8 +23,8 @@ return [
     'register_submit'                => 'Skapa konto',
     'register_have_account'          => 'Har du redan ett konto?',
     'register_login_link'            => 'Logga in →',
-    'register_creator_toggle_label'  => 'Är du en quizskapare?',
-    'register_creator_toggle_desc'   => 'Aktivera detta för att publicera och sälja dina egna quiz',
+    'register_lecturer_toggle_label'  => 'Är du en quizskapare?',
+    'register_lecturer_toggle_desc'   => 'Aktivera detta för att publicera och sälja dina egna quiz',
     'or_divider'              => 'eller',
     'continue_with_google'    => 'Fortsätt med Google',
     'otp_title'               => 'Verifiera din e-post',

@@ -13,7 +13,7 @@ trait DemoModeEditPage
 {
     protected function beforeSave(): void
     {
-        if (config('quizora.demo_mode')) {
+        if (config('examsys.demo_mode')) {
             Notification::make()
                 ->title('Demo Mode — Editing disabled')
                 ->body('This is a read-only demo. Changes cannot be saved.')

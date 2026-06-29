@@ -48,38 +48,23 @@ class CompetitionExamSeeder extends Seeder
             }
         }
 
-        // ── Plans ────────────────────────────────────────────────────────
-        $freePlan = \App\Models\Plan::where('slug', 'free')->first();
-        $proPlan  = \App\Models\Plan::where('slug', 'pro')->first();
-
+        // ── Lecturers ─────────────────────────────────────────────────────
         // ── Creators ─────────────────────────────────────────────────────
-        $creator1 = User::firstOrCreate(
-            ['email' => 'emma.wilson@quizora.demo'],
-            ['name' => 'Emma Wilson', 'password' => Hash::make('password'), 'role' => 'creator',
-             'is_active' => true, 'ai_credits_free_remaining' => $freePlan?->ai_free_generations ?? 10, 'email_verified_at' => now()]
+        $lecturer1 = User::firstOrCreate(
+            ['email' => 'emma.wilson@demo.local'],
+            ['name' => 'Emma Wilson', 'password' => Hash::make('password'), 'role' => 'lecturer',
+             'is_active' => true, 'ai_credits_free_remaining' => 10, 'email_verified_at' => now()]
         );
-        $creator1->assignRole('creator');
-        if ($freePlan) {
-            \App\Models\Subscription::updateOrCreate(['user_id' => $creator1->id], [
-                'plan_id' => $freePlan->id, 'status' => 'active', 'billing_cycle' => 'yearly',
-                'current_period_start' => now(), 'current_period_end' => now()->addYear(), 'gateway' => 'manual',
-            ]);
-        }
+        $lecturer1->assignRole('lecturer');
 
-        $creator2 = User::firstOrCreate(
-            ['email' => 'carlos.mendoza@quizora.demo'],
-            ['name' => 'Carlos Mendoza', 'password' => Hash::make('password'), 'role' => 'creator',
-             'is_active' => true, 'ai_credits_free_remaining' => $proPlan?->ai_free_generations ?? 100, 'email_verified_at' => now()]
+        $lecturer2 = User::firstOrCreate(
+            ['email' => 'carlos.mendoza@demo.local'],
+            ['name' => 'Carlos Mendoza', 'password' => Hash::make('password'), 'role' => 'lecturer',
+             'is_active' => true, 'ai_credits_free_remaining' => 10, 'email_verified_at' => now()]
         );
-        $creator2->assignRole('creator');
-        if ($proPlan) {
-            \App\Models\Subscription::updateOrCreate(['user_id' => $creator2->id], [
-                'plan_id' => $proPlan->id, 'status' => 'active', 'billing_cycle' => 'yearly',
-                'current_period_start' => now(), 'current_period_end' => now()->addYear(), 'gateway' => 'manual',
-            ]);
-        }
+        $lecturer2->assignRole('lecturer');
 
-        // ── Customers ────────────────────────────────────────────────────
+        // ── Students ────────────────────────────────────────────────────
         foreach ([
             ['Aisha Johnson',   'aisha@demo.com'],
             ['Liam Nguyen',     'liam@demo.com'],
@@ -90,37 +75,37 @@ class CompetitionExamSeeder extends Seeder
             $u = User::firstOrCreate(
                 ['email' => $email],
                 ['name' => $name, 'password' => Hash::make('password'),
-                 'role' => 'customer', 'is_active' => true, 'email_verified_at' => now()]
+                 'role' => 'student', 'is_active' => true, 'email_verified_at' => now()]
             );
-            $u->assignRole('customer');
+            $u->assignRole('student');
         }
 
         // ── Quizzes ──────────────────────────────────────────────────────
-        $this->createQuiz($creator1, $subs['SAT Prep'], 'SAT Math — Algebra & Problem Solving',
+        $this->createQuiz($lecturer1, $subs['SAT Prep'], 'SAT Math — Algebra & Problem Solving',
             'Practice SAT-style math questions covering linear equations, systems of equations, ratios, percentages, and word problems. Ideal for high school students targeting a top SAT score.',
-            $this->satMathQuestions(), 7.99);
+            $this->satMathQuestions(), 0);
 
-        $this->createQuiz($creator1, $subs['GRE Verbal & Quant'], 'GRE Verbal Reasoning Practice',
+        $this->createQuiz($lecturer1, $subs['GRE Verbal & Quant'], 'GRE Verbal Reasoning Practice',
             'High-difficulty GRE verbal questions: text completion, sentence equivalence, and reading comprehension — modelled on the ETS format for graduate school applicants.',
-            $this->greVerbalQuestions(), 9.99);
+            $this->greVerbalQuestions(), 0);
 
-        $this->createQuiz($creator2, $subs['GMAT'], 'GMAT Critical Reasoning & Data Sufficiency',
+        $this->createQuiz($lecturer2, $subs['GMAT'], 'GMAT Critical Reasoning & Data Sufficiency',
             'Targeted GMAT practice covering Critical Reasoning argument analysis and Data Sufficiency — the two most challenging GMAT question types for business school applicants.',
-            $this->gmatQuestions(), 12.99);
+            $this->gmatQuestions(), 0);
 
-        $this->createQuiz($creator2, $subs['Logical Reasoning'], 'Logical Reasoning — Patterns & Deduction',
+        $this->createQuiz($lecturer2, $subs['Logical Reasoning'], 'Logical Reasoning — Patterns & Deduction',
             'Universal aptitude test preparation covering syllogisms, number series, coding-decoding, seating arrangements, and direction sense. Suitable for any competitive exam worldwide.',
             $this->logicalReasoningQuestions(), 0);
 
-        $this->createQuiz($creator1, $subs['IELTS Academic'], 'IELTS Academic — Reading & Grammar',
+        $this->createQuiz($lecturer1, $subs['IELTS Academic'], 'IELTS Academic — Reading & Grammar',
             'Practice IELTS Academic reading passages and grammar questions. Covers inference, matching headings, sentence completion, and core grammar rules tested in IELTS.',
-            $this->ieltsQuestions(), 7.99);
+            $this->ieltsQuestions(), 0);
 
-        $this->createQuiz($creator2, $subs['Quantitative Aptitude'], 'Quantitative Aptitude — Speed, Work & Profit',
+        $this->createQuiz($lecturer2, $subs['Quantitative Aptitude'], 'Quantitative Aptitude — Speed, Work & Profit',
             'International aptitude quiz covering speed-distance-time, work and wages, profit and loss, simple and compound interest. Used for placement tests and competitive exams globally.',
-            $this->quantAptitudeQuestions(), 5.99);
+            $this->quantAptitudeQuestions(), 0);
 
-        // ── Theme: Quizora (Default) — purple + gold ─────────────────────
+        // ── Theme: Default — purple + gold ─────────────────────
         $settings = app(\App\Settings\PlatformSettings::class);
         $settings->primary_color   = '#6C2E63';
         $settings->accent_color    = '#E0A431';
@@ -130,18 +115,16 @@ class CompetitionExamSeeder extends Seeder
         $settings->save();
     }
 
-    private function createQuiz(User $creator, Category $category, string $title, string $desc, array $questions, float $price = 0): void
+    private function createQuiz(User $creator, Category $category, string $title, string $desc, array $questions): void
     {
         $quiz = Quiz::create([
-            'creator_id'              => $creator->id,
+            'lecturer_id'              => $creator->id,
             'category_id'             => $category->id,
             'title'                   => $title,
             'slug'                    => Str::slug($title) . '-' . Str::random(4),
             'description'             => $desc,
             'status'                  => 'published',
             'visibility'              => 'public',
-            'price'                   => $price,
-            'currency'                => 'USD',
             'duration_minutes'        => 30,
             'max_attempts'            => null,
             'pass_percentage'         => 60,
@@ -156,7 +139,7 @@ class CompetitionExamSeeder extends Seeder
         foreach ($questions as $i => $q) {
             $question = Question::create([
                 'quiz_id'       => $quiz->id,
-                'creator_id'    => $creator->id,
+                'lecturer_id'    => $creator->id,
                 'type'          => 'mcq_single',
                 'content'       => $q['q'],
                 'explanation'   => $q['exp'] ?? null,
@@ -200,7 +183,7 @@ class CompetitionExamSeeder extends Seeder
             ['q' => 'In a class of 30 students, 40% are boys. How many girls are in the class?',
              'exp' => 'Boys = 40% of 30 = 12. Girls = 30 – 12 = 18.',
              'options' => [['text'=>'12','correct'=>false],['text'=>'15','correct'=>false],['text'=>'18','correct'=>true],['text'=>'20','correct'=>false]]],
-            ['q' => 'The slope of a line passing through (2, 5) and (6, 13) is:',
+            ['q' => 'The slope of a line passing through (2, 0) and (6, 0) is:',
              'exp' => 'Slope = (13 – 5) / (6 – 2) = 8 / 4 = 2.',
              'options' => [['text'=>'1','correct'=>false],['text'=>'2','correct'=>true],['text'=>'3','correct'=>false],['text'=>'4','correct'=>false]]],
             ['q' => 'If the area of a square is 64 cm², what is the perimeter?',

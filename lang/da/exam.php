@@ -1,6 +1,6 @@
 <?php
 return [
-    'brand'=>'QUIZORA','time_left'=>'RESTERENDE TID','time_unlimited'=>'∞','end_test'=>'Afslut test','questions_count'=>'Spørgsmål',
+    'brand'=>'EXAMSYS','time_left'=>'RESTERENDE TID','time_unlimited'=>'∞','end_test'=>'Afslut test','questions_count'=>'Spørgsmål',
     'saving'=>'Gemmer…','saved'=>'✓ Gemt','not_saved'=>'! Ikke gemt','save_failed_connection'=>'Gemning mislykkedes. Kontroller forbindelsen.',
     'question_of'=>'Sp :current / :total','mark_singular'=>'point','mark_plural'=>'point','negative_wrong'=>'−:marks forkert',
     'fill_blank_placeholder'=>'Skriv dit svar…','show_hint'=>'Vis hint','hide_hint'=>'Skjul hint',

@@ -30,8 +30,6 @@
   <nav class="topnav-links tnav-links">
     <a href="{{ route('quizzes.index') }}" class="nav-item-light">{{ __('common.nav_discover') }}</a>
     <a href="{{ route('categories.index') }}" class="nav-item-light">{{ __('common.pubbar_categories') }}</a>
-    <a href="{{ route('for-creators') }}" class="nav-item-light">{{ __('common.nav_for_creators') }}</a>
-    <a href="{{ route('pricing') }}" class="nav-item-light">{{ __('common.nav_pricing') }}</a>
   </nav>
   <form action="{{ route('quizzes.index') }}" method="GET" class="tnav-search topnav-links" role="search">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
@@ -115,8 +113,8 @@
           @if(auth()->user()->role === 'super_admin')
             <a href="{{ url('/admin') }}" class="up-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg> {{ __('common.user_admin_panel') }}</a>
           @endif
-          @if(in_array(auth()->user()->role, ['creator','super_admin']))
-            <a href="{{ url('/creator') }}" class="up-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4z"/></svg> {{ __('common.user_creator_dashboard') }}</a>
+          @if(in_array(auth()->user()->role, ['lecturer','super_admin']))
+            <a href="{{ url('/lecturer') }}" class="up-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4z"/></svg> {{ __('common.user_lecturer_dashboard') }}</a>
           @endif
           <a href="{{ route('my.dashboard') }}" class="up-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg> {{ __('common.user_my_dashboard') }}</a>
           <a href="{{ route('my.attempts') }}" class="up-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a9 9 0 109 9"/><path d="M12 3v9l6-3"/></svg> {{ __('common.user_my_attempts') }}</a>
@@ -147,15 +145,13 @@
   </form>
   <a href="{{ route('quizzes.index') }}" class="mobile-nav-item">{{ __('common.nav_discover') }}</a>
   <a href="{{ route('categories.index') }}" class="mobile-nav-item">{{ __('common.pubbar_categories') }}</a>
-  <a href="{{ route('for-creators') }}" class="mobile-nav-item">{{ __('common.nav_for_creators') }}</a>
-  <a href="{{ route('pricing') }}" class="mobile-nav-item">{{ __('common.nav_pricing') }}</a>
   <div class="mobile-nav-sep"></div>
   @guest
     <a href="{{ route('login') }}" class="mobile-nav-item">{{ __('common.nav_login') }}</a>
     <a href="{{ route('register') }}" class="mobile-nav-item mobile-nav-cta">{{ __('common.nav_signup') }}</a>
   @else
-    @if(in_array(auth()->user()->role, ['creator','super_admin']))
-      <a href="{{ url('/creator') }}" class="mobile-nav-item">{{ __('common.user_creator_dashboard') }}</a>
+    @if(in_array(auth()->user()->role, ['lecturer','super_admin']))
+      <a href="{{ url('/lecturer') }}" class="mobile-nav-item">{{ __('common.user_lecturer_dashboard') }}</a>
     @endif
     <a href="{{ route('my.dashboard') }}" class="mobile-nav-item">{{ __('common.user_my_dashboard') }}</a>
     <form method="POST" action="{{ route('logout') }}" class="tnav-form-inline">@csrf

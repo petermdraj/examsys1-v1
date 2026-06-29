@@ -1,9 +1,9 @@
-name: quizora
+name: examsys
 
 services:
   app:
     build: .
-    container_name: quizora-app
+    container_name: examsys-app
     volumes:
       - public_assets:/var/www/html/public
       - ./storage:/var/www/html/storage
@@ -18,7 +18,7 @@ services:
 
   web:
     image: nginx:1.27-alpine
-    container_name: quizora-web
+    container_name: examsys-web
     ports:
       - "8080:80"
     volumes:
@@ -30,10 +30,10 @@ services:
 
   mysql:
     image: mysql:8.0
-    container_name: quizora-mysql
+    container_name: examsys-mysql
     environment:
-      MYSQL_DATABASE: quizora
-      MYSQL_USER: quizora
+      MYSQL_DATABASE: examsys1
+      MYSQL_USER: examsys
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: rootsecret
     volumes:
@@ -49,14 +49,14 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: quizora-redis
+    container_name: examsys-redis
     volumes:
       - redis_data:/data
     restart: unless-stopped
 
   queue:
     build: .
-    container_name: quizora-queue
+    container_name: examsys-queue
     command: php artisan queue:work redis --queue=payments,emails,payouts,default --tries=3 --timeout=120
     volumes:
       - ./storage:/var/www/html/storage

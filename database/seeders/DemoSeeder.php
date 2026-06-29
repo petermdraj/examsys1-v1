@@ -7,16 +7,14 @@ use App\Models\Attempt;
 use App\Models\AttemptAnswer;
 use App\Models\Category;
 use App\Models\Certificate;
-use App\Models\CreatorPayout;
 use App\Models\FillBlankAnswer;
-use App\Models\Order;
 use App\Models\Question;
 use App\Models\QuestionOption;
 use App\Models\Quiz;
 use App\Models\QuizEnrollment;
-use App\Models\Subscription;
-use App\Models\Plan;
+use App\Models\StudentBatch;
 use App\Models\User;
+use App\Services\Quiz\QuizAssignmentService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -27,30 +25,31 @@ class DemoSeeder extends Seeder
     {
         $this->command->info('Seeding demo data…');
 
+        $this->call(CategorySeeder::class);
+
         // Wipe previous demo data cleanly
         $this->wipe();
 
-        $creators  = $this->seedCreators();
-        $customers = $this->seedCustomers();
+        $creators  = $this->seedLecturers();
+        $batches   = $this->seedBatches();
+        $customers = $this->seedStudents($batches);
         $quizzes   = $this->seedQuizzes($creators);
-        $this->seedOrders($quizzes, $customers);
+        $this->seedAssignments($quizzes, $creators, $batches, $customers);
         $this->seedAttempts($quizzes, $customers);
         $this->seedAiLogs($creators, $quizzes);
-        $this->seedPayouts($creators);
-        $this->seedSubscriptions($creators);
 
         $this->command->newLine();
         $this->command->info('✅ Demo seed complete. Test credentials:');
         $this->command->table(
             ['Role', 'Email', 'Password'],
             [
-                ['Admin',   'admin@quizora.app', 'password'],
-                ['Creator', 'priya@demo.quiz',   'password'],
-                ['Creator', 'rahul@demo.quiz',   'password'],
-                ['Creator', 'sofia@demo.quiz',   'password'],
-                ['Customer','alice@demo.quiz',   'password'],
-                ['Customer','bob@demo.quiz',     'password'],
-                ['Customer','carol@demo.quiz',   'password'],
+                ['Admin',   'admin@quiz.com', 'password'],
+                ['Lecturer', 'priya@demo.quiz',   'password'],
+                ['Lecturer', 'rahul@demo.quiz',   'password'],
+                ['Lecturer', 'sofia@demo.quiz',   'password'],
+                ['Student','alice@demo.quiz',   'password'],
+                ['Student','bob@demo.quiz',     'password'],
+                ['Student','carol@demo.quiz',   'password'],
             ]
         );
     }
@@ -74,7 +73,7 @@ class DemoSeeder extends Seeder
         }
 
         $userIds = User::whereIn('email', $demoEmails)->pluck('id');
-        $quizIds = Quiz::whereIn('creator_id', $userIds)->pluck('id');
+        $quizIds = Quiz::whereIn('lecturer_id', $userIds)->pluck('id');
 
         DB::table('attempt_answers')->whereIn('attempt_id',
             DB::table('attempts')->whereIn('quiz_id', $quizIds)->pluck('id')
@@ -82,8 +81,7 @@ class DemoSeeder extends Seeder
         DB::table('certificates')->whereIn('quiz_id', $quizIds)->delete();
         DB::table('attempts')->whereIn('quiz_id', $quizIds)->delete();
         DB::table('quiz_enrollments')->whereIn('quiz_id', $quizIds)->delete();
-        DB::table('orders')->whereIn('quiz_id', $quizIds)->delete();
-
+        DB::table('quiz_assignments')->whereIn('quiz_id', $quizIds)->delete();
         // Delete questions/options for these quizzes
         $questionIds = DB::table('questions')->whereIn('quiz_id', $quizIds)->pluck('id');
         DB::table('fill_blank_answers')->whereIn('question_id', $questionIds)->delete();
@@ -92,76 +90,163 @@ class DemoSeeder extends Seeder
         DB::table('quizzes')->whereIn('id', $quizIds)->delete();
 
         DB::table('ai_generation_logs')->whereIn('user_id', $userIds)->delete();
-        DB::table('creator_payouts')->whereIn('creator_id', $userIds)->delete();
-        DB::table('subscriptions')->whereIn('user_id', $userIds)->delete();
         User::withTrashed()->whereIn('email', $demoEmails)->forceDelete();
+        StudentBatch::whereIn('code', ['CS-2026-A', 'CS-2026-B'])->delete();
+    }
+
+    private function seedBatches(): array
+    {
+        return [
+            'a' => StudentBatch::create([
+                'name'        => 'Computer Science 2026 — Group A',
+                'code'        => 'CS-2026-A',
+                'description' => 'Demo batch for first-year CS students.',
+                'is_active'   => true,
+            ]),
+            'b' => StudentBatch::create([
+                'name'        => 'Computer Science 2026 — Group B',
+                'code'        => 'CS-2026-B',
+                'description' => 'Demo batch for second cohort.',
+                'is_active'   => true,
+            ]),
+        ];
     }
 
     // ──────────────────────────────────────────
     // Creators
     // ──────────────────────────────────────────
-    private function seedCreators(): array
+    private function seedLecturers(): array
     {
         $data = [
-            ['name'=>'Priya Sharma',    'email'=>'priya@demo.quiz',   'wallet'=>1250.00, 'credits'=>8],
-            ['name'=>'Rahul Mehta',     'email'=>'rahul@demo.quiz',   'wallet'=>800.00,  'credits'=>3],
-            ['name'=>'Sofia Rodriguez', 'email'=>'sofia@demo.quiz',   'wallet'=>450.00,  'credits'=>10],
+            ['name'=>'Priya Sharma',    'email'=>'priya@demo.quiz',   'credits'=>8],
+            ['name'=>'Rahul Mehta',     'email'=>'rahul@demo.quiz',   'credits'=>3],
+            ['name'=>'Sofia Rodriguez', 'email'=>'sofia@demo.quiz',   'credits'=>10],
         ];
-        return array_map(fn($d) => User::create([
-            'name'                     => $d['name'],
-            'email'                    => $d['email'],
-            'password'                 => bcrypt('password'),
-            'role'                     => 'creator',
-            'is_active'                => true,
-            'ai_credits_free_remaining' => $d['credits'],
-            'ai_credits_used'          => 10 - $d['credits'],
-            'wallet_balance'           => $d['wallet'],
-            'email_verified_at'        => now(),
-        ]), $data);
+        return User::unguarded(function () use ($data) {
+            return array_map(function ($d) {
+                $user = User::create([
+                    'name'                      => $d['name'],
+                    'email'                     => $d['email'],
+                    'password'                  => bcrypt('password'),
+                    'role'                      => 'lecturer',
+                    'is_active'                 => true,
+                    'ai_credits_free_remaining' => $d['credits'],
+                    'ai_credits_used'           => 10 - $d['credits'],
+                    'email_verified_at'         => now(),
+                ]);
+                $user->assignRole('lecturer');
+
+                return $user;
+            }, $data);
+        });
     }
 
     // ──────────────────────────────────────────
     // Customers (named, for easy testing)
     // ──────────────────────────────────────────
-    private function seedCustomers(): array
+    private function seedStudents(array $batches): array
     {
         $named = [
-            ['name'=>'Alice Johnson', 'email'=>'alice@demo.quiz'],
-            ['name'=>'Bob Smith',     'email'=>'bob@demo.quiz'],
-            ['name'=>'Carol White',   'email'=>'carol@demo.quiz'],
-            ['name'=>'Dave Brown',    'email'=>'dave@demo.quiz'],
-            ['name'=>'Eve Davis',     'email'=>'eve@demo.quiz'],
-            ['name'=>'Frank Miller',  'email'=>'frank@demo.quiz'],
-            ['name'=>'Grace Wilson',  'email'=>'grace@demo.quiz'],
-            ['name'=>'Henry Taylor',  'email'=>'henry@demo.quiz'],
-            ['name'=>'Ivy Anderson',  'email'=>'ivy@demo.quiz'],
-            ['name'=>'Jack Thomas',   'email'=>'jack@demo.quiz'],
+            ['name'=>'Alice Johnson', 'email'=>'alice@demo.quiz', 'batch'=>'a'],
+            ['name'=>'Bob Smith',     'email'=>'bob@demo.quiz', 'batch'=>'a'],
+            ['name'=>'Carol White',   'email'=>'carol@demo.quiz', 'batch'=>'a'],
+            ['name'=>'Dave Brown',    'email'=>'dave@demo.quiz', 'batch'=>'b'],
+            ['name'=>'Eve Davis',     'email'=>'eve@demo.quiz', 'batch'=>'b'],
+            ['name'=>'Frank Miller',  'email'=>'frank@demo.quiz', 'batch'=>'b'],
+            ['name'=>'Grace Wilson',  'email'=>'grace@demo.quiz', 'batch'=>'b'],
+            ['name'=>'Henry Taylor',  'email'=>'henry@demo.quiz', 'batch'=>'a'],
+            ['name'=>'Ivy Anderson',  'email'=>'ivy@demo.quiz', 'batch'=>'b'],
+            ['name'=>'Jack Thomas',   'email'=>'jack@demo.quiz', 'batch'=>'a'],
         ];
         $customers = [];
-        foreach ($named as $d) {
-            $customers[] = User::create([
-                'name'                     => $d['name'],
-                'email'                    => $d['email'],
-                'password'                 => bcrypt('password'),
-                'role'                     => 'customer',
-                'is_active'                => true,
-                'ai_credits_free_remaining' => 0,
-                'email_verified_at'        => now(),
-            ]);
-        }
-        // Extra anonymous students
-        for ($i = 1; $i <= 10; $i++) {
-            $customers[] = User::create([
-                'name'                     => "Student $i",
-                'email'                    => "student{$i}@demo.quiz",
-                'password'                 => bcrypt('password'),
-                'role'                     => 'customer',
-                'is_active'                => true,
-                'ai_credits_free_remaining' => 0,
-                'email_verified_at'        => now(),
-            ]);
-        }
+        User::unguarded(function () use ($named, $batches, &$customers) {
+            foreach ($named as $d) {
+                $user = User::create([
+                    'name'                      => $d['name'],
+                    'email'                     => $d['email'],
+                    'password'                  => bcrypt('password'),
+                    'role'                      => 'student',
+                    'student_batch_id'          => $batches[$d['batch']]->id,
+                    'is_active'                 => true,
+                    'ai_credits_free_remaining' => 0,
+                    'email_verified_at'         => now(),
+                ]);
+                $user->assignRole('student');
+                $customers[] = $user;
+            }
+            for ($i = 1; $i <= 10; $i++) {
+                $user = User::create([
+                    'name'                      => "Student $i",
+                    'email'                     => "student{$i}@demo.quiz",
+                    'password'                  => bcrypt('password'),
+                    'role'                      => 'student',
+                    'student_batch_id'          => $batches[$i % 2 ? 'a' : 'b']->id,
+                    'is_active'                 => true,
+                    'ai_credits_free_remaining' => 0,
+                    'email_verified_at'         => now(),
+                ]);
+                $user->assignRole('student');
+                $customers[] = $user;
+            }
+        });
         return $customers;
+    }
+
+    private function seedAssignments(array $quizzes, array $creators, array $batches, array $customers): void
+    {
+        $service = app(QuizAssignmentService::class);
+
+        foreach (array_slice($quizzes, 0, 6) as $quiz) {
+            $service->assignToBatch($quiz, $quiz->lecturer, $batches['a']);
+        }
+
+        $service->assignToBatch($quizzes[6], $creators[0], $batches['b']);
+
+        if (isset($customers[3], $quizzes[7])) {
+            $service->assignToStudent($quizzes[7], $quizzes[7]->lecturer, $customers[3]);
+        }
+    }
+
+    private function seedAttempts(array $quizzes, array $customers): void
+    {
+        foreach (array_slice($quizzes, 0, 3) as $quiz) {
+            foreach (array_slice($customers, 0, 4) as $student) {
+                $enrollment = QuizEnrollment::firstOrCreate(
+                    ['quiz_id' => $quiz->id, 'user_id' => $student->id],
+                    ['enrolled_at' => now(), 'source' => 'assigned']
+                );
+
+                $score = random_int(4, 10);
+                Attempt::create([
+                    'quiz_id'            => $quiz->id,
+                    'user_id'            => $student->id,
+                    'enrollment_id'      => $enrollment->id,
+                    'status'             => 'completed',
+                    'score'              => $score,
+                    'total_marks'        => 10,
+                    'percentage'         => $score * 10,
+                    'time_taken_seconds' => random_int(300, 1800),
+                    'started_at'         => now()->subDays(random_int(1, 14)),
+                    'submitted_at'       => now()->subDays(random_int(0, 13)),
+                ]);
+            }
+        }
+    }
+
+    private function seedAiLogs(array $creators, array $quizzes): void
+    {
+        foreach ($creators as $i => $creator) {
+            AiGenerationLog::create([
+                'user_id'              => $creator->id,
+                'quiz_id'              => $quizzes[$i]->id ?? null,
+                'prompt'               => 'Generate 10 MCQ questions for demo quiz.',
+                'questions_generated'  => 10,
+                'tokens_used'          => 920,
+                'model'                => 'gpt-4o-mini',
+                'status'               => 'success',
+                'was_free'             => true,
+            ]);
+        }
     }
 
     // ──────────────────────────────────────────
@@ -177,16 +262,16 @@ class DemoSeeder extends Seeder
         $hist  = $cats['history']          ?? $tech;
 
         $quizDefs = [
-            ['title'=>'PHP & Laravel Fundamentals',        'cat'=>$tech,  'creator'=>$creators[0], 'price'=>0,   'duration'=>30, 'pass'=>60, 'neg'=>false, 'cert'=>true],
-            ['title'=>'JavaScript ES6+ Mastery',           'cat'=>$tech,  'creator'=>$creators[0], 'price'=>199, 'duration'=>45, 'pass'=>65, 'neg'=>true,  'cert'=>true],
-            ['title'=>'Human Body Systems',                'cat'=>$sci,   'creator'=>$creators[1], 'price'=>0,   'duration'=>20, 'pass'=>60, 'neg'=>false, 'cert'=>false],
-            ['title'=>'Basic Algebra & Equations',         'cat'=>$math,  'creator'=>$creators[1], 'price'=>99,  'duration'=>30, 'pass'=>70, 'neg'=>false, 'cert'=>true],
-            ['title'=>'World History: Ancient Civilizations','cat'=>$hist, 'creator'=>$creators[2], 'price'=>0,   'duration'=>25, 'pass'=>60, 'neg'=>false, 'cert'=>false],
-            ['title'=>'English Grammar & Usage',           'cat'=>$eng,   'creator'=>$creators[2], 'price'=>149, 'duration'=>30, 'pass'=>60, 'neg'=>false, 'cert'=>true],
-            ['title'=>'Data Structures & Algorithms',      'cat'=>$tech,  'creator'=>$creators[0], 'price'=>299, 'duration'=>60, 'pass'=>65, 'neg'=>true,  'cert'=>true],
-            ['title'=>'General Science — Class 10',        'cat'=>$sci,   'creator'=>$creators[1], 'price'=>0,   'duration'=>20, 'pass'=>60, 'neg'=>false, 'cert'=>false],
-            ['title'=>'Aptitude: Reasoning & Puzzles',     'cat'=>$math,  'creator'=>$creators[2], 'price'=>0,   'duration'=>20, 'pass'=>60, 'neg'=>false, 'cert'=>false],
-            ['title'=>'Computer Networks Essentials',      'cat'=>$tech,  'creator'=>$creators[0], 'price'=>199, 'duration'=>40, 'pass'=>65, 'neg'=>false, 'cert'=>true],
+            ['title'=>'PHP & Laravel Fundamentals',        'cat'=>$tech,  'lecturer'=>$creators[0],   'duration'=>30, 'pass'=>60, 'neg'=>false, 'cert'=>true],
+            ['title'=>'JavaScript ES6+ Mastery',           'cat'=>$tech,  'lecturer'=>$creators[0], 'duration'=>45, 'pass'=>65, 'neg'=>true,  'cert'=>true],
+            ['title'=>'Human Body Systems',                'cat'=>$sci,   'lecturer'=>$creators[1],   'duration'=>20, 'pass'=>60, 'neg'=>false, 'cert'=>false],
+            ['title'=>'Basic Algebra & Equations',         'cat'=>$math,  'lecturer'=>$creators[1],  'duration'=>30, 'pass'=>70, 'neg'=>false, 'cert'=>true],
+            ['title'=>'World History: Ancient Civilizations','cat'=>$hist, 'lecturer'=>$creators[2],   'duration'=>25, 'pass'=>60, 'neg'=>false, 'cert'=>false],
+            ['title'=>'English Grammar & Usage',           'cat'=>$eng,   'lecturer'=>$creators[2], 'duration'=>30, 'pass'=>60, 'neg'=>false, 'cert'=>true],
+            ['title'=>'Data Structures & Algorithms',      'cat'=>$tech,  'lecturer'=>$creators[0], 'duration'=>60, 'pass'=>65, 'neg'=>true,  'cert'=>true],
+            ['title'=>'General Science — Class 10',        'cat'=>$sci,   'lecturer'=>$creators[1],   'duration'=>20, 'pass'=>60, 'neg'=>false, 'cert'=>false],
+            ['title'=>'Aptitude: Reasoning & Puzzles',     'cat'=>$math,  'lecturer'=>$creators[2],   'duration'=>20, 'pass'=>60, 'neg'=>false, 'cert'=>false],
+            ['title'=>'Computer Networks Essentials',      'cat'=>$tech,  'lecturer'=>$creators[0], 'duration'=>40, 'pass'=>65, 'neg'=>false, 'cert'=>true],
         ];
 
         $quizzes = [];
@@ -198,15 +283,13 @@ class DemoSeeder extends Seeder
 
         foreach ($quizDefs as $i => $def) {
             $quiz = Quiz::create([
-                'creator_id'               => $def['creator']->id,
+                'lecturer_id'               => $def['lecturer']->id,
                 'category_id'              => $def['cat'],
                 'title'                    => $def['title'],
                 'slug'                     => Str::slug($def['title']),
                 'description'              => "A comprehensive quiz covering {$def['title']}. Test your knowledge and earn a certificate!",
                 'status'                   => 'published',
                 'visibility'               => 'public',
-                'price'                    => $def['price'],
-                'currency'                 => 'INR',
                 'pass_percentage'          => $def['pass'],
                 'duration_minutes'         => $def['duration'],
                 'max_attempts'             => null,
@@ -253,301 +336,6 @@ class DemoSeeder extends Seeder
         return $quizzes;
     }
 
-    // ──────────────────────────────────────────
-    // Orders (for paid quizzes)
-    // ──────────────────────────────────────────
-    private function seedOrders(array $quizzes, array $customers): void
-    {
-        $commissionRate = 20.0;
-        $paidQuizzes = array_filter($quizzes, fn($q) => $q->price > 0);
-
-        foreach ($paidQuizzes as $quiz) {
-            // Give 4–7 customers paid access
-            $buyers = collect($customers)->shuffle()->take(rand(4, 7));
-            foreach ($buyers as $customer) {
-                $commission = round($quiz->price * $commissionRate / 100, 2);
-                $earning    = round($quiz->price - $commission, 2);
-                $paidAt     = now()->subDays(rand(1, 45));
-
-                $order = Order::create([
-                    'user_id'             => $customer->id,
-                    'quiz_id'             => $quiz->id,
-                    'amount'              => $quiz->price,
-                    'currency'            => 'INR',
-                    'platform_commission' => $commission,
-                    'creator_earning'     => $earning,
-                    'status'              => 'paid',
-                    'gateway'             => collect(['razorpay','stripe'])->random(),
-                    'gateway_order_id'    => 'order_' . Str::random(14),
-                    'gateway_payment_id'  => 'pay_' . Str::random(14),
-                    'paid_at'             => $paidAt,
-                    'created_at'          => $paidAt,
-                    'updated_at'          => $paidAt,
-                ]);
-
-                QuizEnrollment::create([
-                    'quiz_id'     => $quiz->id,
-                    'user_id'     => $customer->id,
-                    'enrolled_at' => $paidAt,
-                    'source'      => 'purchased',
-                    'order_id'    => $order->id,
-                ]);
-            }
-        }
-    }
-
-    // ──────────────────────────────────────────
-    // Attempts + Answers + Certificates
-    // ──────────────────────────────────────────
-    private function seedAttempts(array $quizzes, array $customers): void
-    {
-        foreach ($quizzes as $quiz) {
-            $questions = $quiz->questions()->with('options', 'fillBlankAnswers')->get();
-
-            // Determine who can attempt
-            if ($quiz->isFree()) {
-                $participants = collect($customers)->shuffle()->take(rand(10, 18));
-            } else {
-                // Only enrolled customers
-                $enrolledIds  = QuizEnrollment::where('quiz_id', $quiz->id)->pluck('user_id');
-                $participants = User::whereIn('id', $enrolledIds)->get();
-            }
-
-            // Also enroll free quiz participants
-            if ($quiz->isFree()) {
-                foreach ($participants as $customer) {
-                    QuizEnrollment::firstOrCreate(
-                        ['quiz_id' => $quiz->id, 'user_id' => $customer->id],
-                        ['enrolled_at' => now()->subDays(rand(1, 60)), 'source' => 'free']
-                    );
-                }
-            }
-
-            $totalPct = 0;
-            $count    = 0;
-
-            foreach ($participants as $customer) {
-                // Random score 30–100%
-                $targetPct    = rand(30, 100);
-                $targetCorrect = (int) round($questions->count() * $targetPct / 100);
-
-                $startedAt   = now()->subDays(rand(0, 30))->subMinutes(rand(5, 55));
-                $timeTaken   = rand(300, $quiz->duration_minutes * 60 - 60);
-                $submittedAt = $startedAt->copy()->addSeconds($timeTaken);
-
-                $enrollment = QuizEnrollment::where('quiz_id', $quiz->id)->where('user_id', $customer->id)->first();
-
-                $attempt = Attempt::create([
-                    'quiz_id'            => $quiz->id,
-                    'user_id'            => $customer->id,
-                    'enrollment_id'      => $enrollment->id,
-                    'attempt_number'     => 1,
-                    'status'             => 'completed',
-                    'started_at'         => $startedAt,
-                    'submitted_at'       => $submittedAt,
-                    'time_taken_seconds' => $timeTaken,
-                    'score'              => null, // set after answers
-                    'total_marks'        => $questions->count(),
-                    'percentage'         => null,
-                    'is_passed'          => null,
-                    'ip_address'         => fake()->ipv4(),
-                    'user_agent'         => 'Mozilla/5.0 (demo)',
-                    'created_at'         => $startedAt,
-                    'updated_at'         => $submittedAt,
-                ]);
-
-                // Create answer records
-                $score = 0;
-                $shuffled = $questions->shuffle();
-                foreach ($shuffled as $qi => $question) {
-                    $isCorrect = $qi < $targetCorrect; // first N are correct
-                    $answer    = $this->makeAnswer($question, $isCorrect);
-
-                    AttemptAnswer::create([
-                        'attempt_id'          => $attempt->id,
-                        'question_id'         => $question->id,
-                        'selected_options'    => $answer['selected_options'],
-                        'text_answer'         => $answer['text_answer'],
-                        'is_correct'          => $isCorrect,
-                        'marks_earned'        => $isCorrect ? 1 : ($quiz->negative_marking_enabled && $answer['selected_options'] ? -0.25 : 0),
-                        'is_marked_for_review' => rand(0, 5) === 0,
-                        'time_spent_seconds'  => rand(10, 90),
-                        'answered_at'         => $submittedAt,
-                        'created_at'          => $submittedAt,
-                        'updated_at'          => $submittedAt,
-                    ]);
-
-                    if ($isCorrect) {
-                        $score += 1;
-                    } elseif ($quiz->negative_marking_enabled && $answer['selected_options']) {
-                        $score -= 0.25;
-                    }
-                }
-
-                $score      = max(0, $score);
-                $percentage = round($score / $questions->count() * 100, 2);
-                $isPassed   = $percentage >= $quiz->pass_percentage;
-
-                $attempt->update([
-                    'score'      => $score,
-                    'percentage' => $percentage,
-                    'is_passed'  => $isPassed,
-                ]);
-
-                // Issue certificate if passed + enabled
-                if ($isPassed && $quiz->certificate_enabled) {
-                    Certificate::create([
-                        'attempt_id' => $attempt->id,
-                        'user_id'    => $customer->id,
-                        'quiz_id'    => $quiz->id,
-                        'uuid'       => (string) Str::uuid(),
-                        'issued_at'  => $submittedAt,
-                        'pdf_path'   => null,
-                        'created_at' => $submittedAt,
-                    ]);
-                }
-
-                $totalPct += $percentage;
-                $count++;
-            }
-
-            // Update quiz stats
-            $quiz->update([
-                'total_attempts' => $count,
-                'average_score'  => $count > 0 ? round($totalPct / $count, 2) : 0,
-            ]);
-        }
-    }
-
-    // Build realistic answer payload for a question
-    private function makeAnswer(Question $question, bool $correct): array
-    {
-        $selected = null;
-        $text     = null;
-
-        if ($question->type === 'fill_blank') {
-            if ($correct) {
-                $ans  = $question->fillBlankAnswers->first();
-                $text = $ans?->answer ?? 'test';
-            } else {
-                $text = 'wrong answer ' . rand(1, 99);
-            }
-        } elseif ($question->type === 'short_answer') {
-            $text = $correct ? 'correct answer' : 'wrong answer';
-        } else {
-            $options = $question->options;
-            if ($correct) {
-                $correctOpts = $options->where('is_correct', true);
-                if ($question->type === 'mcq_multiple') {
-                    $selected = $correctOpts->pluck('id')->toArray();
-                } else {
-                    $selected = [$correctOpts->first()?->id];
-                }
-            } else {
-                $wrongOpts = $options->where('is_correct', false);
-                $selected  = $wrongOpts->isNotEmpty()
-                    ? [$wrongOpts->random()->id]
-                    : [$options->first()?->id];
-            }
-            $selected = array_filter($selected); // remove nulls
-        }
-
-        return ['selected_options' => $selected ?: null, 'text_answer' => $text];
-    }
-
-    // ──────────────────────────────────────────
-    // AI Generation Logs
-    // ──────────────────────────────────────────
-    private function seedAiLogs(array $creators, array $quizzes): void
-    {
-        $prompts = [
-            'PHP OOP concepts for intermediate developers',
-            'JavaScript async/await and Promises',
-            'Human body circulatory system',
-            'Linear equations and graph plotting',
-            'Ancient Greek philosophers',
-        ];
-
-        foreach ($creators as $ci => $creator) {
-            for ($j = 0; $j < 4; $j++) {
-                $quiz = $quizzes[($ci * 3 + $j) % count($quizzes)];
-                AiGenerationLog::create([
-                    'user_id'             => $creator->id,
-                    'quiz_id'             => $quiz->id,
-                    'prompt'              => $prompts[($ci + $j) % count($prompts)],
-                    'options'             => ['count' => 10, 'type' => 'mixed', 'difficulty' => 'medium'],
-                    'questions_generated' => 10,
-                    'tokens_used'         => rand(800, 2000),
-                    'charge_applied'      => 0,
-                    'was_free'            => true,
-                    'model'               => 'gpt-4o',
-                    'status'              => rand(0, 9) > 0 ? 'success' : 'failed',
-                    'error_message'       => null,
-                    'created_at'          => now()->subDays(rand(0, 20)),
-                ]);
-            }
-        }
-    }
-
-    // ──────────────────────────────────────────
-    // Creator Payouts
-    // ──────────────────────────────────────────
-    private function seedPayouts(array $creators): void
-    {
-        $payouts = [
-            ['creator' => $creators[0], 'amount' => 500,  'status' => 'paid',    'days' => 30],
-            ['creator' => $creators[0], 'amount' => 750,  'status' => 'pending', 'days' => 3],
-            ['creator' => $creators[1], 'amount' => 300,  'status' => 'paid',    'days' => 20],
-            ['creator' => $creators[2], 'amount' => 200,  'status' => 'pending', 'days' => 5],
-        ];
-
-        foreach ($payouts as $p) {
-            CreatorPayout::create([
-                'creator_id'   => $p['creator']->id,
-                'amount'       => $p['amount'],
-                'status'       => $p['status'],
-                'gateway'      => 'UPI: ' . $p['creator']->email,
-                'note'         => 'Monthly payout request',
-                'requested_at' => now()->subDays($p['days']),
-                'processed_at' => $p['status'] === 'paid' ? now()->subDays($p['days'] - 2) : null,
-            ]);
-        }
-    }
-
-    // ──────────────────────────────────────────
-    // Subscriptions
-    // ──────────────────────────────────────────
-    private function seedSubscriptions(array $creators): void
-    {
-        $proPlan      = Plan::where('slug', 'pro')->first();
-        $businessPlan = Plan::where('slug', 'business')->first();
-
-        if ($proPlan) {
-            Subscription::create([
-                'user_id'              => $creators[0]->id,
-                'plan_id'              => $proPlan->id,
-                'status'               => 'active',
-                'billing_cycle'        => 'monthly',
-                'current_period_start' => now()->startOfMonth(),
-                'current_period_end'   => now()->endOfMonth(),
-                'gateway'              => 'stripe',
-                'gateway_subscription_id' => 'sub_' . Str::random(14),
-            ]);
-        }
-
-        if ($businessPlan) {
-            Subscription::create([
-                'user_id'              => $creators[1]->id,
-                'plan_id'              => $businessPlan->id,
-                'status'               => 'active',
-                'billing_cycle'        => 'yearly',
-                'current_period_start' => now()->subMonths(2),
-                'current_period_end'   => now()->addMonths(10),
-                'gateway'              => 'razorpay',
-                'gateway_subscription_id' => 'sub_' . Str::random(14),
-            ]);
-        }
-    }
 
     // ──────────────────────────────────────────
     // Question banks (10 Qs each quiz)

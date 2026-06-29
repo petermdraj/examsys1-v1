@@ -98,8 +98,8 @@ return [
     'link_copied'              => 'Link copied!',
 
     // Creator card on quiz detail
-    'creator_quizzes_published'  => ':count quizzes published',
-    'more_by_creator'            => 'More by this creator',
+    'lecturer_quizzes_published'  => ':count quizzes published',
+    'more_by_lecturer'            => 'More by this creator',
 
     // Attempt / result page
     'result_heading'           => 'Exam Result',

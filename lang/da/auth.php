@@ -1,9 +1,9 @@
 <?php
 return [
     'failed'                     => 'Disse legitimationsoplysninger stemmer ikke overens med vores registreringer.',
-    'login_title'                => 'Log ind — Quizora',
+    'login_title'                => 'Log ind — ExamSys',
     'login_heading'              => 'Velkommen tilbage',
-    'login_subheading'           => 'Log ind på din Quizora-konto',
+    'login_subheading'           => 'Log ind på din ExamSys-konto',
     'login_email_label'          => 'E-mail',
     'login_email_placeholder'    => 'dig@eksempel.dk',
     'login_password_label'       => 'Adgangskode',
@@ -23,8 +23,8 @@ return [
     'register_submit'                => 'Opret konto',
     'register_have_account'          => 'Har du allerede en konto?',
     'register_login_link'            => 'Log ind →',
-    'register_creator_toggle_label'  => 'Er du en quiz-skaber?',
-    'register_creator_toggle_desc'   => 'Aktiver dette for at udgive og sælge dine egne quizzer',
+    'register_lecturer_toggle_label'  => 'Er du en quiz-skaber?',
+    'register_lecturer_toggle_desc'   => 'Aktiver dette for at udgive og sælge dine egne quizzer',
     'or_divider'              => 'eller',
     'continue_with_google'    => 'Fortsæt med Google',
     'otp_title'               => 'Bekræft din e-mail',

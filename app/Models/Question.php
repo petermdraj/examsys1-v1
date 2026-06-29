@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Question extends Model
 {
     use HasFactory, HasUuid;
-    protected $fillable = ['quiz_id','creator_id','type','content','explanation','marks','negative_marks',
+    protected $fillable = ['quiz_id','lecturer_id','type','content','explanation','marks','negative_marks',
         'time_limit_seconds','sort_order','is_mandatory','hint','difficulty','collection_id','source_bank_question_id'];
 
     protected function casts(): array {
@@ -15,7 +15,7 @@ class Question extends Model
     }
 
     public function quiz() { return $this->belongsTo(Quiz::class); }
-    public function creator() { return $this->belongsTo(User::class, 'creator_id'); }
+    public function lecturer() { return $this->belongsTo(User::class, 'lecturer_id'); }
     public function options() { return $this->hasMany(QuestionOption::class)->orderBy('sort_order'); }
     public function fillBlankAnswers() { return $this->hasMany(FillBlankAnswer::class); }
     public function attemptAnswers() { return $this->hasMany(AttemptAnswer::class); }
@@ -26,7 +26,7 @@ class Question extends Model
     /** Scope: bank questions (no quiz) owned by a creator */
     public function scopeBankFor($query, string $creatorId)
     {
-        return $query->whereNull('quiz_id')->where('creator_id', $creatorId);
+        return $query->whereNull('quiz_id')->where('lecturer_id', $creatorId);
     }
 
     /** Count distinct quizzes this bank question has been imported into */

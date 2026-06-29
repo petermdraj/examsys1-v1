@@ -1,6 +1,6 @@
 <?php
 return [
-    'brand'=>'QUIZORA','time_left'=>'ÅTERSTÅENDE TID','time_unlimited'=>'∞','end_test'=>'Avsluta test','questions_count'=>'Frågor',
+    'brand'=>'EXAMSYS','time_left'=>'ÅTERSTÅENDE TID','time_unlimited'=>'∞','end_test'=>'Avsluta test','questions_count'=>'Frågor',
     'saving'=>'Sparar…','saved'=>'✓ Sparat','not_saved'=>'! Inte sparat','save_failed_connection'=>'Sparandet misslyckades. Kontrollera anslutningen.',
     'question_of'=>'F :current / :total','mark_singular'=>'poäng','mark_plural'=>'poäng','negative_wrong'=>'−:marks fel',
     'fill_blank_placeholder'=>'Skriv ditt svar…','show_hint'=>'Visa ledtråd','hide_hint'=>'Dölj ledtråd',

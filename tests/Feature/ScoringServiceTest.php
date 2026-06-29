@@ -143,6 +143,22 @@ class ScoringServiceTest extends TestCase
         $this->assertEquals(1.0, $result->score);
     }
 
+    public function test_short_answer_exact_match(): void
+    {
+        $attempt = $this->makeAttempt();
+        $question = Question::factory()->create(['quiz_id' => $attempt->quiz_id, 'type' => 'short_answer', 'marks' => 2, 'negative_marks' => 0]);
+        FillBlankAnswer::factory()->create(['question_id' => $question->id, 'answer' => 'Paris', 'is_regex' => false]);
+
+        AttemptAnswer::factory()->create([
+            'attempt_id'  => $attempt->id,
+            'question_id' => $question->id,
+            'text_answer' => 'paris',
+        ]);
+
+        $result = $this->scorer->evaluate($attempt);
+        $this->assertEquals(2.0, $result->score);
+    }
+
     public function test_is_passed_based_on_pass_percentage(): void
     {
         $attempt = $this->makeAttempt(['pass_percentage' => 60, 'total_marks' => 1]);

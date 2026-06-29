@@ -20,7 +20,7 @@ return [
     'top_scores'=>'トップスコア','anonymous'=>'匿名','rank'=>'順位','score'=>'スコア',
     'certificate_verified'=>'認定証（確認済み）','certificate_pass_earn'=>'合格してQRコード付きの共有可能な認定証を取得',
     'save_to_favourites'=>'お気に入りに追加','remove_from_favourites'=>'お気に入りから削除','share_this_quiz'=>'このクイズをシェア','copy_link'=>'リンクをコピー','link_copied'=>'リンクをコピーしました！',
-    'creator_quizzes_published'=>':count本のクイズを公開中','more_by_creator'=>'このクリエイターの他のクイズ',
+    'lecturer_quizzes_published'=>':count本のクイズを公開中','more_by_lecturer'=>'このクリエイターの他のクイズ',
     'result_heading'=>'試験結果','result_score'=>'あなたのスコア','result_passed'=>'合格！','result_failed'=>'不合格',
     'result_percentage'=>':percent%','result_time_taken'=>'所要時間','result_questions_correct'=>'正解','result_questions_wrong'=>'不正解','result_questions_skipped'=>'スキップ',
     'result_marks_earned'=>'取得点数','result_total_marks'=>'/ :total点','result_pass_percentage'=>'合格ライン',

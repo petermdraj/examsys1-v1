@@ -1,6 +1,6 @@
 @php
 $presets = [
-    'preset_quizora' => ['label' => 'Quizora',        'emoji' => '🟣', 'ring' => '#6C2E63', 'primary' => '#6C2E63', 'accent' => '#E0A431', 'font_display' => 'Plus Jakarta Sans', 'font_primary' => 'Inter',         'font_size_base' => '16px'],
+    'preset_default' => ['label' => 'Default',        'emoji' => '🟣', 'ring' => '#6C2E63', 'primary' => '#6C2E63', 'accent' => '#E0A431', 'font_display' => 'Plus Jakarta Sans', 'font_primary' => 'Inter',         'font_size_base' => '16px'],
     'preset_ocean'   => ['label' => 'Ocean Pro',       'emoji' => '🔵', 'ring' => '#0369a1', 'primary' => '#0369a1', 'accent' => '#f59e0b', 'font_display' => 'Sora',              'font_primary' => 'DM Sans',        'font_size_base' => '16px'],
     'preset_forest'  => ['label' => 'Forest Academy',  'emoji' => '🟢', 'ring' => '#166534', 'primary' => '#166534', 'accent' => '#ca8a04', 'font_display' => 'Merriweather',      'font_primary' => 'Source Sans 3',  'font_size_base' => '17px'],
     'preset_slate'   => ['label' => 'Slate Corporate', 'emoji' => '⚫', 'ring' => '#1e293b', 'primary' => '#1e293b', 'accent' => '#6366f1', 'font_display' => 'Space Grotesk',     'font_primary' => 'IBM Plex Sans',  'font_size_base' => '15px'],

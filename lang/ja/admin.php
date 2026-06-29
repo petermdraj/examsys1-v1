@@ -22,7 +22,7 @@ return [
     'widget_total_quizzes'      => 'Total Quizzes',
     'widget_total_orders'       => 'Total Orders',
     'widget_ai_usage'           => 'AI Generations Today',
-    'widget_top_creators'       => 'Top Creators',
+    'widget_top_lecturers'       => 'Top Creators',
 
     // User resource
     'user_heading'                  => 'Users',
@@ -38,8 +38,8 @@ return [
     'user_col_ai_credits'           => 'AI credits',
     'user_col_active'               => 'Active',
     'user_role_super_admin'         => 'Super Admin',
-    'user_role_creator'             => 'Creator',
-    'user_role_customer'            => 'Customer',
+    'user_role_lecturer'            => '講師',
+    'user_role_student'             => '学生',
     'user_action_activate'          => 'Activate',
     'user_action_deactivate'        => 'Deactivate',
     'user_action_suspend'           => 'Suspend',
@@ -276,7 +276,7 @@ return [
     'settings_desc_footer_columns'  => 'Add up to 4 columns of links in the footer. Each column has a heading and a list of link items.',
     'settings_desc_renewal'         => 'Automated emails sent to creators before their subscription expires.',
     'settings_desc_grace'           => 'Window after expiry during which premium features remain active, giving creators time to renew.',
-    'settings_desc_cron'            => 'Quizora relies on the Laravel task scheduler for automated background tasks. You must add the following cron entry to your server for these features to work.',
+    'settings_desc_cron'            => 'ExamSys relies on the Laravel task scheduler for automated background tasks. You must add the following cron entry to your server for these features to work.',
     'settings_desc_razorpay'        => 'Razorpay only supports INR. If your platform currency is not INR, use Stripe instead.',
 
     // Settings — field labels
@@ -474,7 +474,7 @@ return [
     'widget_ai_no_usage'           => 'No AI usage yet',
 
     // Widget — Top Creators
-    'widget_top_creators_desc'     => 'Ranked by total earnings from quiz sales',
+    'widget_top_lecturers_desc'     => 'Ranked by total earnings from quiz sales',
     'col_creator'                  => 'Creator',
     'col_email'                    => 'Email',
     'col_published'                => 'Published',
@@ -564,7 +564,7 @@ return [
     'order_filter_paid_today'        => 'Paid today',
     'order_filter_paid_this_month'   => 'Paid this month',
     'order_modal_refund_heading'     => 'Mark as refunded?',
-    'order_modal_refund_desc'        => 'This marks the order as refunded in Quizora. You must process the actual refund in your payment gateway separately.',
+    'order_modal_refund_desc'        => 'This marks the order as refunded in ExamSys. You must process the actual refund in your payment gateway separately.',
     'order_notif_refunded'           => 'Order marked as refunded',
     'order_bulk_export_csv'          => 'Export to CSV',
 
@@ -702,7 +702,7 @@ return [
 
     // Settings page placeholders
     'settings_ph_quizzes_url'   => 'Leave blank for /quizzes',
-    'settings_ph_creators_url'  => 'Leave blank for /for-creators',
+    'settings_ph_creators_url'  => 'Leave blank for /for-lecturers',
     'settings_ph_stat_1_value'  => '50,000+',
     'settings_ph_stat_1_label'  => 'mock tests taken',
     'settings_ph_stat_2_value'  => '94%',

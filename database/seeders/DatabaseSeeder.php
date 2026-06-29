@@ -16,8 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleAndPermissionSeeder::class,
             AdminSeeder::class,
-            PlanSeeder::class,
-            EmailTemplateSeeder::class,   // system default mail templates — always seeded
+            EmailTemplateSeeder::class,
         ]);
     }
 }

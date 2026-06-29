@@ -26,10 +26,10 @@ class AddHomepageAndFooterContentSettings extends SettingsMigration
         $this->migrator->add('platform.featured_title', 'Featured quizzes');
 
         // Homepage — Creator CTA Strip
-        $this->migrator->add('platform.creator_cta_title', 'Are you a quiz creator?');
-        $this->migrator->add('platform.creator_cta_sub',   'Sell your expertise.');
-        $this->migrator->add('platform.creator_cta_btn',   'Learn more →');
-        $this->migrator->add('platform.creator_cta_url',   '');
+        $this->migrator->add('platform.lecturer_cta_title', 'Are you a quiz lecturer?');
+        $this->migrator->add('platform.lecturer_cta_sub',   'Sell your expertise.');
+        $this->migrator->add('platform.lecturer_cta_btn',   'Learn more →');
+        $this->migrator->add('platform.lecturer_cta_url',   '');
 
         // Footer
         $this->migrator->add('platform.footer_tagline',         'AI-powered quiz marketplace. Generate, publish, and sell quizzes in minutes. Self-hosted.');

@@ -41,11 +41,10 @@ class CertificateService
             // 1. Creator's own logo (if plan allows custom logo)
             // 2. Platform default certificate logo
             // 3. Platform app logo
-            $creator     = $attempt->quiz->creator;
-            $creatorPlan = $creator?->activeSubscription()->with('plan')->first()?->plan;
-            $logoPath    = null;
-            if ($creatorPlan?->allow_custom_certificate_logo && $creator?->certificate_logo) {
-                $logoPath = $creator->certificate_logo;
+            $lecturer = $attempt->quiz->lecturer;
+            $logoPath = null;
+            if ($lecturer?->certificate_logo) {
+                $logoPath = $lecturer->certificate_logo;
             } else {
                 $settings = app(PlatformSettings::class);
                 $logoPath = $settings->certificate_logo ?: $settings->app_logo;

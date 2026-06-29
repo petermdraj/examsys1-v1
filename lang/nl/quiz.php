@@ -20,7 +20,7 @@ return [
     'top_scores'=>'Topscores','anonymous'=>'Anoniem','rank'=>'Rang','score'=>'Score',
     'certificate_verified'=>'Geverifieerd certificaat','certificate_pass_earn'=>'Slagen en een deelbaar certificaat met QR-verificatie verdienen',
     'save_to_favourites'=>'Aan favorieten toevoegen','remove_from_favourites'=>'Uit favorieten verwijderen','share_this_quiz'=>'Deze quiz delen','copy_link'=>'Link kopiëren','link_copied'=>'Link gekopieerd!',
-    'creator_quizzes_published'=>':count quizzen gepubliceerd','more_by_creator'=>'Meer van deze maker',
+    'lecturer_quizzes_published'=>':count quizzen gepubliceerd','more_by_lecturer'=>'Meer van deze maker',
     'result_heading'=>'Examenresultaat','result_score'=>'Uw score','result_passed'=>'Geslaagd!','result_failed'=>'Niet geslaagd',
     'result_percentage'=>':percent%','result_time_taken'=>'Bestede tijd','result_questions_correct'=>'Correct','result_questions_wrong'=>'Onjuist','result_questions_skipped'=>'Overgeslagen',
     'result_marks_earned'=>'Verdiende punten','result_total_marks'=>'van :total','result_pass_percentage'=>'Slaagpercentage',

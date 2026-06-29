@@ -2,7 +2,7 @@
 
 return [
     // Left panel
-    'brand_name'       => 'QUIZORA',
+    'brand_name'       => 'EXAMSYS',
     'cert_type'        => 'Official',
     'official_label'   => 'Official',
     'cert_heading'     => 'Certificate of Achievement',
@@ -26,17 +26,17 @@ return [
 
     // Footer
     'sig_platform_name' => 'Platform Authority',
-    'sig_platform_role' => 'Quizora',
+    'sig_platform_role' => 'ExamSys',
     'sig_author_role'   => 'Quiz Author',
     'cert_id_label'     => 'Certificate ID',
     'verify_prefix'     => 'Verify:',
     'verify_url_prefix' => 'Verify',
-    'powered_by'        => 'Powered by Quizora',
+    'powered_by'        => 'Powered by ExamSys',
 
     // Public verify page
     'verify_title'          => 'Certificate Verification',
     'verify_valid_heading'  => 'Valid Certificate',
-    'verify_valid_body'     => 'This certificate is genuine and was issued by Quizora.',
+    'verify_valid_body'     => 'This certificate is genuine and was issued by ExamSys.',
     'verify_invalid'        => 'Certificate not found or invalid.',
     'verify_recipient'      => 'Recipient',
     'verify_quiz'           => 'Quiz',

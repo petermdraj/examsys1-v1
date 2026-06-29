@@ -34,26 +34,18 @@ class OtpController extends Controller
                 ->withErrors(['otp' => 'Session expired. Please register again.']);
         }
 
-        if ($user->email_otp !== $request->otp) {
-            return back()->withErrors(['otp' => 'The code you entered is incorrect. Please try again.']);
+        if (! $user->verifyEmailOtp($request->otp)) {
+            return back()->withErrors(['otp' => 'The code you entered is incorrect or has expired. Please try again.']);
         }
 
-        if (! $user->email_otp_expires_at || now()->isAfter($user->email_otp_expires_at)) {
-            return back()->withErrors(['otp' => 'This code has expired. Please request a new one.']);
-        }
-
-        $user->update([
-            'email_verified_at'    => now(),
-            'email_otp'            => null,
-            'email_otp_expires_at' => null,
-        ]);
+        $user->markEmailVerified();
 
         session()->forget(['otp_user_id', 'otp_email']);
         auth()->login($user);
 
-        return $user->role === 'creator'
-            ? redirect('/creator')->with('status', 'Email verified! Welcome to Quizora.')
-            : redirect(route('my.dashboard'))->with('status', 'Email verified! Welcome to Quizora.');
+        return $user->role === 'lecturer'
+            ? redirect('/lecturer')->with('status', 'Email verified! Welcome!')
+            : redirect(route('my.dashboard'))->with('status', 'Email verified! Welcome!');
     }
 
     public function resend(Request $request)
@@ -68,10 +60,7 @@ class OtpController extends Controller
         $settings = app(PlatformSettings::class);
         $otp      = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
-        $user->update([
-            'email_otp'            => $otp,
-            'email_otp_expires_at' => now()->addMinutes(10),
-        ]);
+        $user->assignEmailOtp($otp);
 
         Mail::to($user->email)->send(
             new EmailVerificationOtp($user, $otp, $settings->app_name)

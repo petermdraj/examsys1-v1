@@ -15,7 +15,7 @@ class QuestionBankController extends Controller
         $creatorId = auth()->id();
 
         $paginated = Question::whereNull('quiz_id')
-            ->where('creator_id', $creatorId)
+            ->where('lecturer_id', $creatorId)
             ->with(['options', 'collection'])
             ->when($request->collection_id, fn ($q) => $q->where('collection_id', $request->collection_id))
             ->when($request->difficulty,    fn ($q) => $q->where('difficulty', $request->difficulty))
@@ -57,7 +57,7 @@ class QuestionBankController extends Controller
         ]);
 
         $quiz = Quiz::where('id', $validated['quiz_id'])
-            ->where('creator_id', auth()->id())
+            ->where('lecturer_id', auth()->id())
             ->firstOrFail();
 
         $imported = $service->randomImport(

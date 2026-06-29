@@ -195,7 +195,7 @@ $svgPaths = [
         </div>
         <div>
             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Database Name</label>
-            <input wire:model="dbName" type="text" placeholder="quizora"
+            <input wire:model="dbName" type="text" placeholder="examsys1"
                 class="inp w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-900">
         </div>
         <div class="grid grid-cols-2 gap-4">
@@ -251,7 +251,7 @@ $svgPaths = [
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">App Name</label>
-                <input wire:model="appName" type="text" placeholder="Quizora"
+                <input wire:model="appName" type="text" placeholder="ExamSys"
                     class="inp w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-900">
             </div>
             <div>
@@ -397,7 +397,7 @@ $progressPct    = $totalInstallSteps > 0
         <span class="absolute -bottom-0 -left-2 w-2 h-2 rounded-full bg-fuchsia-400 opacity-70"></span>
     </div>
     <h2 class="text-2xl font-bold text-slate-900 mb-2">Installation Complete!</h2>
-    <p class="text-slate-500 text-sm max-w-sm leading-relaxed">Your Quizora platform is live and ready to go. Log in to the admin panel to get started.</p>
+    <p class="text-slate-500 text-sm max-w-sm leading-relaxed">Your platform is live and ready to go. Log in to the admin panel to get started.</p>
     <div class="flex gap-3 mt-7">
         <a href="/admin"
            class="inline-flex items-center gap-2 px-6 py-3 bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-xl text-sm transition-colors shadow-lg shadow-violet-200">
@@ -420,7 +420,7 @@ $progressPct    = $totalInstallSteps > 0
 <div @if(!$installError && !$installed) wire:poll.800ms="advanceStep" @endif>
 
     <p class="text-xs font-bold text-violet-600 uppercase tracking-widest mb-1">Step 4 of {{ $totalSteps }}</p>
-    <h2 class="text-2xl font-bold text-slate-900 tracking-tight mb-1">Installing Quizora…</h2>
+    <h2 class="text-2xl font-bold text-slate-900 tracking-tight mb-1">Installing…</h2>
     <p class="text-slate-500 text-sm mb-5">Please keep this window open while we set up your platform.</p>
 
     {{-- Progress bar --}}

@@ -14,7 +14,7 @@ return [
     'result_status_passed'      => 'उत्तीर्ण',
     'result_status_failed'      => 'अनुत्तीर्ण',
     'result_cta'                => 'पूरा परिणाम देखें',
-    'footer_copyright'          => '© :year Quizora. सभी अधिकार सुरक्षित।',
+    'footer_copyright'          => '© :year ExamSys. सभी अधिकार सुरक्षित।',
     'footer_rights'             => 'सभी अधिकार सुरक्षित।',
 
     // Shared
@@ -45,7 +45,7 @@ return [
     'digest_heading'            => 'इस सप्ताह नए क्विज़ आए 🎯',
     'digest_date_range'         => ':from – :to',
     'digest_greeting'           => 'नमस्ते :name,',
-    'digest_intro'              => 'इस सप्ताह Quizora पर क्या नया है। आइए अपना ज्ञान परखें!',
+    'digest_intro'              => 'इस सप्ताह ExamSys पर क्या नया है। आइए अपना ज्ञान परखें!',
     'digest_section_label'      => 'इस सप्ताह के क्विज़',
     'digest_questions_count'    => '· :count प्रश्न',
     'digest_duration'           => '· :minutes मिनट',
@@ -56,7 +56,7 @@ return [
     'digest_manage_prefs'       => 'सूचना प्राथमिकताएं प्रबंधित करें',
 
     // OTP verification email
-    'otp_subject'               => 'आपका Quizora सत्यापन कोड',
+    'otp_subject'               => 'आपका ExamSys सत्यापन कोड',
     'otp_greeting'              => 'नमस्ते :name',
     'otp_intro'                 => 'साइन अप करने के लिए धन्यवाद! अपना ईमेल सत्यापित करने और खाता सक्रिय करने के लिए नीचे दिए गए कोड का उपयोग करें।',
     'otp_label'                 => 'आपका सत्यापन कोड',

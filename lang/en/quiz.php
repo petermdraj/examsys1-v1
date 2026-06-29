@@ -62,6 +62,8 @@ return [
     'buy_for_price'            => 'Buy for :symbol:price →',
     'signup_to_enroll'         => 'Sign up to enroll',
     'signup_to_buy'            => 'Sign up to buy',
+    'login_to_start'           => 'Log in to start',
+    'not_assigned'             => 'This exam has not been assigned to you. Contact your lecturer or administrator.',
     'resume_attempt'           => 'Resume attempt →',
     'attempt_again'            => 'Attempt again',
     'view_result'              => 'View result →',
@@ -98,8 +100,8 @@ return [
     'link_copied'              => 'Link copied!',
 
     // Creator card on quiz detail
-    'creator_quizzes_published'  => ':count quizzes published',
-    'more_by_creator'            => 'More by this creator',
+    'lecturer_quizzes_published'  => ':count quizzes published',
+    'more_by_lecturer'            => 'More by this creator',
 
     // Attempt / result page
     'result_heading'           => 'Exam Result',

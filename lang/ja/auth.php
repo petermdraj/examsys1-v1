@@ -1,9 +1,9 @@
 <?php
 return [
     'failed'                     => 'この認証情報は記録と一致しません。',
-    'login_title'                => 'ログイン — Quizora',
+    'login_title'                => 'ログイン — ExamSys',
     'login_heading'              => 'おかえりなさい',
-    'login_subheading'           => 'Quizoraアカウントにログインしてください',
+    'login_subheading'           => 'ExamSysアカウントにログインしてください',
     'login_email_label'          => 'メールアドレス',
     'login_email_placeholder'    => 'あなた@例.jp',
     'login_password_label'       => 'パスワード',
@@ -23,8 +23,8 @@ return [
     'register_submit'                => 'アカウントを作成',
     'register_have_account'          => 'すでにアカウントをお持ちですか？',
     'register_login_link'            => 'ログイン →',
-    'register_creator_toggle_label'  => 'クイズクリエイターですか？',
-    'register_creator_toggle_desc'   => '自分のクイズを公開・販売するにはこれを有効にしてください',
+    'register_lecturer_toggle_label'  => 'クイズクリエイターですか？',
+    'register_lecturer_toggle_desc'   => '自分のクイズを公開・販売するにはこれを有効にしてください',
     'or_divider'              => 'または',
     'continue_with_google'    => 'Googleで続ける',
     'otp_title'               => 'メールを確認',

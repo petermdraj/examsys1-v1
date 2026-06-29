@@ -1,6 +1,6 @@
 <?php
 return [
-    'brand'=>'QUIZORA','time_left'=>'VERBLEIBENDE ZEIT','time_unlimited'=>'∞','end_test'=>'Test beenden','questions_count'=>'Fragen',
+    'brand'=>'EXAMSYS','time_left'=>'VERBLEIBENDE ZEIT','time_unlimited'=>'∞','end_test'=>'Test beenden','questions_count'=>'Fragen',
     'saving'=>'Speichern…','saved'=>'✓ Gespeichert','not_saved'=>'! Nicht gespeichert','save_failed_connection'=>'Speichern fehlgeschlagen. Verbindung prüfen.',
     'question_of'=>'F :current / :total','mark_singular'=>'Punkt','mark_plural'=>'Punkte','negative_wrong'=>'−:marks falsch',
     'fill_blank_placeholder'=>'Ihre Antwort eingeben…','show_hint'=>'Hinweis anzeigen','hide_hint'=>'Hinweis verbergen',

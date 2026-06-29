@@ -27,12 +27,12 @@ class RoleAndPermissionSeeder extends Seeder
             // AI
             'ai.generate_quiz', 'ai.unlimited',
 
-            // Customer
-            'quiz.attempt', 'quiz.purchase', 'certificate.download',
+            // Student
+            'quiz.attempt', 'certificate.download',
 
             // Admin
-            'admin.manage_users', 'admin.manage_plans', 'admin.manage_settings',
-            'admin.manage_payouts', 'admin.view_all_reports',
+            'admin.manage_users', 'admin.manage_settings',
+            'admin.view_all_reports',
         ];
 
         foreach ($permissions as $perm) {
@@ -41,8 +41,8 @@ class RoleAndPermissionSeeder extends Seeder
 
         // ── Roles ──────────────────────────────────────────────────────────
         $superAdmin = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
-        $creator    = Role::firstOrCreate(['name' => 'creator',     'guard_name' => 'web']);
-        $customer   = Role::firstOrCreate(['name' => 'customer',    'guard_name' => 'web']);
+        $creator    = Role::firstOrCreate(['name' => 'lecturer',     'guard_name' => 'web']);
+        $customer   = Role::firstOrCreate(['name' => 'student',    'guard_name' => 'web']);
 
         // ── Role → Permission assignments ──────────────────────────────────
         $superAdmin->syncPermissions(Permission::all());
@@ -52,11 +52,11 @@ class RoleAndPermissionSeeder extends Seeder
             'quiz.view_reports', 'question.create', 'question.edit',
             'question.delete', 'question.bulk_generate',
             'ai.generate_quiz',
-            'quiz.attempt', 'quiz.purchase', 'certificate.download',
+            'quiz.attempt', 'certificate.download',
         ]);
 
         $customer->syncPermissions([
-            'quiz.attempt', 'quiz.purchase', 'certificate.download',
+            'quiz.attempt', 'certificate.download',
         ]);
 
         // Clear again after seeding so the app picks up the new values immediately

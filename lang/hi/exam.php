@@ -2,7 +2,7 @@
 
 return [
     // Top bar
-    'brand'                    => 'QUIZORA',
+    'brand'                    => 'EXAMSYS',
     'time_left'                => 'शेष समय',
     'time_unlimited'           => '∞',
     'end_test'                 => 'परीक्षा समाप्त करें',

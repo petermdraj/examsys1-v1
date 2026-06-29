@@ -7,7 +7,11 @@ return new class extends SettingsMigration
     public function up(): void
     {
         foreach (['license_key', 'license_domain', 'license_status'] as $key) {
-            $this->migrator->delete("platform.{$key}");
+            try {
+                $this->migrator->delete("platform.{$key}");
+            } catch (\Throwable) {
+                // Keys were never added on fresh installs — safe to ignore.
+            }
         }
     }
 

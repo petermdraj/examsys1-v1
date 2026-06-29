@@ -3,18 +3,18 @@
 return [
 
     // App
-    'app_name'                => config('app.name', 'Quizora'),
+    'app_name'                => config('app.name', 'ExamSys'),
 
     // Pubbar (secondary discovery bar)
     'pubbar_explore'          => 'Explore',
     'pubbar_quizzes'          => 'Quizzes',
     'pubbar_categories'       => 'Categories',
-    'pubbar_for_creators'     => 'For creators',
+    'pubbar_for_lecturers'     => 'For creators',
     'pubbar_search'           => 'Search quizzes…',
 
     // Navigation
     'nav_discover'           => 'Discover',
-    'nav_for_creators'       => 'For Creators',
+    'nav_for_lecturers'       => 'For Creators',
     'nav_pricing'            => 'Pricing',
     'nav_login'              => 'Log in',
     'nav_signup'             => 'Sign up free',
@@ -22,7 +22,7 @@ return [
 
     // User dropdown
     'user_admin_panel'       => 'Admin panel',
-    'user_creator_dashboard' => 'Creator dashboard',
+    'user_lecturer_dashboard' => 'Creator dashboard',
     'user_my_dashboard'      => 'My dashboard',
     'user_my_attempts'       => 'My attempts',
     'user_certificates'      => 'Certificates',
@@ -96,7 +96,7 @@ return [
     'pricing_switch_free'          => 'Switch to Free',
     'pricing_get_started_free'     => 'Get started free',
     'pricing_upgrade_to'           => 'Upgrade to :name',
-    'pricing_become_creator'       => 'Become a creator',
+    'become_lecturer'       => 'Become a creator',
     'pricing_get_plan'             => 'Get :name',
     'pricing_secure_payments'      => 'Secure payments',
     'pricing_secure_payments_desc' => 'Powered by Razorpay & Stripe. Your card details never touch our servers.',
@@ -140,7 +140,7 @@ return [
     'account_deleted'                   => 'Your account has been deleted.',
 
     // Subscription controller messages
-    'creators_only'                     => 'Only creators can subscribe to plans.',
+    'lecturers_only'                     => 'Only creators can subscribe to plans.',
     'payment_gateway_not_configured'    => 'Payment gateway is not configured. Please contact the administrator.',
     'payment_verification_failed'       => 'Payment verification failed. Please try again.',
     'subscription_activated'            => 'You are now on the :plan plan!',
@@ -253,13 +253,13 @@ return [
     'featured_quizzes'                  => 'Featured quizzes',
     'see_all'                           => 'See all →',
     'no_quizzes_published'              => 'No quizzes yet.',
-    'be_first_creator'                  => 'Be the first creator →',
+    'be_first_lecturer'                  => 'Be the first creator →',
     'quiz_questions'                    => 'questions',
     'quiz_min'                          => 'min',
     'quiz_attempts'                     => 'attempts',
     'quiz_avg'                          => 'Avg',
-    'creator_teaser_students'           => 'Are you a teacher or tutor?',
-    'creator_teaser_link_students'      => 'Share your knowledge →',
+    'lecturer_teaser_students'           => 'Are you a teacher or tutor?',
+    'lecturer_teaser_link_students'      => 'Share your knowledge →',
 
     // Home themes — professionals
     'professionals_hero_eyebrow'        => 'Verifiable certifications · career skills · LinkedIn-ready',
@@ -278,8 +278,8 @@ return [
     'featured_certifications'           => 'Featured certifications',
     'no_certs_published'                => 'No certifications published yet.',
     'publish_first_cert'                => 'Publish the first one →',
-    'creator_teaser_professionals'      => 'Are you a subject matter expert or L&D professional?',
-    'creator_teaser_link_professionals' => 'Publish certification quizzes →',
+    'lecturer_teaser_professionals'      => 'Are you a subject matter expert or L&D professional?',
+    'lecturer_teaser_link_professionals' => 'Publish certification quizzes →',
 
     // Home themes — competition (hardcoded fallback label only)
     'no_quizzes_competition'            => 'No quizzes published yet.',

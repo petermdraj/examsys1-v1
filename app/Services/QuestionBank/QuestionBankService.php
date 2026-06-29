@@ -2,45 +2,59 @@
 
 namespace App\Services\QuestionBank;
 
-use App\Exceptions\PlanLimitExceededException;
 use App\Models\FillBlankAnswer;
 use App\Models\Question;
 use App\Models\QuestionCollection;
 use App\Models\QuestionOption;
 use App\Models\Quiz;
 use App\Models\User;
-use App\Services\Quiz\PlanLimitService;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Spatie\Activitylog\Facades\Activity;
 
 class QuestionBankService
 {
+    private const EXCEL_OPTION_COUNT = 6;
+
+    /** @var list<string> */
+    private const EXCEL_HEADERS = [
+        'type',
+        'content',
+        'difficulty',
+        'marks',
+        'negative_marks',
+        'explanation',
+        'hint',
+        'collection_name',
+        'option_1',
+        'correct_1',
+        'option_2',
+        'correct_2',
+        'option_3',
+        'correct_3',
+        'option_4',
+        'correct_4',
+        'option_5',
+        'correct_5',
+        'option_6',
+        'correct_6',
+        'blank_answers',
+    ];
     /**
      * Deep-copy bank questions into a quiz.
      * Runs in a transaction — all-or-nothing.
      */
     public function importToQuiz(string $creatorId, array $bankQuestionIds, Quiz $quiz, ?User $creator = null): int
     {
-        $limitService = app(PlanLimitService::class);
-        $creatorUser  = $creator ?? \App\Models\User::find($creatorId);
-
-        return DB::transaction(function () use ($creatorId, $bankQuestionIds, $quiz, $limitService, $creatorUser) {
+        return DB::transaction(function () use ($creatorId, $bankQuestionIds, $quiz) {
             $maxSort = $quiz->questions()->max('sort_order') ?? 0;
             $imported = 0;
 
             foreach ($bankQuestionIds as $bankId) {
-                // Enforce per-quiz limit before each import
-                if ($creatorUser) {
-                    try {
-                        $limitService->assertCanAddQuestion($creatorUser, $quiz->id);
-                    } catch (PlanLimitExceededException $e) {
-                        // Stop importing; partial import up to limit is allowed
-                        break;
-                    }
-                }
-
                 $src = Question::whereNull('quiz_id')
-                    ->where('creator_id', $creatorId)
+                    ->where('lecturer_id', $creatorId)
                     ->with(['options', 'fillBlankAnswers'])
                     ->find($bankId);
 
@@ -48,7 +62,7 @@ class QuestionBankService
 
                 $newQ = Question::create([
                     'quiz_id'                => $quiz->id,
-                    'creator_id'             => $creatorId,
+                    'lecturer_id'             => $creatorId,
                     'type'                   => $src->type,
                     'content'                => $src->content,
                     'explanation'            => $src->explanation,
@@ -83,7 +97,7 @@ class QuestionBankService
 
             activity()
                 ->causedByAnonymous()
-                ->withProperties(['creator_id' => $creatorId, 'quiz_id' => $quiz->id, 'count' => $imported])
+                ->withProperties(['lecturer_id' => $creatorId, 'quiz_id' => $quiz->id, 'count' => $imported])
                 ->log('bank_question_imported');
 
             return $imported;
@@ -104,7 +118,7 @@ class QuestionBankService
 
         $bankQ = Question::create([
             'quiz_id'       => null,
-            'creator_id'    => $creatorId,
+            'lecturer_id'    => $creatorId,
             'type'          => $question->type,
             'content'       => $question->content,
             'explanation'   => $question->explanation,
@@ -145,7 +159,7 @@ class QuestionBankService
         ?string $type = null
     ): int {
         $ids = Question::whereNull('quiz_id')
-            ->where('creator_id', $creatorId)
+            ->where('lecturer_id', $creatorId)
             ->when($collectionId, fn($q) => $q->where('collection_id', $collectionId))
             ->when($difficulty,   fn($q) => $q->where('difficulty', $difficulty))
             ->when($type,         fn($q) => $q->where('type', $type))
@@ -158,52 +172,113 @@ class QuestionBankService
     }
 
     /**
-     * Stream-export all bank questions as a JSON download.
-     * Uses chunking to avoid OOM on large banks.
+     * Export all bank questions to an .xlsx file.
+     * Returns the temp file path, or null when the bank is empty.
      */
-    public function exportJson(string $creatorId): array
+    public function exportExcel(string $creatorId): ?string
     {
-        $questions = [];
+        $spreadsheet = new Spreadsheet();
+        $sheet       = $spreadsheet->getActiveSheet();
+        $sheet->fromArray([self::EXCEL_HEADERS], null, 'A1');
+
+        $row = 2;
+        $count = 0;
 
         Question::whereNull('quiz_id')
-            ->where('creator_id', $creatorId)
+            ->where('lecturer_id', $creatorId)
             ->with(['options', 'fillBlankAnswers', 'collection'])
-            ->chunk(100, function ($chunk) use (&$questions) {
+            ->orderBy('created_at')
+            ->chunk(100, function ($chunk) use ($sheet, &$row, &$count) {
                 foreach ($chunk as $q) {
-                    $questions[] = [
-                        'content'         => $q->content,
-                        'type'            => $q->type,
-                        'difficulty'      => $q->difficulty,
-                        'marks'           => (float) $q->marks,
-                        'negative_marks'  => (float) $q->negative_marks,
-                        'explanation'     => $q->explanation,
-                        'hint'            => $q->hint,
-                        'collection_name' => $q->collection?->name,
-                        'options'         => $q->options->map(fn($o) => [
-                            'content'    => $o->content,
-                            'is_correct' => $o->is_correct,
-                        ])->all(),
-                        'blank_answers'   => $q->fillBlankAnswers->pluck('answer')->all(),
+                    $options = $q->options->values();
+                    $line    = [
+                        $q->type,
+                        $q->content,
+                        $q->difficulty ?? '',
+                        (float) $q->marks,
+                        (float) $q->negative_marks,
+                        $q->explanation ?? '',
+                        $q->hint ?? '',
+                        $q->collection?->name ?? '',
                     ];
+
+                    for ($i = 0; $i < self::EXCEL_OPTION_COUNT; $i++) {
+                        $opt = $options->get($i);
+                        $line[] = $opt?->content ?? '';
+                        $line[] = $opt ? ($opt->is_correct ? 'yes' : 'no') : '';
+                    }
+
+                    $line[] = $q->fillBlankAnswers->pluck('answer')->implode('|');
+
+                    $sheet->fromArray([$line], null, 'A' . $row);
+                    $row++;
+                    $count++;
                 }
             });
 
+        if ($count === 0) {
+            return null;
+        }
+
         activity()
             ->causedByAnonymous()
-            ->withProperties(['creator_id' => $creatorId, 'count' => count($questions)])
+            ->withProperties(['lecturer_id' => $creatorId, 'count' => $count])
             ->log('bank_export_generated');
 
-        return ['version' => 1, 'questions' => $questions];
+        $path = tempnam(sys_get_temp_dir(), 'qbank_') . '.xlsx';
+        (new Xlsx($spreadsheet))->save($path);
+
+        return $path;
     }
 
     /**
-     * Import questions from a validated JSON file.
+     * Import questions from an Excel file (.xlsx / .xls).
+     * Returns ['imported' => N, 'skipped' => N, 'errors' => N, 'total' => N].
+     */
+    public function importExcel(string $creatorId, string $filePath): array
+    {
+        $spreadsheet = IOFactory::load($filePath);
+        $rows        = $spreadsheet->getActiveSheet()->toArray(null, true, true, false);
+
+        if (count($rows) < 2) {
+            return ['imported' => 0, 'skipped' => 0, 'errors' => 0, 'total' => 0];
+        }
+
+        $headers = array_map(
+            fn ($h) => strtolower(trim((string) $h)),
+            $rows[0]
+        );
+
+        $questions = [];
+        foreach (array_slice($rows, 1) as $row) {
+            $assoc = [];
+            foreach ($headers as $i => $header) {
+                if ($header === '') {
+                    continue;
+                }
+                $assoc[$header] = isset($row[$i]) ? trim((string) $row[$i]) : '';
+            }
+
+            if ($this->excelRowIsEmpty($assoc)) {
+                continue;
+            }
+
+            $questions[] = $this->normalizeExcelRow($assoc);
+        }
+
+        $result         = $this->importQuestions($creatorId, $questions);
+        $result['total'] = count($questions);
+
+        return $result;
+    }
+
+    /**
+     * Import questions from a normalized array.
      * Returns ['imported' => N, 'skipped' => N, 'errors' => N].
      */
-    public function importJson(string $creatorId, array $data): array
+    public function importQuestions(string $creatorId, array $questions): array
     {
         $imported = $skipped = $errors = 0;
-        $questions = $data['questions'] ?? [];
 
         foreach ($questions as $row) {
             if (empty($row['content']) || empty($row['type'])) {
@@ -220,25 +295,25 @@ class QuestionBankService
             }
 
             $collectionId = null;
-            if (!empty($row['collection_name'])) {
+            if (! empty($row['collection_name'])) {
                 $collectionName = trim($row['collection_name']);
-                $col = QuestionCollection::where('creator_id', $creatorId)
+                $col = QuestionCollection::where('lecturer_id', $creatorId)
                     ->whereRaw('LOWER(name) = ?', [mb_strtolower($collectionName)])
                     ->first()
-                    ?? QuestionCollection::create(['creator_id' => $creatorId, 'name' => $collectionName]);
+                    ?? QuestionCollection::create(['lecturer_id' => $creatorId, 'name' => $collectionName]);
                 $collectionId = $col->id;
             }
 
             $q = Question::create([
                 'quiz_id'        => null,
-                'creator_id'     => $creatorId,
+                'lecturer_id'     => $creatorId,
                 'type'           => $row['type'],
                 'content'        => $content,
                 'explanation'    => isset($row['explanation']) ? strip_tags($row['explanation']) : null,
                 'marks'          => (float) ($row['marks'] ?? 1),
                 'negative_marks' => (float) ($row['negative_marks'] ?? 0),
                 'hint'           => isset($row['hint']) ? strip_tags($row['hint']) : null,
-                'difficulty'     => in_array($row['difficulty'] ?? '', ['easy', 'medium', 'hard'])
+                'difficulty'     => in_array($row['difficulty'] ?? '', ['easy', 'medium', 'hard'], true)
                     ? $row['difficulty'] : null,
                 'collection_id'  => $collectionId,
                 'sort_order'     => 0,
@@ -262,10 +337,70 @@ class QuestionBankService
 
         activity()
             ->causedByAnonymous()
-            ->withProperties(['creator_id' => $creatorId, 'imported' => $imported, 'skipped' => $skipped, 'errors' => $errors])
+            ->withProperties(['lecturer_id' => $creatorId, 'imported' => $imported, 'skipped' => $skipped, 'errors' => $errors])
             ->log('bank_import_completed');
 
         return compact('imported', 'skipped', 'errors');
+    }
+
+    /**
+     * @param  array<string, string>  $row
+     */
+    private function normalizeExcelRow(array $row): array
+    {
+        $options = [];
+        for ($i = 1; $i <= self::EXCEL_OPTION_COUNT; $i++) {
+            $content = $row["option_{$i}"] ?? '';
+            if ($content === '') {
+                continue;
+            }
+            $options[] = [
+                'content'    => $content,
+                'is_correct' => $this->parseExcelBoolean($row["correct_{$i}"] ?? ''),
+            ];
+        }
+
+        $blankAnswers = [];
+        if (! empty($row['blank_answers'])) {
+            $blankAnswers = array_values(array_filter(array_map(
+                'trim',
+                preg_split('/[|;]/', $row['blank_answers']) ?: []
+            )));
+        }
+
+        return [
+            'type'            => $row['type'] ?? '',
+            'content'         => $row['content'] ?? ($row['question'] ?? ''),
+            'difficulty'      => $row['difficulty'] ?? '',
+            'marks'           => is_numeric($row['marks'] ?? null) ? (float) $row['marks'] : 1,
+            'negative_marks'  => is_numeric($row['negative_marks'] ?? null) ? (float) $row['negative_marks'] : 0,
+            'explanation'     => $row['explanation'] ?? '',
+            'hint'            => $row['hint'] ?? '',
+            'collection_name' => $row['collection_name'] ?? ($row['collection'] ?? ''),
+            'options'         => $options,
+            'blank_answers'   => $blankAnswers,
+        ];
+    }
+
+    /**
+     * @param  array<string, string>  $row
+     */
+    private function excelRowIsEmpty(array $row): bool
+    {
+        $content = trim($row['content'] ?? ($row['question'] ?? ''));
+
+        return $content === '';
+    }
+
+    private function parseExcelBoolean(string $value): bool
+    {
+        return in_array(strtolower(trim($value)), ['1', 'yes', 'y', 'true', 'correct'], true);
+    }
+
+    /** @deprecated Use importQuestions() or importExcel() */
+    public function importJson(string $creatorId, array $data): array
+    {
+        return $this->importQuestions($creatorId, $data['questions'] ?? []);
     }
 
     public function contentHash(string $content): string
@@ -277,7 +412,7 @@ class QuestionBankService
     {
         // Compute hash in PHP; load content and compare to avoid SQL dialect issues (MySQL MD5 vs SQLite).
         return Question::whereNull('quiz_id')
-            ->where('creator_id', $creatorId)
+            ->where('lecturer_id', $creatorId)
             ->get(['content'])
             ->contains(fn($q) => $this->contentHash($q->content) === $hash);
     }

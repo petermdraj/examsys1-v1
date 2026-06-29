@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "quizora/quizora",
+    "name": "examsys/examsys",
     "type": "project",
-    "description": "Quizora — AI-powered quiz platform with IBPS-style exam engine, Razorpay/Stripe payments, and creator monetisation.",
+    "description": "ExamSys — AI-powered quiz platform with IBPS-style exam engine and institutional student access.",
     "keywords": ["quiz", "exam", "ai", "laravel", "filament", "ibps", "mcq"],
     "license": "MIT",
     "require": {
@@ -15,12 +15,12 @@
         "laravel/socialite": "^5.28",
         "laravel/tinker": "^3.0",
         "openai-php/laravel": "^0.19.1",
+        "phpoffice/phpspreadsheet": "^5.8",
         "spatie/laravel-activitylog": "^4.12",
         "spatie/laravel-medialibrary": "^11.23",
         "spatie/laravel-permission": "^8.0",
         "spatie/laravel-settings": "^3.9",
-        "stechstudio/filament-impersonate": "^3.16",
-        "stripe/stripe-php": "^20.2"
+        "stechstudio/filament-impersonate": "^3.16"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

@@ -10,7 +10,7 @@ return new class extends Migration
         $rows = [
             ['group' => 'platform', 'name' => 'enabled_locales',       'payload' => json_encode(['en'])],
             ['group' => 'platform', 'name' => 'show_switcher_admin',   'payload' => json_encode(true)],
-            ['group' => 'platform', 'name' => 'show_switcher_creator', 'payload' => json_encode(true)],
+            ['group' => 'platform', 'name' => 'show_switcher_lecturer', 'payload' => json_encode(true)],
             ['group' => 'platform', 'name' => 'show_switcher_front',   'payload' => json_encode(true)],
         ];
 
@@ -26,7 +26,7 @@ return new class extends Migration
     {
         DB::table('settings')
             ->where('group', 'platform')
-            ->whereIn('name', ['enabled_locales', 'show_switcher_admin', 'show_switcher_creator', 'show_switcher_front'])
+            ->whereIn('name', ['enabled_locales', 'show_switcher_admin', 'show_switcher_lecturer', 'show_switcher_front'])
             ->delete();
     }
 };

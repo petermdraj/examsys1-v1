@@ -9,7 +9,7 @@ return new class extends Migration {
             $table->uuid('quiz_id');
             $table->uuid('user_id');
             $table->timestamp('enrolled_at')->useCurrent();
-            $table->enum('source', ['free','purchased','gifted','admin'])->default('free');
+            $table->enum('source', ['free','purchased','gifted','admin','assigned'])->default('free');
             $table->uuid('order_id')->nullable();
             $table->timestamps();
             $table->unique(['quiz_id', 'user_id']);

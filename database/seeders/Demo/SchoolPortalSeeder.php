@@ -50,52 +50,30 @@ class SchoolPortalSeeder extends Seeder
             }
         }
 
-        // ── Plans ────────────────────────────────────────────────────────
-        $freePlan     = \App\Models\Plan::where('slug', 'free')->first();
-        $proPlan      = \App\Models\Plan::where('slug', 'pro')->first();
-        $businessPlan = \App\Models\Plan::where('slug', 'business')->first();
-
+        // ── Lecturers ─────────────────────────────────────────────────────
         // ── Creators (Teachers) ───────────────────────────────────────────
         $mathTeacher = User::firstOrCreate(
             ['email' => 'david.math@school.demo'],
-            ['name' => 'Mr. David Chen', 'password' => Hash::make('password'), 'role' => 'creator',
-             'is_active' => true, 'ai_credits_free_remaining' => $freePlan?->ai_free_generations ?? 10, 'email_verified_at' => now()]
+            ['name' => 'Mr. David Chen', 'password' => Hash::make('password'), 'role' => 'lecturer',
+             'is_active' => true, 'ai_credits_free_remaining' => 10, 'email_verified_at' => now()]
         );
-        $mathTeacher->assignRole('creator');
-        if ($freePlan) {
-            \App\Models\Subscription::updateOrCreate(['user_id' => $mathTeacher->id], [
-                'plan_id' => $freePlan->id, 'status' => 'active', 'billing_cycle' => 'yearly',
-                'current_period_start' => now(), 'current_period_end' => now()->addYear(), 'gateway' => 'manual',
-            ]);
-        }
+        $mathTeacher->assignRole('lecturer');
 
         $scienceTeacher = User::firstOrCreate(
             ['email' => 'amara.science@school.demo'],
-            ['name' => 'Ms. Amara Osei', 'password' => Hash::make('password'), 'role' => 'creator',
-             'is_active' => true, 'ai_credits_free_remaining' => $proPlan?->ai_free_generations ?? 100, 'email_verified_at' => now()]
+            ['name' => 'Ms. Amara Osei', 'password' => Hash::make('password'), 'role' => 'lecturer',
+             'is_active' => true, 'ai_credits_free_remaining' => 10, 'email_verified_at' => now()]
         );
-        $scienceTeacher->assignRole('creator');
-        if ($proPlan) {
-            \App\Models\Subscription::updateOrCreate(['user_id' => $scienceTeacher->id], [
-                'plan_id' => $proPlan->id, 'status' => 'active', 'billing_cycle' => 'yearly',
-                'current_period_start' => now(), 'current_period_end' => now()->addYear(), 'gateway' => 'manual',
-            ]);
-        }
+        $scienceTeacher->assignRole('lecturer');
 
         $engTeacher = User::firstOrCreate(
             ['email' => 'sarah.english@school.demo'],
-            ['name' => 'Mrs. Sarah Mitchell', 'password' => Hash::make('password'), 'role' => 'creator',
-             'is_active' => true, 'ai_credits_free_remaining' => $businessPlan?->ai_free_generations ?? 500, 'email_verified_at' => now()]
+            ['name' => 'Mrs. Sarah Mitchell', 'password' => Hash::make('password'), 'role' => 'lecturer',
+             'is_active' => true, 'ai_credits_free_remaining' => 10, 'email_verified_at' => now()]
         );
-        $engTeacher->assignRole('creator');
-        if ($businessPlan) {
-            \App\Models\Subscription::updateOrCreate(['user_id' => $engTeacher->id], [
-                'plan_id' => $businessPlan->id, 'status' => 'active', 'billing_cycle' => 'yearly',
-                'current_period_start' => now(), 'current_period_end' => now()->addYear(), 'gateway' => 'manual',
-            ]);
-        }
+        $engTeacher->assignRole('lecturer');
 
-        // ── Students (Customers) ─────────────────────────────────────────
+        // ── Students ─────────────────────────────────────────
         foreach ([
             ['Emma Taylor',    'emma.t@student.demo'],
             ['Noah Martinez',  'noah@student.demo'],
@@ -107,9 +85,9 @@ class SchoolPortalSeeder extends Seeder
             $u = User::firstOrCreate(
                 ['email' => $email],
                 ['name' => $name, 'password' => Hash::make('password'),
-                 'role' => 'customer', 'is_active' => true, 'email_verified_at' => now()]
+                 'role' => 'student', 'is_active' => true, 'email_verified_at' => now()]
             );
-            $u->assignRole('customer');
+            $u->assignRole('student');
         }
 
         // ── Quizzes ───────────────────────────────────────────────────────
@@ -125,19 +103,19 @@ class SchoolPortalSeeder extends Seeder
         // Paid school quizzes
         $this->createQuiz($mathTeacher, $subs['Geometry'], 'Geometry Fundamentals — Lines, Angles & Triangles',
             'Covers properties of lines and angles, types of triangles, congruence, similarity, and the Pythagorean theorem.',
-            $this->geometryQuestions(), 'mcq_single', false, 2.99);
+            $this->geometryQuestions(), 'mcq_single', false, 0);
 
         $this->createQuiz($scienceTeacher, $subs['Biology'], 'Human Body Systems — Grade 8',
             'Explore the major systems of the human body including the digestive, respiratory, circulatory, and nervous systems.',
-            $this->biologyQuestions(), 'mcq_single', false, 3.99);
+            $this->biologyQuestions(), 'mcq_single', false, 0);
 
         $this->createQuiz($scienceTeacher, $subs['Chemistry'], 'Elements, Compounds & Mixtures',
             'Understand the difference between elements, compounds, and mixtures. Covers the periodic table, chemical bonding, and reactions.',
-            $this->chemistryQuestions(), 'mcq_single', false, 3.99);
+            $this->chemistryQuestions(), 'mcq_single', false, 0);
 
         $this->createQuiz($engTeacher, $subs['Grammar'], 'English Grammar — Tenses & Parts of Speech',
             'Practice identifying and using the correct tenses and parts of speech in sentences. Ideal for Grade 7–9 students.',
-            $this->grammarQuestions(), 'mcq_single', false, 2.99);
+            $this->grammarQuestions(), 'mcq_single', false, 0);
 
         // ── Theme: Ocean Pro — blue + amber, Sora + DM Sans ─────────────
         $settings = app(\App\Settings\PlatformSettings::class);
@@ -149,18 +127,16 @@ class SchoolPortalSeeder extends Seeder
         $settings->save();
     }
 
-    private function createQuiz(User $creator, Category $category, string $title, string $desc, array $questions, string $type = 'mcq_single', bool $negativeMarking = false, float $price = 0): void
+    private function createQuiz(User $creator, Category $category, string $title, string $desc, array $questions, string $type = 'mcq_single', bool $negativeMarking = false): void
     {
         $quiz = Quiz::create([
-            'creator_id'              => $creator->id,
+            'lecturer_id'              => $creator->id,
             'category_id'             => $category->id,
             'title'                   => $title,
             'slug'                    => Str::slug($title) . '-' . Str::random(4),
             'description'             => $desc,
             'status'                  => 'published',
             'visibility'              => 'public',
-            'price'                   => $price,
-            'currency'                => 'USD',
             'duration_minutes'        => 20,
             'max_attempts'            => null,
             'pass_percentage'         => 50,
@@ -176,7 +152,7 @@ class SchoolPortalSeeder extends Seeder
         foreach ($questions as $i => $q) {
             $question = Question::create([
                 'quiz_id'       => $quiz->id,
-                'creator_id'    => $creator->id,
+                'lecturer_id'    => $creator->id,
                 'type'          => $q['type'] ?? $type,
                 'content'       => $q['q'],
                 'explanation'   => $q['exp'] ?? null,

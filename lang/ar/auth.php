@@ -4,9 +4,9 @@ return [
 
     // Login page
     'failed'                     => 'The provided credentials do not match our records.',
-    'login_title'                => 'Login — Quizora',
+    'login_title'                => 'Login — ExamSys',
     'login_heading'              => 'Welcome back',
-    'login_subheading'           => 'Log in to your Quizora account',
+    'login_subheading'           => 'Log in to your ExamSys account',
     'login_email_label'          => 'Email',
     'login_email_placeholder'    => 'you@example.com',
     'login_password_label'       => 'Password',
@@ -28,8 +28,8 @@ return [
     'register_submit'                => 'Create account',
     'register_have_account'          => 'Already have an account?',
     'register_login_link'            => 'Log in →',
-    'register_creator_toggle_label'  => 'Are you a quiz creator?',
-    'register_creator_toggle_desc'   => 'Enable this to publish and sell your own quizzes',
+    'register_lecturer_toggle_label'  => 'Are you a quiz lecturer?',
+    'register_lecturer_toggle_desc'   => 'Enable this to publish and sell your own quizzes',
 
     // Social login
     'or_divider'              => 'or',

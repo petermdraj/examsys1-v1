@@ -2,20 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Exceptions\InsufficientAiCreditsException;
 use App\Http\Controllers\Controller;
 use App\Models\Quiz;
-use App\Services\AI\AiCreditService;
 use App\Services\AI\QuizGeneratorService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AiGenerateController extends Controller
 {
-    public function __construct(
-        private AiCreditService $creditService,
-        private QuizGeneratorService $generator,
-    ) {}
+    public function __construct(private QuizGeneratorService $generator) {}
 
     public function stream(Request $request): StreamedResponse
     {
@@ -25,7 +20,7 @@ class AiGenerateController extends Controller
             'quiz_id'            => $saveToBank ? 'nullable|uuid|exists:quizzes,id' : 'required|uuid|exists:quizzes,id',
             'collection_id'      => 'nullable|uuid|exists:question_collections,id',
             'prompt'             => 'required|string|min:3|max:500',
-            'count'              => 'integer|min:1|max:50',
+            'count'              => 'integer|min:1',
             'type'               => 'in:mcq_single,mcq_multiple,fill_blank,true_false,mixed',
             'difficulty'         => 'in:easy,medium,hard,mixed',
             'language'           => 'string|max:10',
@@ -35,10 +30,22 @@ class AiGenerateController extends Controller
         ]);
 
         $user = $request->user();
+
+        if ($saveToBank) {
+            abort_unless(in_array($user->role, ['lecturer', 'super_admin'], true), 403);
+
+            if ($request->filled('collection_id')) {
+                $ownsCollection = \App\Models\QuestionCollection::where('id', $request->collection_id)
+                    ->where('lecturer_id', $user->id)
+                    ->exists();
+                abort_unless($ownsCollection, 403);
+            }
+        }
+
         $quiz = null;
-        if (!$saveToBank && $request->quiz_id) {
+        if (! $saveToBank && $request->quiz_id) {
             $quiz = Quiz::where('id', $request->quiz_id)
-                ->where('creator_id', $user->id)
+                ->where('lecturer_id', $user->id)
                 ->firstOrFail();
         }
 
@@ -48,48 +55,42 @@ class AiGenerateController extends Controller
         ]);
         $options['count'] = $options['count'] ?? 10;
 
-        try {
-            $deductedFrom = $this->creditService->consume($user);
-        } catch (InsufficientAiCreditsException $e) {
-            return response()->json(['error' => $e->getMessage()], 402);
-        }
-
         $collectionId = $saveToBank ? $request->input('collection_id') : null;
 
-        return response()->stream(function () use ($user, $quiz, $options, $deductedFrom, $collectionId, $saveToBank) {
+        return response()->stream(function () use ($user, $quiz, $options, $collectionId, $saveToBank) {
             $questions = [];
 
             try {
                 $questions = $this->generator->stream($user, $quiz, $options, function (string $chunk) {
-                    echo 'data: ' . json_encode(['chunk' => $chunk]) . "\n\n";
+                    echo 'data: '.json_encode(['chunk' => $chunk])."\n\n";
                     ob_flush();
                     flush();
                 }, $collectionId);
             } catch (\Throwable $e) {
-                $this->creditService->refund($user, $deductedFrom);
-                echo 'data: ' . json_encode(['error' => $e->getMessage()]) . "\n\n";
+                echo 'data: '.json_encode(['error' => $e->getMessage()])."\n\n";
                 ob_flush();
                 flush();
+
                 return;
             }
 
-            echo 'data: ' . json_encode([
-                'done'            => true,
-                'question_count'  => count($questions),
-                'questions'       => collect($questions)->map(fn($q) => [
-                    'id'           => $q->id,
-                    'type'         => $q->type,
-                    'content'      => $q->content,
-                    'explanation'  => $q->explanation,
-                    'marks'        => (float) $q->marks,
+            echo 'data: '.json_encode([
+                'done'           => true,
+                'question_count' => count($questions),
+                'questions'      => collect($questions)->map(fn ($q) => [
+                    'id'             => $q->id,
+                    'type'           => $q->type,
+                    'content'        => $q->content,
+                    'explanation'    => $q->explanation,
+                    'marks'          => (float) $q->marks,
                     'negative_marks' => (float) $q->negative_marks,
-                    'options'      => $q->options->map(fn($o) => [
+                    'options'        => $q->options->map(fn ($o) => [
                         'content'    => $o->content,
                         'is_correct' => (bool) $o->is_correct,
                     ])->toArray(),
                     'blank_answers' => $q->fillBlankAnswers->pluck('answer')->toArray(),
                 ])->toArray(),
-            ]) . "\n\n";
+            ])."\n\n";
             ob_flush();
             flush();
         }, 200, [

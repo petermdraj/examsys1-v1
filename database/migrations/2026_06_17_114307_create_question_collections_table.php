@@ -9,12 +9,12 @@ return new class extends Migration {
     {
         Schema::create('question_collections', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('creator_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignUuid('lecturer_id')->constrained('users')->cascadeOnDelete();
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('color', 7)->nullable();
             $table->timestamps();
-            $table->index('creator_id');
+            $table->index('lecturer_id');
         });
     }
 

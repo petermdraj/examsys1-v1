@@ -1,6 +1,6 @@
 <?php
 return [
-    'brand'=>'QUIZORA','time_left'=>'TEMPS RESTANT','time_unlimited'=>'∞','end_test'=>'Terminer le test','questions_count'=>'Questions',
+    'brand'=>'EXAMSYS','time_left'=>'TEMPS RESTANT','time_unlimited'=>'∞','end_test'=>'Terminer le test','questions_count'=>'Questions',
     'saving'=>'Enregistrement…','saved'=>'✓ Enregistré','not_saved'=>'! Non enregistré','save_failed_connection'=>'Enregistrement échoué. Vérifiez la connexion.',
     'question_of'=>'Q :current / :total','mark_singular'=>'point','mark_plural'=>'points','negative_wrong'=>'−:marks faux',
     'fill_blank_placeholder'=>'Tapez votre réponse…','show_hint'=>'Afficher l\'indice','hide_hint'=>'Masquer l\'indice',

@@ -1,9 +1,9 @@
 <?php
 return [
     'failed'                     => 'Deze gegevens komen niet overeen met onze records.',
-    'login_title'                => 'Inloggen — Quizora',
+    'login_title'                => 'Inloggen — ExamSys',
     'login_heading'              => 'Welkom terug',
-    'login_subheading'           => 'Log in op uw Quizora-account',
+    'login_subheading'           => 'Log in op uw ExamSys-account',
     'login_email_label'          => 'E-mail',
     'login_email_placeholder'    => 'u@voorbeeld.nl',
     'login_password_label'       => 'Wachtwoord',
@@ -23,8 +23,8 @@ return [
     'register_submit'                => 'Account aanmaken',
     'register_have_account'          => 'Al een account?',
     'register_login_link'            => 'Inloggen →',
-    'register_creator_toggle_label'  => 'Bent u een quizmaker?',
-    'register_creator_toggle_desc'   => 'Activeer dit om uw eigen quizzen te publiceren en te verkopen',
+    'register_lecturer_toggle_label'  => 'Bent u een quizmaker?',
+    'register_lecturer_toggle_desc'   => 'Activeer dit om uw eigen quizzen te publiceren en te verkopen',
     'or_divider'              => 'of',
     'continue_with_google'    => 'Doorgaan met Google',
     'otp_title'               => 'E-mail verifiëren',

@@ -20,7 +20,7 @@ return [
     'top_scores'=>'Meilleurs scores','anonymous'=>'Anonyme','rank'=>'Rang','score'=>'Score',
     'certificate_verified'=>'Certificat vérifié','certificate_pass_earn'=>'Réussir et obtenir un certificat partageable avec vérification QR',
     'save_to_favourites'=>'Ajouter aux favoris','remove_from_favourites'=>'Retirer des favoris','share_this_quiz'=>'Partager ce quiz','copy_link'=>'Copier le lien','link_copied'=>'Lien copié !',
-    'creator_quizzes_published'=>':count quiz publiés','more_by_creator'=>'Autres quiz de ce créateur',
+    'lecturer_quizzes_published'=>':count quiz publiés','more_by_lecturer'=>'Autres quiz de ce créateur',
     'result_heading'=>'Résultat de l\'examen','result_score'=>'Votre score','result_passed'=>'Réussi !','result_failed'=>'Non réussi',
     'result_percentage'=>':percent%','result_time_taken'=>'Temps pris','result_questions_correct'=>'Correct','result_questions_wrong'=>'Incorrect','result_questions_skipped'=>'Ignoré',
     'result_marks_earned'=>'Points obtenus','result_total_marks'=>'sur :total','result_pass_percentage'=>'Pourcentage de réussite',

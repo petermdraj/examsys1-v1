@@ -8,17 +8,17 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('questions', function (Blueprint $table) {
-            $table->uuid('creator_id')->nullable()->after('quiz_id');
-            $table->foreign('creator_id')->references('id')->on('users')->nullOnDelete();
-            $table->index('creator_id');
+            $table->uuid('lecturer_id')->nullable()->after('quiz_id');
+            $table->foreign('lecturer_id')->references('id')->on('users')->nullOnDelete();
+            $table->index('lecturer_id');
         });
     }
 
     public function down(): void
     {
         Schema::table('questions', function (Blueprint $table) {
-            $table->dropForeign(['creator_id']);
-            $table->dropColumn('creator_id');
+            $table->dropForeign(['lecturer_id']);
+            $table->dropColumn('lecturer_id');
         });
     }
 };

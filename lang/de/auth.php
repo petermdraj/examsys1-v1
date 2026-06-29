@@ -1,9 +1,9 @@
 <?php
 return [
     'failed'                     => 'Diese Anmeldedaten stimmen nicht mit unseren Aufzeichnungen überein.',
-    'login_title'                => 'Anmelden — Quizora',
+    'login_title'                => 'Anmelden — ExamSys',
     'login_heading'              => 'Willkommen zurück',
-    'login_subheading'           => 'Melden Sie sich bei Ihrem Quizora-Konto an',
+    'login_subheading'           => 'Melden Sie sich bei Ihrem ExamSys-Konto an',
     'login_email_label'          => 'E-Mail',
     'login_email_placeholder'    => 'sie@beispiel.de',
     'login_password_label'       => 'Passwort',
@@ -23,8 +23,8 @@ return [
     'register_submit'                => 'Konto erstellen',
     'register_have_account'          => 'Bereits ein Konto?',
     'register_login_link'            => 'Anmelden →',
-    'register_creator_toggle_label'  => 'Sind Sie ein Quiz-Ersteller?',
-    'register_creator_toggle_desc'   => 'Aktivieren Sie dies, um eigene Quizze zu veröffentlichen und zu verkaufen',
+    'register_lecturer_toggle_label'  => 'Sind Sie ein Quiz-Ersteller?',
+    'register_lecturer_toggle_desc'   => 'Aktivieren Sie dies, um eigene Quizze zu veröffentlichen und zu verkaufen',
     'or_divider'              => 'oder',
     'continue_with_google'    => 'Mit Google fortfahren',
     'otp_title'               => 'E-Mail verifizieren',

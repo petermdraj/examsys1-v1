@@ -28,14 +28,14 @@ class InstallerWizard extends Component
     // Step 2 — Database
     public string  $dbHost     = '127.0.0.1';
     public string  $dbPort     = '3306';
-    public string  $dbName     = 'quizora';
+    public string  $dbName     = 'examsys1';
     public string  $dbUser     = 'root';
     public string  $dbPassword = '';
     public ?string $dbError    = null;
     public bool    $dbTested   = false;
 
     // Step 3 — App
-    public string $appName       = 'Quizora';
+    public string $appName       = 'ExamSys';
     public string $appUrl        = '';
     public string $adminName     = 'Admin';
     public string $adminEmail    = 'admin@example.com';
@@ -52,7 +52,7 @@ class InstallerWizard extends Component
     public string $installErrMsg = '';
 
     // ── Fields persisted to/from session ────────────────────────────────────
-    private const SESSION_KEY = 'quizora_installer';
+    private const SESSION_KEY = 'examsys_installer';
 
     private const PERSISTED_FIELDS = [
         'dbHost', 'dbPort', 'dbName', 'dbUser', 'dbPassword', 'dbTested',

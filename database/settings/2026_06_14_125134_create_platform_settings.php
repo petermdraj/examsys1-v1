@@ -6,7 +6,7 @@ return new class extends SettingsMigration
 {
     public function up(): void
     {
-        $this->migrator->add('platform.app_name', 'Quizora');
+        $this->migrator->add('platform.app_name', 'ExamSys');
         $this->migrator->add('platform.app_logo', '');
         $this->migrator->add('platform.ai_free_generations_default', 10);
         $this->migrator->add('platform.ai_charge_per_gen_default', 5.00);

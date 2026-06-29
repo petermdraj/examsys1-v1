@@ -335,16 +335,16 @@ class Settings extends Page
                                 Forms\Components\Section::make(__('admin.settings_section_creator_cta'))
                                     ->description(__('admin.settings_desc_creator_cta'))
                                     ->schema([
-                                        Forms\Components\TextInput::make('creator_cta_title')
+                                        Forms\Components\TextInput::make('lecturer_cta_title')
                                             ->label(__('admin.settings_field_title'))
                                             ->maxLength(80),
-                                        Forms\Components\TextInput::make('creator_cta_sub')
+                                        Forms\Components\TextInput::make('lecturer_cta_sub')
                                             ->label(__('admin.settings_field_subtitle'))
                                             ->maxLength(120),
-                                        Forms\Components\TextInput::make('creator_cta_btn')
+                                        Forms\Components\TextInput::make('lecturer_cta_btn')
                                             ->label(__('admin.settings_field_btn_text'))
                                             ->maxLength(40),
-                                        Forms\Components\TextInput::make('creator_cta_url')
+                                        Forms\Components\TextInput::make('lecturer_cta_url')
                                             ->label(__('admin.settings_field_btn_url'))
                                             ->placeholder(__('admin.settings_ph_creators_url'))
                                             ->url()
@@ -442,7 +442,7 @@ class Settings extends Page
                                 Forms\Components\Toggle::make('allow_registration')
                                     ->label(__('admin.settings_field_allow_reg'))
                                     ->helperText(__('admin.settings_helper_allow_reg')),
-                                Forms\Components\Toggle::make('creator_registration_open')
+                                Forms\Components\Toggle::make('lecturer_registration_open')
                                     ->label(__('admin.settings_field_creator_reg'))
                                     ->helperText(__('admin.settings_helper_creator_reg')),
                                 Forms\Components\Toggle::make('require_email_verification')
@@ -492,65 +492,6 @@ class Settings extends Page
                                             ->required(),
                                     ])->columns(2),
 
-                            ]),
-
-                        // ── Payments ──────────────────────────────────────────
-                        Forms\Components\Tabs\Tab::make(__('admin.settings_tab_payments'))
-                            ->icon('heroicon-o-credit-card')
-                            ->schema([
-                                Forms\Components\Section::make(__('admin.settings_section_razorpay'))
-                                    ->description(__('admin.settings_desc_razorpay'))
-                                    ->schema([
-                                        Forms\Components\TextInput::make('razorpay_key')
-                                            ->label(__('admin.settings_field_key_id')),
-                                        Forms\Components\TextInput::make('razorpay_secret')
-                                            ->label(__('admin.settings_field_key_secret'))
-                                            ->password()->revealable()->dehydrated(fn ($state) => filled($state))
-                                            ->hint(fn() => $this->secretHint('razorpay_secret')),
-                                        Forms\Components\Placeholder::make('razorpay_currency_warning')
-                                            ->label('')
-                                            ->content(function (): \Illuminate\Support\HtmlString {
-                                                $currency = app(\App\Settings\PlatformSettings::class)->default_currency;
-                                                if (strtoupper($currency) !== 'INR') {
-                                                    return new \Illuminate\Support\HtmlString(
-                                                        '<div style="padding:10px 14px;border-radius:8px;background:#fef3c7;border:1px solid #f59e0b;color:#92400e;font-size:13px;font-weight:500;">'
-                                                        . '⚠️ ' . __('admin.settings_razorpay_currency_warning', ['currency' => e($currency)])
-                                                        . '</div>'
-                                                    );
-                                                }
-                                                return new \Illuminate\Support\HtmlString('');
-                                            })
-                                            ->columnSpanFull(),
-                                    ])->columns(2),
-
-                                Forms\Components\Section::make(__('admin.settings_section_stripe'))
-                                    ->schema([
-                                        Forms\Components\TextInput::make('stripe_key')
-                                            ->label(__('admin.settings_field_pub_key')),
-                                        Forms\Components\TextInput::make('stripe_secret')
-                                            ->label(__('admin.settings_field_secret_key'))
-                                            ->password()->revealable()->dehydrated(fn ($state) => filled($state))
-                                            ->hint(fn() => $this->secretHint('stripe_secret')),
-                                        Forms\Components\TextInput::make('stripe_webhook_secret')
-                                            ->label(__('admin.settings_field_webhook_secret'))
-                                            ->password()->revealable()->dehydrated(fn ($state) => filled($state))
-                                            ->hint(fn() => $this->secretHint('stripe_webhook_secret'))
-                                            ->columnSpanFull(),
-                                    ])->columns(2),
-
-                                Forms\Components\Section::make(__('admin.settings_section_paypal'))
-                                    ->schema([
-                                        Forms\Components\Select::make('paypal_mode')
-                                            ->label(__('admin.settings_field_mode'))
-                                            ->options(['sandbox' => 'Sandbox (testing)', 'live' => 'Live'])
-                                            ->required(),
-                                        Forms\Components\TextInput::make('paypal_client_id')
-                                            ->label(__('admin.settings_field_client_id')),
-                                        Forms\Components\TextInput::make('paypal_client_secret')
-                                            ->label(__('admin.settings_field_client_secret'))
-                                            ->password()->revealable()->dehydrated(fn ($state) => filled($state))
-                                            ->hint(fn() => $this->secretHint('paypal_client_secret')),
-                                    ])->columns(2),
                             ]),
 
                         // ── Storage ───────────────────────────────────────────
@@ -641,35 +582,6 @@ class Settings extends Page
                                     ])->columns(2),
                             ]),
 
-                        // ── Subscription Lifecycle ────────────────────────────
-                        Forms\Components\Tabs\Tab::make(__('admin.settings_tab_subscriptions'))
-                            ->icon('heroicon-o-arrow-path')
-                            ->schema([
-                                Forms\Components\Section::make(__('admin.settings_section_renewal'))
-                                    ->description(__('admin.settings_desc_renewal'))
-                                    ->schema([
-                                        Forms\Components\TextInput::make('subscription_renewal_reminder_days')
-                                            ->label(__('admin.settings_field_reminder_days'))
-                                            ->numeric()
-                                            ->minValue(1)
-                                            ->maxValue(30)
-                                            ->suffix('days')
-                                            ->helperText(__('admin.settings_helper_reminder_days')),
-                                    ]),
-
-                                Forms\Components\Section::make(__('admin.settings_section_grace'))
-                                    ->description(__('admin.settings_desc_grace'))
-                                    ->schema([
-                                        Forms\Components\TextInput::make('subscription_grace_period_days')
-                                            ->label(__('admin.settings_field_grace_days'))
-                                            ->numeric()
-                                            ->minValue(0)
-                                            ->maxValue(30)
-                                            ->suffix('days')
-                                            ->helperText(__('admin.settings_helper_grace_days')),
-                                    ]),
-                            ]),
-
                         // ── Languages ────────────────────────────────────────
                         Forms\Components\Tabs\Tab::make('Languages')
                             ->icon('heroicon-o-language')
@@ -680,9 +592,9 @@ class Settings extends Page
                                         Forms\Components\Toggle::make('show_switcher_admin')
                                             ->label('Show in Admin panel')
                                             ->helperText('Display the language switcher in the /admin topbar.'),
-                                        Forms\Components\Toggle::make('show_switcher_creator')
-                                            ->label('Show in Creator panel')
-                                            ->helperText('Display the language switcher in the /creator topbar.'),
+                                        Forms\Components\Toggle::make('show_switcher_lecturer')
+                                            ->label('Show in Lecturer panel')
+                                            ->helperText('Display the language switcher in the /lecturer topbar.'),
                                         Forms\Components\Toggle::make('show_switcher_front')
                                             ->label('Show on Customer / Frontend')
                                             ->helperText('Display the language switcher in the customer-facing navigation.'),
@@ -886,7 +798,7 @@ class Settings extends Page
 
             Mail::mailer('smtp')->raw(
                 'This is a test email from ' . config('app.name') . '. Your SMTP settings are working correctly.',
-                fn ($m) => $m->to(auth()->user()->email)->from($from, $name)->subject('Quizora SMTP Test')
+                fn ($m) => $m->to(auth()->user()->email)->from($from, $name)->subject('SMTP Test')
             );
 
             Notification::make()->title(__('admin.settings_smtp_test_sent', ['email' => auth()->user()->email]))->success()->send();

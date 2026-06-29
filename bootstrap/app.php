@@ -5,15 +5,12 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 
-// ── Pick env file + storage path from Nginx ──────────────────────
-$instance    = $_SERVER['QUIZORA_INSTANCE'] ?? null;
+$instance    = $_SERVER['EXAMSYS_INSTANCE'] ?? null;
 $envFile     = $instance ? ".env.{$instance}" : '.env';
 $storagePath = $instance
     ? dirname(__DIR__) . "/storage/{$instance}"
     : dirname(__DIR__) . '/storage';
 
-// Strip the instance prefix from REQUEST_URI so Laravel routes correctly.
-// e.g. /professional/quiz/foo → /quiz/foo
 if ($instance) {
     $prefix = '/' . $instance;
     foreach (['REQUEST_URI', 'PHP_SELF', 'PATH_INFO'] as $key) {
@@ -22,7 +19,6 @@ if ($instance) {
         }
     }
 }
-// ─────────────────────────────────────────────────────────────────
 
 $app = Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -32,10 +28,6 @@ $app = Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->validateCsrfTokens(except: [
-            'payment/razorpay/callback',
-            'pricing/*/callback',
-        ]);
         $middleware->web(prepend: [
             \App\Http\Middleware\EnsureInstalled::class,
         ]);
@@ -45,6 +37,7 @@ $app = Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->alias([
             'otp.verified' => \App\Http\Middleware\RedirectUnverifiedUsers::class,
+            'lecturer'     => \App\Http\Middleware\EnsureLecturer::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

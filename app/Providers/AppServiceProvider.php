@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
         // When running as /competition, /school, /professional — force Laravel's
         // URL generator to prefix all generated URLs with the instance path so
         // links and redirects stay within the correct subfolder.
-        if ($instance = $_SERVER['QUIZORA_INSTANCE'] ?? null) {
+        if ($instance = $_SERVER['EXAMSYS_INSTANCE'] ?? null) {
             \Illuminate\Support\Facades\URL::forceRootUrl(
                 rtrim(config('app.url'), '/')
             );
@@ -47,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
         // When DEMO_MODE=true, delete actions show a notification and cancel
         // instead of removing records. Edit-page saves are blocked via the
         // DemoModeEditPage trait on each EditRecord page.
-        if (config('quizora.demo_mode')) {
+        if (config('examsys.demo_mode')) {
             // Table row → Delete
             \Filament\Tables\Actions\DeleteAction::configureUsing(
                 fn (\Filament\Tables\Actions\DeleteAction $action) =>
@@ -145,27 +145,6 @@ class AppServiceProvider extends ServiceProvider
                     'mail.mailers.smtp.password'   => $s->mail_password,
                     'mail.from.address'            => $s->mail_from_address,
                     'mail.from.name'               => $s->mail_from_name,
-                ]);
-            }
-            // Payment gateways — sync DB-stored keys to config so services pick them up
-            if (! empty($s->razorpay_key) && ! empty($s->razorpay_secret)) {
-                \Illuminate\Support\Facades\Config::set([
-                    'services.razorpay.key'    => $s->razorpay_key,
-                    'services.razorpay.secret' => $s->razorpay_secret,
-                ]);
-            }
-            if (! empty($s->stripe_key) && ! empty($s->stripe_secret)) {
-                \Illuminate\Support\Facades\Config::set([
-                    'services.stripe.key'            => $s->stripe_key,
-                    'services.stripe.secret'         => $s->stripe_secret,
-                    'services.stripe.webhook_secret' => $s->stripe_webhook_secret,
-                ]);
-            }
-            if (! empty($s->paypal_client_id) && ! empty($s->paypal_client_secret)) {
-                \Illuminate\Support\Facades\Config::set([
-                    'services.paypal.client_id'     => $s->paypal_client_id,
-                    'services.paypal.client_secret' => $s->paypal_client_secret,
-                    'services.paypal.mode'          => $s->paypal_mode ?: 'sandbox',
                 ]);
             }
 

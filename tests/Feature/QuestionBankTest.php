@@ -27,13 +27,13 @@ class QuestionBankTest extends TestCase
         parent::setUp();
         $this->service = new QuestionBankService();
 
-        Role::firstOrCreate(['name' => 'creator', 'guard_name' => 'web']);
-        Role::firstOrCreate(['name' => 'customer', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'lecturer', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'student', 'guard_name' => 'web']);
 
-        $this->creator = User::factory()->create();
-        $this->creator->assignRole('creator');
+        $this->creator = User::factory()->create(['role' => 'lecturer']);
+        $this->creator->assignRole('lecturer');
 
-        $this->quiz = Quiz::factory()->create(['creator_id' => $this->creator->id]);
+        $this->quiz = Quiz::factory()->create(['lecturer_id' => $this->creator->id]);
     }
 
     // ── T9-1: AJAX endpoint enforces creator isolation ───────────────
@@ -42,11 +42,11 @@ class QuestionBankTest extends TestCase
     {
         $other = User::factory()->create();
 
-        Question::factory()->create(['creator_id' => $this->creator->id, 'quiz_id' => null]);
-        Question::factory()->create(['creator_id' => $other->id, 'quiz_id' => null]);
+        Question::factory()->create(['lecturer_id' => $this->creator->id, 'quiz_id' => null]);
+        Question::factory()->create(['lecturer_id' => $other->id, 'quiz_id' => null]);
 
         $this->actingAs($this->creator)
-            ->getJson('/creator/api/bank-questions')
+            ->getJson('/lecturer/api/bank-questions')
             ->assertOk()
             ->assertJsonCount(1, 'data');
     }
@@ -56,7 +56,7 @@ class QuestionBankTest extends TestCase
     public function test_import_to_quiz_skips_other_creator_bank_questions(): void
     {
         $other = User::factory()->create();
-        $bankQ = Question::factory()->create(['creator_id' => $other->id, 'quiz_id' => null]);
+        $bankQ = Question::factory()->create(['lecturer_id' => $other->id, 'quiz_id' => null]);
 
         $imported = $this->service->importToQuiz($this->creator->id, [$bankQ->id], $this->quiz);
 
@@ -70,7 +70,7 @@ class QuestionBankTest extends TestCase
     {
         $bankQ = Question::factory()
             ->has(QuestionOption::factory()->count(2), 'options')
-            ->create(['creator_id' => $this->creator->id, 'quiz_id' => null]);
+            ->create(['lecturer_id' => $this->creator->id, 'quiz_id' => null]);
 
         $countBefore = Question::count();
 
@@ -89,7 +89,7 @@ class QuestionBankTest extends TestCase
     {
         $bankQ = Question::factory()
             ->has(QuestionOption::factory()->count(2), 'options')
-            ->create(['creator_id' => $this->creator->id, 'quiz_id' => null]);
+            ->create(['lecturer_id' => $this->creator->id, 'quiz_id' => null]);
 
         $this->service->importToQuiz($this->creator->id, [$bankQ->id], $this->quiz);
 
@@ -103,7 +103,7 @@ class QuestionBankTest extends TestCase
     {
         $bankQ = Question::factory()
             ->has(QuestionOption::factory()->count(3), 'options')
-            ->create(['creator_id' => $this->creator->id, 'quiz_id' => null]);
+            ->create(['lecturer_id' => $this->creator->id, 'quiz_id' => null]);
 
         $this->service->importToQuiz($this->creator->id, [$bankQ->id], $this->quiz);
 
@@ -122,7 +122,7 @@ class QuestionBankTest extends TestCase
     {
         $bankQ = Question::factory(['marks' => 2])
             ->has(QuestionOption::factory()->count(2), 'options')
-            ->create(['creator_id' => $this->creator->id, 'quiz_id' => null]);
+            ->create(['lecturer_id' => $this->creator->id, 'quiz_id' => null]);
 
         $this->service->importToQuiz($this->creator->id, [$bankQ->id], $this->quiz);
 
@@ -131,16 +131,16 @@ class QuestionBankTest extends TestCase
         $this->assertSame(2.0, (float) $this->quiz->total_marks);
     }
 
-    // ── T9-7: collection create-inline sets creator_id ──────────────
+    // ── T9-7: collection create-inline sets lecturer_id ──────────────
 
-    public function test_collection_create_sets_creator_id(): void
+    public function test_collection_create_sets_lecturer_id(): void
     {
         $col = QuestionCollection::create([
-            'creator_id' => $this->creator->id,
+            'lecturer_id' => $this->creator->id,
             'name'       => 'PHP Basics',
         ]);
 
-        $this->assertSame($this->creator->id, $col->creator_id);
+        $this->assertSame($this->creator->id, $col->lecturer_id);
     }
 
     // ── T9-8: deleting collection sets question collection_id to null ─
@@ -148,11 +148,11 @@ class QuestionBankTest extends TestCase
     public function test_delete_collection_nullifies_question_collection_id(): void
     {
         $col = QuestionCollection::create([
-            'creator_id' => $this->creator->id,
+            'lecturer_id' => $this->creator->id,
             'name'       => 'Temp',
         ]);
         $q = Question::factory()->create([
-            'creator_id'    => $this->creator->id,
+            'lecturer_id'    => $this->creator->id,
             'quiz_id'       => null,
             'collection_id' => $col->id,
         ]);
@@ -168,24 +168,21 @@ class QuestionBankTest extends TestCase
     {
         $content = 'What is PHP?';
         Question::factory()->create([
-            'creator_id' => $this->creator->id,
+            'lecturer_id' => $this->creator->id,
             'quiz_id'    => null,
             'content'    => $content,
         ]);
 
-        $result = $this->service->importJson($this->creator->id, [
-            'version'   => 1,
-            'questions' => [
-                [
-                    'type'           => 'mcq_single',
-                    'content'        => $content,
-                    'explanation'    => null,
-                    'marks'          => 1,
-                    'negative_marks' => 0,
-                    'options'        => [],
-                    'blank_answers'  => [],
-                    'collection'     => null,
-                ],
+        $result = $this->service->importQuestions($this->creator->id, [
+            [
+                'type'           => 'mcq_single',
+                'content'        => $content,
+                'explanation'    => null,
+                'marks'          => 1,
+                'negative_marks' => 0,
+                'options'        => [],
+                'blank_answers'  => [],
+                'collection'     => null,
             ],
         ]);
 
@@ -197,11 +194,8 @@ class QuestionBankTest extends TestCase
 
     public function test_import_json_handles_missing_content_field(): void
     {
-        $result = $this->service->importJson($this->creator->id, [
-            'version'   => 1,
-            'questions' => [
-                ['type' => 'mcq_single'], // no 'content' key
-            ],
+        $result = $this->service->importQuestions($this->creator->id, [
+            ['type' => 'mcq_single'],
         ]);
 
         $this->assertSame(0, $result['imported']);
@@ -212,10 +206,7 @@ class QuestionBankTest extends TestCase
 
     public function test_import_json_empty_questions_array(): void
     {
-        $result = $this->service->importJson($this->creator->id, [
-            'version'   => 1,
-            'questions' => [],
-        ]);
+        $result = $this->service->importQuestions($this->creator->id, []);
 
         $this->assertSame(0, $result['imported']);
         $this->assertSame(0, $result['skipped']);
@@ -226,25 +217,22 @@ class QuestionBankTest extends TestCase
 
     public function test_import_json_creates_collection_by_name(): void
     {
-        $result = $this->service->importJson($this->creator->id, [
-            'version'   => 1,
-            'questions' => [
-                [
-                    'type'           => 'true_false',
-                    'content'        => 'PHP is compiled',
-                    'explanation'    => null,
-                    'marks'          => 1,
-                    'negative_marks' => 0,
-                    'options'        => [],
-                    'blank_answers'  => [],
-                    'collection_name' => 'New Collection',
-                ],
+        $result = $this->service->importQuestions($this->creator->id, [
+            [
+                'type'           => 'true_false',
+                'content'        => 'PHP is compiled',
+                'explanation'    => null,
+                'marks'          => 1,
+                'negative_marks' => 0,
+                'options'        => [],
+                'blank_answers'  => [],
+                'collection_name' => 'New Collection',
             ],
         ]);
 
         $this->assertSame(1, $result['imported']);
         $this->assertDatabaseHas('question_collections', [
-            'creator_id' => $this->creator->id,
+            'lecturer_id' => $this->creator->id,
             'name'       => 'New Collection',
         ]);
     }
@@ -254,7 +242,7 @@ class QuestionBankTest extends TestCase
     public function test_random_import_does_not_exceed_bank_size(): void
     {
         Question::factory()->count(3)->create([
-            'creator_id' => $this->creator->id,
+            'lecturer_id' => $this->creator->id,
             'quiz_id'    => null,
         ]);
 
@@ -269,11 +257,64 @@ class QuestionBankTest extends TestCase
 
     public function test_random_import_with_zero_count_imports_nothing(): void
     {
-        Question::factory()->create(['creator_id' => $this->creator->id, 'quiz_id' => null]);
+        Question::factory()->create(['lecturer_id' => $this->creator->id, 'quiz_id' => null]);
 
         $this->service->randomImport($this->creator->id, $this->quiz, 0, null, null, null);
 
         $this->assertSame(0, Question::where('quiz_id', $this->quiz->id)->count());
+    }
+
+    // ── T9-19: Excel export/import round trip ────────────────────────
+
+    public function test_excel_export_import_round_trip(): void
+    {
+        $col = QuestionCollection::create([
+            'lecturer_id' => $this->creator->id,
+            'name'       => 'Excel Collection',
+        ]);
+
+        $bankQ = Question::factory()->create([
+            'lecturer_id'    => $this->creator->id,
+            'quiz_id'       => null,
+            'content'       => 'Excel round trip question?',
+            'type'          => 'mcq_single',
+            'difficulty'    => 'easy',
+            'marks'         => 2,
+            'negative_marks'=> 0.5,
+            'collection_id' => $col->id,
+        ]);
+
+        QuestionOption::create([
+            'question_id' => $bankQ->id,
+            'content'     => 'Option A',
+            'is_correct'  => true,
+            'sort_order'  => 1,
+        ]);
+        QuestionOption::create([
+            'question_id' => $bankQ->id,
+            'content'     => 'Option B',
+            'is_correct'  => false,
+            'sort_order'  => 2,
+        ]);
+
+        $path = $this->service->exportExcel($this->creator->id);
+        $this->assertNotNull($path);
+        $this->assertFileExists($path);
+
+        Question::whereNull('quiz_id')->where('lecturer_id', $this->creator->id)->delete();
+
+        $result = $this->service->importExcel($this->creator->id, $path);
+        @unlink($path);
+
+        $this->assertSame(1, $result['imported']);
+        $this->assertSame(0, $result['skipped']);
+        $this->assertSame(0, $result['errors']);
+
+        $imported = Question::whereNull('quiz_id')->where('lecturer_id', $this->creator->id)->first();
+        $this->assertSame('Excel round trip question?', $imported->content);
+        $this->assertSame('easy', $imported->difficulty);
+        $this->assertCount(2, $imported->options);
+        $this->assertTrue($imported->options->firstWhere('content', 'Option A')->is_correct);
     }
 
     // ── T9-15: saveToBank detects duplicate per creator ──────────────
@@ -282,13 +323,13 @@ class QuestionBankTest extends TestCase
     {
         $content = 'What does OOP stand for?';
         $q1 = Question::factory()->create([
-            'creator_id' => $this->creator->id,
+            'lecturer_id' => $this->creator->id,
             'quiz_id'    => null,
             'content'    => $content,
         ]);
 
         $q2 = Question::factory()->create([
-            'creator_id' => $this->creator->id,
+            'lecturer_id' => $this->creator->id,
             'quiz_id'    => $this->quiz->id,
             'content'    => $content,
         ]);
@@ -305,7 +346,7 @@ class QuestionBankTest extends TestCase
         $q = Question::factory()
             ->has(QuestionOption::factory()->count(2), 'options')
             ->create([
-                'creator_id' => $this->creator->id,
+                'lecturer_id' => $this->creator->id,
                 'quiz_id'    => $this->quiz->id,
                 'content'    => 'Unique question content XYZ123',
             ]);
@@ -314,7 +355,7 @@ class QuestionBankTest extends TestCase
 
         $this->assertTrue($result);
         $this->assertDatabaseHas('questions', [
-            'creator_id' => $this->creator->id,
+            'lecturer_id' => $this->creator->id,
             'quiz_id'    => null,
             'content'    => $q->content,
         ]);
@@ -325,7 +366,7 @@ class QuestionBankTest extends TestCase
     public function test_duplicate_detection_is_case_and_whitespace_insensitive(): void
     {
         Question::factory()->create([
-            'creator_id' => $this->creator->id,
+            'lecturer_id' => $this->creator->id,
             'quiz_id'    => null,
             'content'    => 'What is PHP?',
         ]);
@@ -342,7 +383,7 @@ class QuestionBankTest extends TestCase
         $content = 'Shared question text';
 
         Question::factory()->create([
-            'creator_id' => $other->id,
+            'lecturer_id' => $other->id,
             'quiz_id'    => null,
             'content'    => $content,
         ]);

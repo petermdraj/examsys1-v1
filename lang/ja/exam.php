@@ -1,6 +1,6 @@
 <?php
 return [
-    'brand'=>'QUIZORA','time_left'=>'残り時間','time_unlimited'=>'∞','end_test'=>'テストを終了','questions_count'=>'問題',
+    'brand'=>'EXAMSYS','time_left'=>'残り時間','time_unlimited'=>'∞','end_test'=>'テストを終了','questions_count'=>'問題',
     'saving'=>'保存中…','saved'=>'✓ 保存済み','not_saved'=>'! 未保存','save_failed_connection'=>'保存に失敗しました。接続を確認してください。',
     'question_of'=>'Q :current / :total','mark_singular'=>'点','mark_plural'=>'点','negative_wrong'=>'−:marks 不正解',
     'fill_blank_placeholder'=>'回答を入力…','show_hint'=>'ヒントを表示','hide_hint'=>'ヒントを非表示',

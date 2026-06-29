@@ -1,4 +1,4 @@
-@if(config('quizora.demo_mode'))
+@if(config('examsys.demo_mode'))
 <div style="
     background: linear-gradient(90deg, #d97706 0%, #b45309 100%);
     color: #fff;

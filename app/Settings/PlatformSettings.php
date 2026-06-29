@@ -7,7 +7,7 @@ use Spatie\LaravelSettings\Settings;
 class PlatformSettings extends Settings
 {
     // General
-    public string  $app_name         = 'Quizora';
+    public string  $app_name         = 'ExamSys';
     public ?string $app_logo         = null;
     public ?string $app_favicon      = null;
     public ?string $certificate_logo = null;
@@ -28,7 +28,7 @@ class PlatformSettings extends Settings
     public bool   $allow_social_login         = false;
     public string $google_client_id           = '';
     public string $google_client_secret       = '';
-    public bool   $creator_registration_open  = true;
+    public bool   $lecturer_registration_open  = true;
 
     // AI / OpenAI
     public string $openai_api_key              = '';
@@ -107,10 +107,10 @@ class PlatformSettings extends Settings
     public string $featured_title = 'Featured quizzes';
 
     // Homepage — Creator CTA Strip
-    public string $creator_cta_title = 'Are you a quiz creator?';
-    public string $creator_cta_sub   = 'Sell your expertise.';
-    public string $creator_cta_btn   = 'Learn more →';
-    public string $creator_cta_url   = '';
+    public string $lecturer_cta_title = 'Are you a quiz lecturer?';
+    public string $lecturer_cta_sub   = 'Sell your expertise.';
+    public string $lecturer_cta_btn   = 'Learn more →';
+    public string $lecturer_cta_url   = '';
 
     // Homepage — Stats Strip
     public string $homepage_stat_1_label = '';
@@ -135,7 +135,7 @@ class PlatformSettings extends Settings
     /** Locale codes that are active and visible in the switcher (e.g. ['en','hi','de']) */
     public array $enabled_locales       = ['en','hi','de','nl','da','no','sv','fr','ja'];
     public bool  $show_switcher_admin   = true;
-    public bool  $show_switcher_creator = true;
+    public bool  $show_switcher_lecturer = true;
     public bool  $show_switcher_front   = true;
 
     // Custom & hidden locales (managed via Translation Dashboard)
