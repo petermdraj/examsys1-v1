@@ -18,11 +18,11 @@ class ProfessionalTestSeeder extends Seeder
         // ── Categories ────────────────────────────────────────────────────
         $cats = [];
         foreach ([
-            ['name' => 'Technology',           'icon' => '⚙️', 'color' => '#7c3aed'],
-            ['name' => 'Business & Management','icon' => '📊', 'color' => '#0891b2'],
-            ['name' => 'Design & Creative',    'icon' => '🎨', 'color' => '#ec4899'],
-            ['name' => 'Marketing & Sales',    'icon' => '📣', 'color' => '#f97316'],
-            ['name' => 'Human Resources',      'icon' => '👥', 'color' => '#16a34a'],
+            ['name' => 'Medicine',           'icon' => '🩺', 'color' => '#7c3aed'],
+            ['name' => 'Surgery',            'icon' => '⚕️', 'color' => '#0891b2'],
+            ['name' => 'OB/Gyn',             'icon' => '🤰', 'color' => '#ec4899'],
+            ['name' => 'Pediatrics',         'icon' => '👶', 'color' => '#16a34a'],
+            ['name' => 'Psychiatry',         'icon' => '🧠', 'color' => '#f97316'],
         ] as $c) {
             $slug = Str::slug($c['name']) . '-pro';
             $cats[$c['name']] = Category::firstOrCreate(
@@ -34,11 +34,11 @@ class ProfessionalTestSeeder extends Seeder
         // Sub-categories
         $subs = [];
         $subDefs = [
-            'Technology'            => ['PHP & Laravel', 'JavaScript & Node.js', 'Python', 'DevOps & Cloud', 'Cybersecurity'],
-            'Business & Management' => ['Project Management', 'Agile & Scrum', 'Leadership', 'Operations Management'],
-            'Design & Creative'     => ['UI/UX Design', 'Graphic Design', 'Product Design'],
-            'Marketing & Sales'     => ['Digital Marketing', 'SEO & Content', 'Sales Techniques'],
-            'Human Resources'       => ['HR Fundamentals', 'Talent Acquisition', 'Labour Laws'],
+            'Medicine'   => ['Cardiology', 'Respiratory Medicine', 'Gastroenterology', 'Endocrinology'],
+            'Surgery'    => ['General Surgery', 'Orthopaedics', 'Urology', 'Neurosurgery'],
+            'OB/Gyn'     => ['Obstetrics', 'Gynecology', 'Antenatal Care', 'Reproductive Health'],
+            'Pediatrics' => ['Neonatology', 'Paediatric Infections', 'Growth & Development', 'Immunisation'],
+            'Psychiatry' => ['Mood Disorders', 'Psychosis', 'Anxiety Disorders', 'Substance Use'],
         ];
         foreach ($subDefs as $parentName => $children) {
             foreach ($children as $child) {
@@ -52,26 +52,26 @@ class ProfessionalTestSeeder extends Seeder
 
         // ── Lecturers ─────────────────────────────────────────────────────
         // ── Creators ─────────────────────────────────────────────────────
-        $techLecturer = User::firstOrCreate(
-            ['email' => 'alex.tech@demo.local'],
-            ['name' => 'Alex Rivera', 'password' => Hash::make('password'), 'role' => 'lecturer',
+        $medLecturer = User::firstOrCreate(
+            ['email' => 'alex.medicine@demo.local'],
+            ['name' => 'Dr. Alex Rivera', 'password' => Hash::make('password'), 'role' => 'lecturer',
              'is_active' => true, 'ai_credits_free_remaining' => 10, 'email_verified_at' => now()]
         );
-        $techLecturer->assignRole('lecturer');
+        $medLecturer->assignRole('lecturer');
 
-        $bizLecturer = User::firstOrCreate(
-            ['email' => 'natasha.biz@demo.local'],
-            ['name' => 'Natasha Kowalski', 'password' => Hash::make('password'), 'role' => 'lecturer',
+        $surgLecturer = User::firstOrCreate(
+            ['email' => 'natasha.surgery@demo.local'],
+            ['name' => 'Dr. Natasha Kowalski', 'password' => Hash::make('password'), 'role' => 'lecturer',
              'is_active' => true, 'ai_credits_free_remaining' => 10, 'email_verified_at' => now()]
         );
-        $bizLecturer->assignRole('lecturer');
+        $surgLecturer->assignRole('lecturer');
 
-        $hrLecturer = User::firstOrCreate(
-            ['email' => 'james.hr@demo.local'],
-            ['name' => 'James Okonkwo', 'password' => Hash::make('password'), 'role' => 'lecturer',
+        $obgynLecturer = User::firstOrCreate(
+            ['email' => 'james.obgyn@demo.local'],
+            ['name' => 'Dr. James Okonkwo', 'password' => Hash::make('password'), 'role' => 'lecturer',
              'is_active' => true, 'ai_credits_free_remaining' => 10, 'email_verified_at' => now()]
         );
-        $hrLecturer->assignRole('lecturer');
+        $obgynLecturer->assignRole('lecturer');
 
         // ── Students ────────────────────────────────────────
         foreach ([
@@ -91,31 +91,29 @@ class ProfessionalTestSeeder extends Seeder
         }
 
         // ── Quizzes ───────────────────────────────────────────────────────
-        // Free quizzes (entry-level / tasters)
-        $this->createQuiz($techLecturer, $subs['PHP & Laravel'], 'PHP Developer Skills Assessment',
-            'Evaluate PHP fundamentals, OOP concepts, design patterns, and Laravel-specific knowledge. Suitable for mid-level backend developer screening.',
-            $this->phpQuestions(), 0);
+        $this->createQuiz($medLecturer, $subs['Cardiology'], 'Cardiology Clinical Assessment',
+            'Evaluate knowledge of ECG interpretation, heart failure management, arrhythmias, and valvular disease for clinical-year medical students.',
+            $this->cardiologyQuestions(), 0);
 
-        $this->createQuiz($hrLecturer, $subs['Digital Marketing'], 'Digital Marketing Fundamentals',
-            'Assess knowledge of SEO, SEM, social media marketing, email campaigns, content strategy, analytics, and digital advertising.',
-            $this->digitalMarketingQuestions(), 0);
+        $this->createQuiz($obgynLecturer, $subs['Antenatal Care'], 'Obstetrics — Antenatal Care Essentials',
+            'Assess understanding of antenatal visits, screening tests, fetal monitoring, and common pregnancy complications.',
+            $this->obstetricsQuestions(), 0);
 
-        // Paid quizzes
-        $this->createQuiz($techLecturer, $subs['JavaScript & Node.js'], 'JavaScript & ES6+ Proficiency Test',
-            'Tests modern JavaScript concepts: closures, promises, async/await, prototypes, ES6+ features, and common DOM manipulation patterns.',
-            $this->jsQuestions(), 0);
+        $this->createQuiz($medLecturer, $subs['Respiratory Medicine'], 'Respiratory Medicine — COPD & Asthma',
+            'Tests diagnosis and management of obstructive lung disease, inhaler therapy, and acute exacerbations.',
+            $this->respiratoryQuestions(), 0);
 
-        $this->createQuiz($bizLecturer, $subs['Project Management'], 'Project Management Professional (PMP) Mock Test',
-            'Practice questions covering project lifecycle, scope management, risk assessment, stakeholder engagement, and agile methodologies per PMBOK guidelines.',
-            $this->pmpQuestions(), 0);
+        $this->createQuiz($surgLecturer, $subs['General Surgery'], 'General Surgery — Acute Abdomen',
+            'Practice questions covering appendicitis, cholecystitis, bowel obstruction, and perioperative care.',
+            $this->surgeryQuestions(), 0);
 
-        $this->createQuiz($bizLecturer, $subs['Agile & Scrum'], 'Scrum Master Certification Prep',
-            'Covers the Scrum framework: roles, ceremonies, artifacts, sprint planning, retrospectives, and scaling Scrum. Based on the Scrum Guide.',
-            $this->scrumQuestions(), 0);
+        $this->createQuiz($surgLecturer, $subs['Orthopaedics'], 'Orthopaedics — Fractures & Trauma',
+            'Covers fracture classification, initial management, compartment syndrome, and common orthopaedic emergencies.',
+            $this->orthopaedicsQuestions(), 0);
 
-        $this->createQuiz($hrLecturer, $subs['HR Fundamentals'], 'HR Professional Skills Assessment',
-            'Covers HR fundamentals including recruitment, onboarding, performance management, compensation, employee relations, and HR compliance.',
-            $this->hrQuestions(), 0);
+        $this->createQuiz($obgynLecturer, $subs['Gynecology'], 'Gynecology — Menstrual & Reproductive Disorders',
+            'Covers PCOS, endometriosis, abnormal uterine bleeding, and contraception counselling.',
+            $this->gynecologyQuestions(), 0);
 
         // ── Theme: Slate Corporate — dark indigo + violet, Space Grotesk + IBM Plex Sans ──
         $settings = app(\App\Settings\PlatformSettings::class);
@@ -172,159 +170,159 @@ class ProfessionalTestSeeder extends Seeder
         }
     }
 
-    private function phpQuestions(): array
+    private function cardiologyQuestions(): array
     {
         return [
-            ['q' => 'Which keyword is used to prevent a class from being inherited in PHP?', 'exp' => 'The "final" keyword in PHP prevents a class from being extended by another class. It can also prevent methods from being overridden.',
-             'options' => [['text'=>'abstract','correct'=>false],['text'=>'static','correct'=>false],['text'=>'final','correct'=>true],['text'=>'private','correct'=>false]]],
-            ['q' => 'What does the "??" operator do in PHP?', 'exp' => 'The null coalescing operator (??) returns the left operand if it exists and is not null, otherwise returns the right operand.',
-             'options' => [['text'=>'Spaceship comparison','correct'=>false],['text'=>'Null coalescing — returns left if not null, else right','correct'=>true],['text'=>'Strict equality check','correct'=>false],['text'=>'Ternary shorthand','correct'=>false]]],
-            ['q' => 'In Laravel, which Artisan command creates a new model with migration?', 'exp' => 'php artisan make:model ModelName -m creates both the Eloquent model and its corresponding database migration file.',
-             'options' => [['text'=>'php artisan make:model -migration','correct'=>false],['text'=>'php artisan make:model ModelName -m','correct'=>true],['text'=>'php artisan model:create --migrate','correct'=>false],['text'=>'php artisan generate:model -mig','correct'=>false]]],
-            ['q' => 'What is the output of: var_dump((int)"42abc");', 'exp' => 'PHP casts the leading numeric characters: "42abc" cast to int gives 42. var_dump outputs int(42).',
-             'options' => [['text'=>'string(5) "42abc"','correct'=>false],['text'=>'int(42)','correct'=>true],['text'=>'bool(false)','correct'=>false],['text'=>'NULL','correct'=>false]]],
-            ['q' => 'Which design pattern does Laravel\'s Service Container implement?', 'exp' => 'Laravel\'s Service Container is an implementation of the Inversion of Control (IoC) container and uses Dependency Injection pattern.',
-             'options' => [['text'=>'Factory Pattern','correct'=>false],['text'=>'Observer Pattern','correct'=>false],['text'=>'Dependency Injection / IoC Container','correct'=>true],['text'=>'Singleton Pattern','correct'=>false]]],
-            ['q' => 'In PHP, what is the difference between == and ===?', 'exp' => '== performs loose comparison (type coercion allowed), while === performs strict comparison (type and value must both match).',
-             'options' => [['text'=>'No difference','correct'=>false],['text'=>'== is strict, === is loose','correct'=>false],['text'=>'== is loose (type coercion), === is strict (type + value)','correct'=>true],['text'=>'=== only works for objects','correct'=>false]]],
-            ['q' => 'What does PSR-4 define?', 'exp' => 'PSR-4 is the PHP Standard Recommendation for autoloading classes from file paths, mapping namespace prefixes to directory paths.',
-             'options' => [['text'=>'Coding style guide','correct'=>false],['text'=>'Autoloading standard for classes','correct'=>true],['text'=>'HTTP message interface','correct'=>false],['text'=>'Logging interface','correct'=>false]]],
-            ['q' => 'In Laravel, the "hasMany" relationship returns:', 'exp' => 'hasMany returns an Illuminate\\Database\\Eloquent\\Relations\\HasMany instance, representing a one-to-many relationship.',
-             'options' => [['text'=>'A single Model instance','correct'=>false],['text'=>'A Collection of related Models','correct'=>true],['text'=>'A BelongsTo instance','correct'=>false],['text'=>'A Builder query','correct'=>false]]],
-            ['q' => 'Which PHP function is used to start a session?', 'exp' => 'session_start() must be called before any output is sent to the browser to initiate or resume a session.',
-             'options' => [['text'=>'start_session()','correct'=>false],['text'=>'session_start()','correct'=>true],['text'=>'begin_session()','correct'=>false],['text'=>'init_session()','correct'=>false]]],
-            ['q' => 'What is a Trait in PHP?', 'exp' => 'A Trait is a mechanism for code reuse in PHP that allows methods to be inserted into classes. It avoids multiple inheritance limitations.',
-             'options' => [['text'=>'A type of interface','correct'=>false],['text'=>'An abstract class','correct'=>false],['text'=>'A code reuse mechanism that inserts methods into classes','correct'=>true],['text'=>'A PHP module for type checking','correct'=>false]]],
+            ['q' => 'Which ECG finding is most suggestive of hyperkalaemia?', 'exp' => 'Peaked T waves are an early sign of hyperkalaemia.',
+             'options' => [['text'=>'Peaked T waves','correct'=>true],['text'=>'Prolonged PR only always','correct'=>false],['text'=>'ST elevation in V1-V4 only','correct'=>false],['text'=>'U waves','correct'=>false]]],
+            ['q' => 'First-line therapy for stable chronic HFrEF includes:', 'exp' => 'Guidelines recommend ACEi/ARNI, beta-blocker, MRA, and SGLT2 inhibitor in eligible patients.',
+             'options' => [['text'=>'ACE inhibitor and evidence-based beta-blocker','correct'=>true],['text'=>'Calcium channel blocker alone','correct'=>false],['text'=>'Digoxin as sole therapy','correct'=>false],['text'=>'Thiazolidinediones','correct'=>false]]],
+            ['q' => 'Atrial fibrillation with haemodynamic instability requires:', 'exp' => 'Unstable AF warrants urgent electrical cardioversion.',
+             'options' => [['text'=>'Immediate electrical cardioversion','correct'=>true],['text'=>'Outpatient watchful waiting only','correct'=>false],['text'=>'Oral aspirin alone','correct'=>false],['text'=>'No treatment','correct'=>false]]],
+            ['q' => 'Troponin elevation is most specific for:', 'exp' => 'Cardiac troponins indicate myocardial injury, especially in ACS.',
+             'options' => [['text'=>'Myocardial injury','correct'=>true],['text'=>'Pulmonary embolism only always','correct'=>false],['text'=>'Normal variant in all chest pain','correct'=>false],['text'=>'Anaemia only','correct'=>false]]],
+            ['q' => 'A pansystolic murmur at the apex radiating to the axilla indicates:', 'exp' => 'Classic finding of mitral regurgitation.',
+             'options' => [['text'=>'Mitral regurgitation','correct'=>true],['text'=>'Aortic stenosis','correct'=>false],['text'=>'PDA','correct'=>false],['text'=>'HOCM','correct'=>false]]],
+            ['q' => 'STEMI management includes:', 'exp' => 'Reperfusion (PCI or fibrinolysis where indicated), antiplatelets, anticoagulation per protocol.',
+             'options' => [['text'=>'Urgent reperfusion therapy','correct'=>true],['text'=>'Observation only for 72 hours','correct'=>false],['text'=>'Avoid all antiplatelets','correct'=>false],['text'=>'Oral beta-blocker contraindicated always','correct'=>false]]],
+            ['q' => 'Which drug reduces mortality post-MI long term?', 'exp' => 'Beta-blockers, ACE inhibitors, statins, and antiplatelets improve outcomes.',
+             'options' => [['text'=>'Evidence-based beta-blocker','correct'=>true],['text'=>'Short-acting nifedipine alone','correct'=>false],['text'=>'Routine NSAIDs','correct'=>false],['text'=>'High-dose diuretics alone','correct'=>false]]],
+            ['q' => 'In heart failure, BNP is useful to:', 'exp' => 'BNP/NT-proBNP aid diagnosis and prognostication in dyspnoea.',
+             'options' => [['text'=>'Differentiate cardiac vs non-cardiac dyspnoea','correct'=>true],['text'=>'Diagnose appendicitis','correct'=>false],['text'=>'Measure liver function','correct'=>false],['text'=>'Replace echocardiography always','correct'=>false]]],
+            ['q' => 'Wolff-Parkinson-White syndrome involves:', 'exp' => 'Accessory pathway causes pre-excitation and risk of tachyarrhythmias.',
+             'options' => [['text'=>'Accessory AV pathway with delta wave','correct'=>true],['text'=>'Complete heart block only','correct'=>false],['text'=>'Long QT only','correct'=>false],['text'=>'Normal conduction always','correct'=>false]]],
+            ['q' => 'Hypertensive emergency is defined by:', 'exp' => 'Severe hypertension with acute end-organ damage requires IV therapy.',
+             'options' => [['text'=>'Severe BP with acute end-organ damage','correct'=>true],['text'=>'Any BP >140/90','correct'=>false],['text'=>'White coat effect only','correct'=>false],['text'=>'Isolated headache without BP rise','correct'=>false]]],
         ];
     }
 
-    private function jsQuestions(): array
+    private function obstetricsQuestions(): array
     {
         return [
-            ['q' => 'What is the output of: console.log(typeof null);', 'exp' => 'This is a well-known JavaScript bug. typeof null returns "object" even though null is not an object. It has been this way since the first version of JavaScript.',
-             'options' => [['text'=>'"null"','correct'=>false],['text'=>'"undefined"','correct'=>false],['text'=>'"object"','correct'=>true],['text'=>'"boolean"','correct'=>false]]],
-            ['q' => 'Which of the following correctly creates a Promise that resolves with the value 42?', 'exp' => 'Promise.resolve(42) is the shorthand to create a Promise that is already resolved with the value 42.',
-             'options' => [['text'=>'new Promise(42)','correct'=>false],['text'=>'Promise.resolve(42)','correct'=>true],['text'=>'Promise.fulfilled(42)','correct'=>false],['text'=>'new Promise(() => 42)','correct'=>false]]],
-            ['q' => 'What does the "..." (spread) operator do in JavaScript?', 'exp' => 'The spread operator (...) expands an iterable (like an array) into individual elements, or spreads object properties into another object.',
-             'options' => [['text'=>'Creates a rest parameter','correct'=>false],['text'=>'Expands iterable elements or object properties','correct'=>true],['text'=>'Defines a generator function','correct'=>false],['text'=>'Creates a shallow reference','correct'=>false]]],
-            ['q' => 'What is a closure in JavaScript?', 'exp' => 'A closure is a function that retains access to its outer (enclosing) scope even after the outer function has finished executing.',
-             'options' => [['text'=>'A function with no return value','correct'=>false],['text'=>'A function that remembers variables from its outer scope','correct'=>true],['text'=>'An immediately invoked function expression','correct'=>false],['text'=>'A function stored in a variable','correct'=>false]]],
-            ['q' => 'What is the difference between "let" and "var" in JavaScript?', 'exp' => '"let" is block-scoped (available only within the block it is declared in), while "var" is function-scoped (or globally scoped) and gets hoisted.',
-             'options' => [['text'=>'No difference','correct'=>false],['text'=>'"let" is block-scoped; "var" is function-scoped and hoisted','correct'=>true],['text'=>'"var" is block-scoped; "let" is function-scoped','correct'=>false],['text'=>'"let" cannot be reassigned','correct'=>false]]],
-            ['q' => 'Which Array method returns a new array with only elements that pass a test?', 'exp' => 'Array.filter() creates a new array with all elements that pass the test implemented by the provided callback function.',
-             'options' => [['text'=>'Array.map()','correct'=>false],['text'=>'Array.find()','correct'=>false],['text'=>'Array.filter()','correct'=>true],['text'=>'Array.reduce()','correct'=>false]]],
-            ['q' => 'What will the following code output? console.log(1 + "2" + 3);', 'exp' => 'In JS, when + encounters a string, it performs concatenation. 1+"2" = "12" (string concat), then "12"+3 = "123".',
-             'options' => [['text'=>'6','correct'=>false],['text'=>'"123"','correct'=>true],['text'=>'"15"','correct'=>false],['text'=>'Error','correct'=>false]]],
-            ['q' => 'What is event delegation in JavaScript?', 'exp' => 'Event delegation is a technique where a single event listener is added to a parent element to handle events from multiple child elements, leveraging event bubbling.',
-             'options' => [['text'=>'Assigning events directly to each child element','correct'=>false],['text'=>'Listening on a parent to handle events from child elements','correct'=>true],['text'=>'Preventing default browser behaviour','correct'=>false],['text'=>'Using Web Workers for events','correct'=>false]]],
-            ['q' => 'What does "async/await" in JavaScript do?', 'exp' => 'async/await is syntactic sugar over Promises that lets you write asynchronous code in a synchronous style. async functions always return a Promise.',
-             'options' => [['text'=>'Makes code run on multiple threads','correct'=>false],['text'=>'Syntax for writing asynchronous code in a synchronous style using Promises','correct'=>true],['text'=>'Blocks all code until the function completes','correct'=>false],['text'=>'Creates a new JavaScript runtime context','correct'=>false]]],
-            ['q' => 'Which statement about arrow functions is TRUE?', 'exp' => 'Arrow functions do not have their own "this" context — they inherit "this" from the enclosing lexical scope. They also cannot be used as constructors.',
-             'options' => [['text'=>'Arrow functions can be used as constructors','correct'=>false],['text'=>'Arrow functions have their own "this" binding','correct'=>false],['text'=>'Arrow functions inherit "this" from the enclosing scope','correct'=>true],['text'=>'Arrow functions cannot access outer variables','correct'=>false]]],
+            ['q' => 'The recommended number of antenatal contacts in uncomplicated pregnancy (WHO) is:', 'exp' => 'WHO recommends at least 8 contacts.',
+             'options' => [['text'=>'8','correct'=>true],['text'=>'2','correct'=>false],['text'=>'15','correct'=>false],['text'=>'1','correct'=>false]]],
+            ['q' => 'Gestational diabetes screening is typically performed at:', 'exp' => 'OGTT commonly at 24–28 weeks.',
+             'options' => [['text'=>'24–28 weeks','correct'=>true],['text'=>'6 weeks postpartum only','correct'=>false],['text'=>'First trimester only always','correct'=>false],['text'=>'Never in low-risk patients','correct'=>false]]],
+            ['q' => 'Preeclampsia includes hypertension and:', 'exp' => 'Proteinuria or end-organ dysfunction after 20 weeks defines preeclampsia.',
+             'options' => [['text'=>'Proteinuria or organ dysfunction','correct'=>true],['text'=>'Hyperglycaemia only','correct'=>false],['text'=>'Hypotension','correct'=>false],['text'=>'Normal BP with oedema only','correct'=>false]]],
+            ['q' => 'Folic acid supplementation should start:', 'exp' => 'At least 1 month preconception to reduce neural tube defects.',
+             'options' => [['text'=>'Before conception','correct'=>true],['text'=>'Only in third trimester','correct'=>false],['text'=>'After delivery only','correct'=>false],['text'=>'Never if diet is adequate always','correct'=>false]]],
+            ['q' => 'Normal fetal heart rate is approximately:', 'exp' => 'Baseline FHR 110–160 bpm.',
+             'options' => [['text'=>'110–160 bpm','correct'=>true],['text'=>'60–80 bpm','correct'=>false],['text'=>'180–220 bpm','correct'=>false],['text'=>'90–100 bpm always','correct'=>false]]],
+            ['q' => 'Which vaccine is recommended in every pregnancy?', 'exp' => 'Influenza (seasonal) and Tdap are routinely recommended.',
+             'options' => [['text'=>'Influenza and Tdap','correct'=>true],['text'=>'MMR','correct'=>false],['text'=>'Varicella','correct'=>false],['text'=>'HPV first dose only always','correct'=>false]]],
+            ['q' => 'Placenta previa presents with:', 'exp' => 'Painless antepartum bleeding; avoid digital vaginal exam if suspected.',
+             'options' => [['text'=>'Painless vaginal bleeding','correct'=>true],['text'=>'Severe abdominal rigidity always','correct'=>false],['text'=>'Fever and purulent discharge only','correct'=>false],['text'=>'No bleeding ever','correct'=>false]]],
+            ['q' => 'Ectopic pregnancy is most commonly located in the:', 'exp' => 'Ampulla of fallopian tube is the most common site.',
+             'options' => [['text'=>'Fallopian tube','correct'=>true],['text'=>'Ovary always','correct'=>false],['text'=>'Uterine fundus','correct'=>false],['text'=>'Cervix primarily','correct'=>false]]],
+            ['q' => 'Group B strep screening is done at:', 'exp' => 'Vaginal-rectal culture at 36–37 weeks in many guidelines.',
+             'options' => [['text'=>'36–37 weeks gestation','correct'=>true],['text'=>'Immediately after birth only','correct'=>false],['text'=>'12 weeks only','correct'=>false],['text'=>'Never indicated','correct'=>false]]],
+            ['q' => 'Hyperemesis gravidarum may cause:', 'exp' => 'Severe vomiting leads to dehydration, electrolyte disturbances, weight loss.',
+             'options' => [['text'=>'Dehydration and electrolyte imbalance','correct'=>true],['text'=>'Permanent fetal malformation always','correct'=>false],['text'=>'No maternal effects','correct'=>false],['text'=>'Hypertension only','correct'=>false]]],
         ];
     }
 
-    private function pmpQuestions(): array
+    private function respiratoryQuestions(): array
     {
         return [
-            ['q' => 'According to PMBOK, which document formally authorizes a project and identifies the project manager?', 'exp' => 'The Project Charter is the document that formally authorizes the existence of a project and gives the project manager authority to apply resources.',
-             'options' => [['text'=>'Project Management Plan','correct'=>false],['text'=>'Project Charter','correct'=>true],['text'=>'Statement of Work','correct'=>false],['text'=>'Project Scope Statement','correct'=>false]]],
-            ['q' => 'A project has a Budget at Completion (BAC) of $100,000. The Earned Value (EV) is $40,000 and Actual Cost (AC) is $50,000. What is the Cost Performance Index (CPI)?', 'exp' => 'CPI = EV / AC = $40,000 / $50,000 = 0.8. A CPI below 1.0 means the project is over budget.',
-             'options' => [['text'=>'1.25','correct'=>false],['text'=>'0.8','correct'=>true],['text'=>'1.0','correct'=>false],['text'=>'0.5','correct'=>false]]],
-            ['q' => 'Which risk response strategy involves shifting the negative impact of a risk to a third party?', 'exp' => 'Transfer is a risk response strategy that shifts the impact and ownership of a risk to a third party, such as through insurance or outsourcing.',
-             'options' => [['text'=>'Avoid','correct'=>false],['text'=>'Mitigate','correct'=>false],['text'=>'Transfer','correct'=>true],['text'=>'Accept','correct'=>false]]],
-            ['q' => 'The Critical Path Method (CPM) identifies:', 'exp' => 'The Critical Path is the longest sequence of dependent tasks that determines the minimum project duration. Activities on the critical path have zero float.',
-             'options' => [['text'=>'Tasks with the highest risk','correct'=>false],['text'=>'The sequence of tasks that determines project duration','correct'=>true],['text'=>'The most expensive activities','correct'=>false],['text'=>'Tasks that can be done in parallel','correct'=>false]]],
-            ['q' => 'Which communication model describes the components: Sender, Message, Medium, Receiver, Feedback?', 'exp' => 'This is the Interactive Communication Model, which captures the two-way nature of communication and includes feedback as a component.',
-             'options' => [['text'=>'Push Communication Model','correct'=>false],['text'=>'Pull Communication Model','correct'=>false],['text'=>'Interactive Communication Model','correct'=>true],['text'=>'Linear Communication Model','correct'=>false]]],
-            ['q' => 'Scope creep in project management refers to:', 'exp' => 'Scope creep is the uncontrolled expansion of project scope without adjustments to time, cost, and resources — often due to undocumented changes.',
-             'options' => [['text'=>'Reducing project scope to save cost','correct'=>false],['text'=>'Uncontrolled expansion of project scope without adjustments','correct'=>true],['text'=>'Documenting scope changes formally','correct'=>false],['text'=>'Meeting scope requirements on time','correct'=>false]]],
-            ['q' => 'During which process group is the Project Management Plan created?', 'exp' => 'The Project Management Plan is developed during the Planning process group, where the project scope, schedule, budget, and plans are defined.',
-             'options' => [['text'=>'Initiating','correct'=>false],['text'=>'Planning','correct'=>true],['text'=>'Executing','correct'=>false],['text'=>'Monitoring & Controlling','correct'=>false]]],
-            ['q' => 'What is a RACI chart used for in project management?', 'exp' => 'A RACI chart defines roles and responsibilities by indicating who is Responsible, Accountable, Consulted, and Informed for each task.',
-             'options' => [['text'=>'Tracking project risks','correct'=>false],['text'=>'Scheduling resources','correct'=>false],['text'=>'Defining roles and responsibilities for tasks','correct'=>true],['text'=>'Managing project communications','correct'=>false]]],
-            ['q' => 'Float (or Slack) in project scheduling is:', 'exp' => 'Float is the amount of time an activity can be delayed without delaying the project completion date (total float) or the next activity (free float).',
-             'options' => [['text'=>'The total project duration','correct'=>false],['text'=>'Extra budget allocated to tasks','correct'=>false],['text'=>'Time an activity can be delayed without delaying the project','correct'=>true],['text'=>'Parallel activities in the schedule','correct'=>false]]],
-            ['q' => 'Which of the following is NOT a characteristic of a project?', 'exp' => 'Projects are temporary and unique endeavours. Repetitive, ongoing operations are NOT projects — they are operational work.',
-             'options' => [['text'=>'Temporary duration','correct'=>false],['text'=>'Unique deliverable','correct'=>false],['text'=>'Repetitive and ongoing operations','correct'=>true],['text'=>'Progressive elaboration','correct'=>false]]],
+            ['q' => 'First-line maintenance therapy for mild asthma is typically:', 'exp' => 'Low-dose ICS or as-needed ICS-formoterol per guidelines.',
+             'options' => [['text'=>'Inhaled corticosteroid','correct'=>true],['text'=>'Oral prednisolone daily long term','correct'=>false],['text'=>'High-flow oxygen only','correct'=>false],['text'=>'Antibiotics prophylaxis always','correct'=>false]]],
+            ['q' => 'COPD diagnosis is confirmed by:', 'exp' => 'Post-bronchodilator FEV1/FVC < 0.7 on spirometry.',
+             'options' => [['text'=>'Spirometry showing airflow obstruction','correct'=>true],['text'=>'Chest X-ray alone','correct'=>false],['text'=>'Peak flow only','correct'=>false],['text'=>'ABG alone','correct'=>false]]],
+            ['q' => 'Acute asthma exacerbation with silent chest suggests:', 'exp' => 'Silent chest indicates severe bronchospasm — life-threatening asthma.',
+             'options' => [['text'=>'Life-threatening asthma','correct'=>true],['text'=>'Mild disease','correct'=>false],['text'=>'Resolution of attack','correct'=>false],['text'=>'Normal finding','correct'=>false]]],
+            ['q' => 'Long-term oxygen therapy in COPD is indicated if PaO2 is:', 'exp' => 'LTOT if PaO2 ≤ 55 mmHg or SpO2 ≤ 88% when stable.',
+             'options' => [['text'=>'≤55 mmHg when stable','correct'=>true],['text'=>'>100 mmHg','correct'=>false],['text'=>'Only during exercise always','correct'=>false],['text'=>'Never indicated','correct'=>false]]],
+            ['q' => 'Pneumonia CURB-65 assesses:', 'exp' => 'Severity scoring guides site of care and mortality risk.',
+             'options' => [['text'=>'Severity and need for hospitalisation','correct'=>true],['text'=>'Asthma control only','correct'=>false],['text'=>'TB exposure only','correct'=>false],['text'=>'Pulmonary embolism probability only','correct'=>false]]],
+            ['q' => 'Pulmonary embolism diagnosis may use:', 'exp' => 'CTPA is commonly used; Wells score guides workup.',
+             'options' => [['text'=>'CT pulmonary angiography','correct'=>true],['text'=>'Liver biopsy','correct'=>false],['text'=>'Colonoscopy','correct'=>false],['text'=>'EEG','correct'=>false]]],
+            ['q' => 'Type 2 respiratory failure features:', 'exp' => 'Hypoxaemia with hypercapnia (raised PaCO2).',
+             'options' => [['text'=>'Hypoxia and hypercapnia','correct'=>true],['text'=>'Hyperoxia only','correct'=>false],['text'=>'Metabolic alkalosis only always','correct'=>false],['text'=>'Normal ABG','correct'=>false]]],
+            ['q' => 'Smoking cessation in COPD:', 'exp' => 'Most important intervention to slow progression.',
+             'options' => [['text'=>'Slows disease progression','correct'=>true],['text'=>'Has no effect on prognosis','correct'=>false],['text'=>'Contraindicated if on oxygen','correct'=>false],['text'=>'Only helps if age <30','correct'=>false]]],
+            ['q' => 'Pleuritic chest pain with haemoptysis suggests:', 'exp' => 'Consider PE, pneumonia, or malignancy depending on context.',
+             'options' => [['text'=>'Pulmonary embolism among differentials','correct'=>true],['text'=>'Benign reflux only always','correct'=>false],['text'=>'Anaemia only','correct'=>false],['text'=>'No investigation needed','correct'=>false]]],
+            ['q' => 'TB is diagnosed definitively by:', 'exp' => 'Microbiological confirmation (smear/culture/NAAT) from appropriate samples.',
+             'options' => [['text'=>'Microbiological confirmation of M. tuberculosis','correct'=>true],['text'=>'Blood glucose only','correct'=>false],['text'=>'Urinalysis','correct'=>false],['text'=>'Skin prick test alone sufficient always','correct'=>false]]],
         ];
     }
 
-    private function scrumQuestions(): array
+    private function surgeryQuestions(): array
     {
         return [
-            ['q' => 'In Scrum, who is responsible for maximizing the value of the product?', 'exp' => 'The Product Owner is responsible for maximizing the value of the product resulting from the Scrum Team\'s work, including managing the Product Backlog.',
-             'options' => [['text'=>'Scrum Master','correct'=>false],['text'=>'Development Team','correct'=>false],['text'=>'Product Owner','correct'=>true],['text'=>'Stakeholders','correct'=>false]]],
-            ['q' => 'What is the maximum recommended length of a Sprint?', 'exp' => 'According to the Scrum Guide, a Sprint is a time-box of one month or less. The most common Sprint length is two weeks.',
-             'options' => [['text'=>'Two weeks','correct'=>false],['text'=>'One month','correct'=>true],['text'=>'Six weeks','correct'=>false],['text'=>'Three months','correct'=>false]]],
-            ['q' => 'Which Scrum artefact provides transparency and an opportunity for inspection about work done and future plans?', 'exp' => 'The Sprint Backlog is the set of Product Backlog items selected for the Sprint, plus a plan for delivering the product Increment and realising the Sprint Goal.',
-             'options' => [['text'=>'Product Backlog','correct'=>false],['text'=>'Increment','correct'=>false],['text'=>'Sprint Backlog','correct'=>true],['text'=>'Burndown Chart','correct'=>false]]],
-            ['q' => 'The Sprint Retrospective is held to:', 'exp' => 'The Sprint Retrospective is an opportunity for the Scrum Team to inspect itself and create a plan for improvements to be enacted during the next Sprint.',
-             'options' => [['text'=>'Plan the next Sprint','correct'=>false],['text'=>'Demo the product to stakeholders','correct'=>false],['text'=>'Inspect the team and plan improvements for the next Sprint','correct'=>true],['text'=>'Review backlog priorities','correct'=>false]]],
-            ['q' => 'What does "Definition of Done" mean in Scrum?', 'exp' => 'The Definition of Done is a shared understanding of what "done" means — the criteria that a Product Backlog item must meet to be considered complete.',
-             'options' => [['text'=>'A list of all tasks to be completed','correct'=>false],['text'=>'The criteria an increment must meet to be considered complete','correct'=>true],['text'=>'The end date of the project','correct'=>false],['text'=>'The acceptance criteria for user stories','correct'=>false]]],
-            ['q' => 'Who facilitates the Daily Scrum?', 'exp' => 'The Development Team is responsible for conducting the Daily Scrum. The Scrum Master ensures that the team has the meeting, but does not run it.',
-             'options' => [['text'=>'Product Owner','correct'=>false],['text'=>'Scrum Master','correct'=>false],['text'=>'The Development Team','correct'=>true],['text'=>'Project Sponsor','correct'=>false]]],
-            ['q' => 'Which statement about the Product Backlog is TRUE?', 'exp' => 'The Product Backlog is an ordered list of everything that might be needed in the product. It is never complete and evolves as the product and market change.',
-             'options' => [['text'=>'It is finalized at the start of the project','correct'=>false],['text'=>'It is owned by the Scrum Master','correct'=>false],['text'=>'It is ordered and evolves as the product and environment change','correct'=>true],['text'=>'It can only be updated at Sprint boundaries','correct'=>false]]],
-            ['q' => 'How long should a Daily Scrum typically last?', 'exp' => 'The Daily Scrum is a 15-minute time-boxed event for the Development Team to inspect progress toward the Sprint Goal.',
-             'options' => [['text'=>'30 minutes','correct'=>false],['text'=>'1 hour','correct'=>false],['text'=>'15 minutes','correct'=>true],['text'=>'As long as needed','correct'=>false]]],
-            ['q' => 'What are the three pillars of empiricism in Scrum?', 'exp' => 'Scrum is founded on empirical process control theory, with three pillars: Transparency (visible work), Inspection (detect variances), and Adaptation (adjust processes).',
-             'options' => [['text'=>'Planning, Executing, Reviewing','correct'=>false],['text'=>'Transparency, Inspection, Adaptation','correct'=>true],['text'=>'Vision, Roadmap, Delivery','correct'=>false],['text'=>'Velocity, Quality, Teamwork','correct'=>false]]],
-            ['q' => 'The Scrum Master\'s role is best described as:', 'exp' => 'The Scrum Master is a servant-leader who helps the team understand and apply Scrum, removes impediments, and coaches the team on self-organisation.',
-             'options' => [['text'=>'The manager who assigns tasks to developers','correct'=>false],['text'=>'A servant-leader who coaches the team and removes impediments','correct'=>true],['text'=>'The person responsible for the product vision','correct'=>false],['text'=>'A QA tester who verifies sprint output','correct'=>false]]],
+            ['q' => 'Acute appendicitis classically begins with pain in the:', 'exp' => 'Periumbilical pain migrating to RIF is classic.',
+             'options' => [['text'=>'Periumbilical region then RIF','correct'=>true],['text'=>'Left shoulder only','correct'=>false],['text'=>'Epigastrium permanently','correct'=>false],['text'=>'No pain','correct'=>false]]],
+            ['q' => 'McBurney point tenderness suggests:', 'exp' => 'Located one-third from ASIS to umbilicus — appendicitis sign.',
+             'options' => [['text'=>'Appendicitis','correct'=>true],['text'=>'Cholecystitis always','correct'=>false],['text'=>'Diverticulitis always left sided','correct'=>false],['text'=>'Pancreatitis only','correct'=>false]]],
+            ['q' => 'Murphy sign is associated with:', 'exp' => 'Inspiratory arrest on RUQ palpation — acute cholecystitis.',
+             'options' => [['text'=>'Acute cholecystitis','correct'=>true],['text'=>'Appendicitis','correct'=>false],['text'=>'Renal colic only','correct'=>false],['text'=>'AAA rupture only','correct'=>false]]],
+            ['q' => 'Small bowel obstruction may show on AXR:', 'exp' => 'Dilated loops, air-fluid levels, paucity of colonic gas.',
+             'options' => [['text'=>'Dilated small bowel loops and air-fluid levels','correct'=>true],['text'=>'Normal film always','correct'=>false],['text'=>'Free air only in all cases','correct'=>false],['text'=>'Pneumoperitoneum excluded if pain mild','correct'=>false]]],
+            ['q' => 'Peritonitis presents with:', 'exp' => 'Board-like rigidity, rebound, guarding, systemic toxicity.',
+             'options' => [['text'=>'Abdominal rigidity and rebound tenderness','correct'=>true],['text'=>'Painless abdomen always','correct'=>false],['text'=>'Isolated pruritus','correct'=>false],['text'=>'Bradycardia only','correct'=>false]]],
+            ['q' => 'Preoperative fasting aims to reduce:', 'exp' => 'Aspiration risk during anaesthesia.',
+             'options' => [['text'=>'Aspiration pneumonitis risk','correct'=>true],['text'=>'Wound infection only indirectly always','correct'=>false],['text'=>'Bleeding always','correct'=>false],['text'=>'No clinical purpose','correct'=>false]]],
+            ['q' => 'Most common organism in SSI is:', 'exp' => 'S. aureus is the leading cause of surgical site infections.',
+             'options' => [['text'=>'Staphylococcus aureus','correct'=>true],['text'=>'E. coli only always','correct'=>false],['text'=>'Candida only','correct'=>false],['text'=>'Viruses primarily','correct'=>false]]],
+            ['q' => 'Tension pneumothorax requires:', 'exp' => 'Immediate needle decompression then chest drain.',
+             'options' => [['text'=>'Immediate decompression','correct'=>true],['text'=>'Outpatient antibiotics only','correct'=>false],['text'=>'CT before any treatment always','correct'=>false],['text'=>'Observation 24 hours','correct'=>false]]],
+            ['q' => 'Acute mesenteric ischaemia presents with:', 'exp' => 'Pain out of proportion to examination findings.',
+             'options' => [['text'=>'Pain disproportionate to exam findings','correct'=>true],['text'=>'Painless bleeding only','correct'=>false],['text'=>'Isolated dysuria','correct'=>false],['text'=>'Chronic constipation only','correct'=>false]]],
+            ['q' => 'Post-op fever on day 1 is often due to:', 'exp' => 'Atelectasis common early; later consider wound, UTI, pneumonia, DVT/PE.',
+             'options' => [['text'=>'Atelectasis','correct'=>true],['text'=>'Anastomotic leak always day 1','correct'=>false],['text'=>'Normal never investigate','correct'=>false],['text'=>'Hyperthyroidism only','correct'=>false]]],
         ];
     }
 
-    private function digitalMarketingQuestions(): array
+    private function orthopaedicsQuestions(): array
     {
         return [
-            ['q' => 'What does SEO stand for?', 'exp' => 'SEO stands for Search Engine Optimisation — the practice of increasing the quantity and quality of traffic to a website from search engines.',
-             'options' => [['text'=>'Social Engagement Optimisation','correct'=>false],['text'=>'Search Engine Optimisation','correct'=>true],['text'=>'Search Engagement Outreach','correct'=>false],['text'=>'Site Experience Output','correct'=>false]]],
-            ['q' => 'Which metric measures the percentage of visitors who leave a website after viewing only one page?', 'exp' => 'Bounce rate measures the percentage of visitors who navigate away from the site after viewing only the entry page, without interacting further.',
-             'options' => [['text'=>'Click-Through Rate (CTR)','correct'=>false],['text'=>'Conversion Rate','correct'=>false],['text'=>'Bounce Rate','correct'=>true],['text'=>'Impression Rate','correct'=>false]]],
-            ['q' => 'In Google Ads, "Quality Score" is based on:', 'exp' => 'Google Ads Quality Score is determined by three factors: Expected CTR, Ad Relevance, and Landing Page Experience. A higher Quality Score lowers your CPC.',
-             'options' => [['text'=>'Budget size and bid amount only','correct'=>false],['text'=>'Expected CTR, ad relevance, and landing page experience','correct'=>true],['text'=>'Number of keywords in ad group','correct'=>false],['text'=>'Ad format and creative quality','correct'=>false]]],
-            ['q' => 'What is the primary purpose of a buyer persona in marketing?', 'exp' => 'A buyer persona is a semi-fictional representation of an ideal customer, helping marketers tailor messaging and strategies to specific audience segments.',
-             'options' => [['text'=>'To create fictional characters for ads','correct'=>false],['text'=>'To represent ideal customers and guide targeted marketing','correct'=>true],['text'=>'To track customer purchase behaviour','correct'=>false],['text'=>'To comply with GDPR regulations','correct'=>false]]],
-            ['q' => 'Which of the following is an example of owned media?', 'exp' => 'Owned media is content or channels that a brand controls. A company blog is owned media. Paid ads are paid media; press coverage is earned media.',
-             'options' => [['text'=>'A newspaper advertisement','correct'=>false],['text'=>'A press mention in a magazine','correct'=>false],['text'=>'The company\'s own blog','correct'=>true],['text'=>'An influencer\'s sponsored post','correct'=>false]]],
-            ['q' => 'What does A/B testing in digital marketing involve?', 'exp' => 'A/B testing (split testing) involves showing two variants of a page, email, or ad to different audience segments to determine which performs better.',
-             'options' => [['text'=>'Testing the site on two different browsers','correct'=>false],['text'=>'Comparing two variants to see which performs better','correct'=>true],['text'=>'Running ads on two different platforms','correct'=>false],['text'=>'Testing before and after a campaign launch','correct'=>false]]],
-            ['q' => 'Email open rate is calculated as:', 'exp' => 'Open Rate = (Unique Opens / Number of Emails Delivered) × 100%. It measures what percentage of delivered emails were opened.',
-             'options' => [['text'=>'(Emails sent / Emails opened) × 100','correct'=>false],['text'=>'(Unique opens / Emails delivered) × 100','correct'=>true],['text'=>'(Clicks / Emails sent) × 100','correct'=>false],['text'=>'(Bounces / Emails sent) × 100','correct'=>false]]],
-            ['q' => 'Which social media metric best indicates content resonance with an audience?', 'exp' => 'Engagement rate (likes, comments, shares, saves as a % of reach or followers) best indicates how well content resonates with the audience.',
-             'options' => [['text'=>'Number of followers','correct'=>false],['text'=>'Number of impressions','correct'=>false],['text'=>'Engagement rate','correct'=>true],['text'=>'Page views','correct'=>false]]],
-            ['q' => 'What is "remarketing" in digital advertising?', 'exp' => 'Remarketing (retargeting) shows ads to people who have previously visited your website or interacted with your content, targeting warm audiences.',
-             'options' => [['text'=>'Sending repeated emails to leads','correct'=>false],['text'=>'Advertising to new audiences only','correct'=>false],['text'=>'Showing ads to previous website visitors or engagers','correct'=>true],['text'=>'Re-publishing old content','correct'=>false]]],
-            ['q' => 'Which of the following is a key on-page SEO factor?', 'exp' => 'Title tags are a critical on-page SEO element that signals to search engines what the page is about, directly influencing search rankings and CTR.',
-             'options' => [['text'=>'Number of backlinks from external sites','correct'=>false],['text'=>'Domain authority score','correct'=>false],['text'=>'Title tags and meta descriptions','correct'=>true],['text'=>'Social media follower count','correct'=>false]]],
+            ['q' => 'Colles fracture involves the:', 'exp' => 'Distal radius fracture with dorsal angulation (fall on outstretched hand).',
+             'options' => [['text'=>'Distal radius','correct'=>true],['text'=>'Scaphoid only always','correct'=>false],['text'=>'Clavicle midshaft only','correct'=>false],['text'=>'Femoral neck','correct'=>false]]],
+            ['q' => 'Compartment syndrome requires:', 'exp' => 'Fasciotomy is definitive treatment — surgical emergency.',
+             'options' => [['text'=>'Emergency fasciotomy','correct'=>true],['text'=>'Ice packs only','correct'=>false],['text'=>'Delayed treatment acceptable always','correct'=>false],['text'=>'Oral antibiotics alone','correct'=>false]]],
+            ['q' => 'Hip fracture in elderly increases risk of:', 'exp' => 'Mortality and morbidity significant; early surgery improves outcomes.',
+             'options' => [['text'=>'Mortality and complications','correct'=>true],['text'=>'No significant impact','correct'=>false],['text'=>'Improved mobility always without surgery','correct'=>false],['text'=>'Only cosmetic issues','correct'=>false]]],
+            ['q' => 'Anterior shoulder dislocation is most common after:', 'exp' => 'Abduction and external rotation injury.',
+             'options' => [['text'=>'Abduction and external rotation trauma','correct'=>true],['text'=>'Direct posterior blow only always','correct'=>false],['text'=>'Repetitive typing','correct'=>false],['text'=>'Spontaneous without trauma always','correct'=>false]]],
+            ['q' => 'Ottawa ankle rules help determine:', 'exp' => 'Need for imaging after ankle/foot injury.',
+             'options' => [['text'=>'Need for ankle/foot radiographs','correct'=>true],['text'=>'Knee replacement timing','correct'=>false],['text'=>'Spinal fusion indication','correct'=>false],['text'=>'Cardiac risk only','correct'=>false]]],
+            ['q' => 'Open fracture management includes:', 'exp' => 'IV antibiotics, tetanus, urgent orthopaedic review, sterile dressing.',
+             'options' => [['text'=>'Antibiotics, tetanus prophylaxis, orthopaedic review','correct'=>true],['text'=>'Wound closure without antibiotics always','correct'=>false],['text'=>'Ignore contamination','correct'=>false],['text'=>'Only oral analgesia','correct'=>false]]],
+            ['q' => 'Cauda equina syndrome features include:', 'exp' => 'Saddle anaesthesia, urinary retention, bilateral leg symptoms — emergency.',
+             'options' => [['text'=>'Saddle anaesthesia and urinary retention','correct'=>true],['text'=>'Isolated neck pain only','correct'=>false],['text'=>'Mild backache only always','correct'=>false],['text'=>'No urgency','correct'=>false]]],
+            ['q' => 'Gout typically affects the:', 'exp' => 'First MTP joint (podagra) classically.',
+             'options' => [['text'=>'First metatarsophalangeal joint','correct'=>true],['text'=>'Shoulder only always','correct'=>false],['text'=>'Cervical spine primarily','correct'=>false],['text'=>'No joint predilection','correct'=>false]]],
+            ['q' => 'DVT prophylaxis post orthopaedic surgery often uses:', 'exp' => 'LMWH or alternative anticoagulant per protocol.',
+             'options' => [['text'=>'Low molecular weight heparin or equivalent','correct'=>true],['text'=>'Aspirin alone always sufficient for all','correct'=>false],['text'=>'No prophylaxis needed ever','correct'=>false],['text'=>'Warfarin loading only always day 1','correct'=>false]]],
+            ['q' => 'Greenstick fracture occurs in:', 'exp' => 'Incomplete fracture in paediatric bone.',
+             'options' => [['text'=>'Children','correct'=>true],['text'=>'Elderly osteoporotic bone only always','correct'=>false],['text'=>'Never in upper limb','correct'=>false],['text'=>'Only skull','correct'=>false]]],
         ];
     }
 
-    private function hrQuestions(): array
+    private function gynecologyQuestions(): array
     {
         return [
-            ['q' => 'What is the primary purpose of an employee onboarding programme?', 'exp' => 'Onboarding helps new employees integrate into the organisation, understand their role, and become productive faster while reducing early turnover.',
-             'options' => [['text'=>'To conduct performance reviews','correct'=>false],['text'=>'To help new hires integrate and become productive faster','correct'=>true],['text'=>'To handle disciplinary procedures','correct'=>false],['text'=>'To process payroll for new employees','correct'=>false]]],
-            ['q' => 'The "halo effect" in performance appraisals refers to:', 'exp' => 'The halo effect occurs when a rater\'s overall positive impression of an employee causes them to rate all aspects positively, even where performance may differ.',
-             'options' => [['text'=>'Rating all employees the same','correct'=>false],['text'=>'Bias where one positive trait influences all ratings','correct'=>true],['text'=>'Rating recent performance more heavily','correct'=>false],['text'=>'Comparing employees against each other','correct'=>false]]],
-            ['q' => 'Which international framework provides the foundation for fair minimum wage standards globally?', 'exp' => 'The ILO Minimum Wage Fixing Convention (No. 131, 0) establishes international standards for setting minimum wages, covering workers in all sectors globally.',
-             'options' => [['text'=>'UN Global Compact','correct'=>false],['text'=>'ILO Minimum Wage Fixing Convention (No. 131)','correct'=>true],['text'=>'ISO 9001 Standard','correct'=>false],['text'=>'OECD Labour Framework','correct'=>false]]],
-            ['q' => '360-degree feedback involves collecting feedback from:', 'exp' => '360-degree feedback gathers input from multiple sources including self-assessment, peers, direct reports, supervisors, and sometimes customers.',
-             'options' => [['text'=>'Only the direct manager','correct'=>false],['text'=>'The HR department only','correct'=>false],['text'=>'Multiple sources: self, peers, reports, managers, and customers','correct'=>true],['text'=>'External consultants only','correct'=>false]]],
-            ['q' => 'What does "attrition rate" measure in HR?', 'exp' => 'Attrition rate measures the percentage of employees who leave the organisation over a given period, both voluntarily and involuntarily.',
-             'options' => [['text'=>'Employee satisfaction','correct'=>false],['text'=>'The rate at which employees leave the organisation','correct'=>true],['text'=>'Productivity per employee','correct'=>false],['text'=>'Training completion rate','correct'=>false]]],
-            ['q' => 'A competency-based interview focuses on:', 'exp' => 'Competency-based (behavioral) interviews ask candidates to describe past behaviour using the STAR method to predict future job performance.',
-             'options' => [['text'=>'Technical knowledge tests','correct'=>false],['text'=>'Past behaviour to predict future performance (STAR method)','correct'=>true],['text'=>'Personality traits only','correct'=>false],['text'=>'Salary negotiation','correct'=>false]]],
-            ['q' => 'Employee engagement is best described as:', 'exp' => 'Employee engagement is the level of emotional commitment and involvement employees have towards their organisation and its goals.',
-             'options' => [['text'=>'Employee satisfaction with pay','correct'=>false],['text'=>'Number of working hours per week','correct'=>false],['text'=>'Emotional commitment and involvement in organisational goals','correct'=>true],['text'=>'Attendance and punctuality record','correct'=>false]]],
-            ['q' => 'Which HR model identifies human capital as a strategic asset tied to business outcomes?', 'exp' => 'The Strategic HRM (SHRM) model positions HR as a strategic partner, aligning human capital management with business goals for competitive advantage.',
-             'options' => [['text'=>'Traditional Administrative HR Model','correct'=>false],['text'=>'Strategic HRM Model','correct'=>true],['text'=>'Compliance-first HR Model','correct'=>false],['text'=>'Welfare-focused HR Model','correct'=>false]]],
-            ['q' => 'What is the purpose of a Job Analysis?', 'exp' => 'Job analysis is the process of studying a job to determine its duties, responsibilities, required skills, outcomes, and work environment.',
-             'options' => [['text'=>'To determine employee pay grades','correct'=>false],['text'=>'To study a job\'s duties, skills, and requirements','correct'=>true],['text'=>'To evaluate individual employee performance','correct'=>false],['text'=>'To design office layouts','correct'=>false]]],
-            ['q' => 'Constructive dismissal occurs when:', 'exp' => 'Constructive dismissal occurs when an employer makes working conditions so intolerable that the employee has no choice but to resign.',
-             'options' => [['text'=>'An employee is fired for misconduct','correct'=>false],['text'=>'A role is made redundant','correct'=>false],['text'=>'Employer makes conditions so intolerable the employee must resign','correct'=>true],['text'=>'An employee resigns voluntarily','correct'=>false]]],
+            ['q' => 'Most common cause of secondary amenorrhoea is:', 'exp' => 'Pregnancy must be excluded first.',
+             'options' => [['text'=>'Pregnancy','correct'=>true],['text'=>'Turner syndrome always','correct'=>false],['text'=>'Asherman always first','correct'=>false],['text'=>'Menopause in teens','correct'=>false]]],
+            ['q' => 'PCOS is associated with:', 'exp' => 'Hyperandrogenism, oligo-anovulation, polycystic ovaries, insulin resistance.',
+             'options' => [['text'=>'Insulin resistance and hyperandrogenism','correct'=>true],['text'=>'Hypothyroidism only always','correct'=>false],['text'=>'Low LH always','correct'=>false],['text'=>'Primary ovarian failure only','correct'=>false]]],
+            ['q' => 'Endometriosis classically causes:', 'exp' => 'Cyclical pelvic pain, dysmenorrhoea, dyspareunia, infertility.',
+             'options' => [['text'=>'Cyclical pelvic pain and dysmenorrhoea','correct'=>true],['text'=>'Painless amenorrhoea only','correct'=>false],['text'=>'Acute appendicitis always','correct'=>false],['text'=>'No fertility impact','correct'=>false]]],
+            ['q' => 'First-line for heavy menstrual bleeding without structural lesion:', 'exp' => 'Levonorgestrel IUD or combined hormonal contraception often first line.',
+             'options' => [['text'=>'Levonorgestrel IUD or COC','correct'=>true],['text'=>'Immediate hysterectomy','correct'=>false],['text'=>'Clomiphene','correct'=>false],['text'=>'No treatment needed','correct'=>false]]],
+            ['q' => 'Cervical screening detects:', 'exp' => 'Precancerous changes and HPV-related disease.',
+             'options' => [['text'=>'Cervical dysplasia and HPV-related disease','correct'=>true],['text'=>'Ovarian cysts directly always','correct'=>false],['text'=>'Endometrial cancer always','correct'=>false],['text'=>'Breast lumps','correct'=>false]]],
+            ['q' => 'Bacterial vaginosis is characterised by:', 'exp' => 'Thin grey discharge, fishy odour, clue cells, pH >4.5.',
+             'options' => [['text'=>'Thin discharge, fishy odour, clue cells','correct'=>true],['text'=>'Curd-like discharge always','correct'=>false],['text'=>'Green frothy discharge always','correct'=>false],['text'=>'No symptoms ever','correct'=>false]]],
+            ['q' => 'Ovarian torsion is a surgical emergency presenting with:', 'exp' => 'Acute severe unilateral pelvic pain, nausea; Doppler ultrasound aids diagnosis.',
+             'options' => [['text'=>'Acute severe unilateral pelvic pain','correct'=>true],['text'=>'Painless chronic bloating only','correct'=>false],['text'=>'Bilateral numbness','correct'=>false],['text'=>'Gradual painless amenorrhoea only','correct'=>false]]],
+            ['q' => 'Emergency contraception is most effective when taken:', 'exp' => 'As soon as possible after unprotected intercourse.',
+             'options' => [['text'=>'As soon as possible after intercourse','correct'=>true],['text'=>'Only if taken 2 weeks later','correct'=>false],['text'=>'Only during menses','correct'=>false],['text'=>'Never effective after 24 hours always','correct'=>false]]],
+            ['q' => 'Fibroids (leiomyomas) are:', 'exp' => 'Benign smooth muscle tumours of the uterus.',
+             'options' => [['text'=>'Benign uterine smooth muscle tumours','correct'=>true],['text'=>'Malignant always','correct'=>false],['text'=>'Ovarian cysts','correct'=>false],['text'=>'Cervical polyps only','correct'=>false]]],
+            ['q' => 'Menopause is defined as:', 'exp' => '12 months of amenorrhoea without other cause, typically reflecting ovarian failure.',
+             'options' => [['text'=>'12 months amenorrhoea without other cause','correct'=>true],['text'=>'Single hot flush','correct'=>false],['text'=>'Any irregular cycle in teens','correct'=>false],['text'=>'Age 30 automatically','correct'=>false]]],
         ];
     }
 }

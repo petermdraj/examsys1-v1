@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Services\QuestionBank\QuestionBankService;
@@ -16,8 +17,9 @@ class QuestionBankController extends Controller
 
         $paginated = Question::whereNull('quiz_id')
             ->where('lecturer_id', $creatorId)
-            ->with(['options', 'collection'])
+            ->with(['options', 'collection', 'category'])
             ->when($request->collection_id, fn ($q) => $q->where('collection_id', $request->collection_id))
+            ->when($request->category_id,   fn ($q) => $q->where('category_id', $request->category_id))
             ->when($request->difficulty,    fn ($q) => $q->where('difficulty', $request->difficulty))
             ->when($request->type,          fn ($q) => $q->where('type', $request->type))
             ->when($request->search,        fn ($q) => $q->where('content', 'like', '%' . $request->search . '%'))
@@ -32,6 +34,7 @@ class QuestionBankController extends Controller
                 'difficulty' => $q->difficulty,
                 'marks'      => (float) $q->marks,
                 'collection' => $q->collection ? ['id' => $q->collection->id, 'name' => $q->collection->name] : null,
+                'category'   => $q->category ? ['id' => $q->category->id, 'name' => $q->category->name] : null,
                 'options'    => $q->options->map(fn ($o) => [
                     'content'    => $o->content,
                     'is_correct' => $o->is_correct,
@@ -52,6 +55,7 @@ class QuestionBankController extends Controller
             'quiz_id'       => 'required|uuid|exists:quizzes,id',
             'count'         => 'required|integer|min:1|max:100',
             'collection_id' => 'nullable|uuid|exists:question_collections,id',
+            'category_id'   => 'nullable|uuid|exists:categories,id',
             'difficulty'    => 'nullable|in:easy,medium,hard',
             'type'          => 'nullable|in:mcq_single,mcq_multiple,fill_blank,true_false,short_answer',
         ]);
@@ -67,6 +71,7 @@ class QuestionBankController extends Controller
             $validated['collection_id'] ?? null,
             $validated['difficulty'] ?? null,
             $validated['type'] ?? null,
+            $validated['category_id'] ?? null,
         );
 
         return response()->json([

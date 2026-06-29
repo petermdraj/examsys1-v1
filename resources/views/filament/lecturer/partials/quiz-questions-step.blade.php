@@ -7,11 +7,12 @@
     // Bank collections for filter dropdown
     $bankCollections = \App\Models\QuestionCollection::where('lecturer_id', auth()->id())
         ->orderBy('name')->get(['id','name']);
+    $bankCategories = \App\Models\Category::active()->orderBy('name')->get(['id','name']);
 
     // Load all bank questions server-side — no AJAX needed
     $bankQuestionsRaw = \App\Models\Question::whereNull('quiz_id')
         ->where('lecturer_id', auth()->id())
-        ->with(['options', 'collection'])
+        ->with(['options', 'collection', 'category'])
         ->orderBy('created_at', 'desc')
         ->get()
         ->map(fn($q) => [
@@ -21,6 +22,7 @@
             'difficulty' => $q->difficulty ?? 'easy',
             'marks'      => (float) $q->marks,
             'collection' => $q->collection ? ['id' => $q->collection->id, 'name' => $q->collection->name] : null,
+            'category'   => $q->category ? ['id' => $q->category->id, 'name' => $q->category->name] : null,
             'options'    => $q->options->map(fn($o) => [
                 'content'    => $o->content,
                 'is_correct' => (bool) $o->is_correct,
@@ -259,9 +261,9 @@
 
             {{-- Filters strip --}}
             <div class="bg-gray-50 border-b border-gray-100" style="padding:10px 12px 8px;">
-                {{-- 3 dropdowns --}}
-                <div class="flex flex-row gap-2 mb-2">
-                    <div style="flex:1;position:relative;">
+                {{-- Filter dropdowns --}}
+                <div class="flex flex-row flex-wrap gap-2 mb-2">
+                    <div style="flex:1;min-width:120px;position:relative;">
                         <select x-model="bankFilter.type"
                             style="width:100%;border-radius:8px;border:1.5px solid #E5E7EB;background:#fff;color:#374151;font-size:11.5px;font-weight:500;padding:6px 24px 6px 9px;appearance:none;-webkit-appearance:none;-moz-appearance:none;outline:none;cursor:pointer;box-sizing:border-box;"
                             :style="bankFilter.type ? 'border-color:#818CF8;color:#4338CA;background:#EEF2FF;' : ''">
@@ -274,7 +276,7 @@
                         </select>
                         <svg style="position:absolute;right:7px;top:50%;transform:translateY(-50%);pointer-events:none;" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
                     </div>
-                    <div style="flex:1;position:relative;">
+                    <div style="flex:1;min-width:120px;position:relative;">
                         <select x-model="bankFilter.difficulty"
                             style="width:100%;border-radius:8px;border:1.5px solid #E5E7EB;background:#fff;color:#374151;font-size:11.5px;font-weight:500;padding:6px 24px 6px 9px;appearance:none;-webkit-appearance:none;-moz-appearance:none;outline:none;cursor:pointer;box-sizing:border-box;"
                             :style="bankFilter.difficulty ? 'border-color:#818CF8;color:#4338CA;background:#EEF2FF;' : ''">
@@ -285,7 +287,18 @@
                         </select>
                         <svg style="position:absolute;right:7px;top:50%;transform:translateY(-50%);pointer-events:none;" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
                     </div>
-                    <div style="flex:1;position:relative;">
+                    <div style="flex:1;min-width:120px;position:relative;">
+                        <select x-model="bankFilter.category_id"
+                            style="width:100%;border-radius:8px;border:1.5px solid #E5E7EB;background:#fff;color:#374151;font-size:11.5px;font-weight:500;padding:6px 24px 6px 9px;appearance:none;-webkit-appearance:none;-moz-appearance:none;outline:none;cursor:pointer;box-sizing:border-box;"
+                            :style="bankFilter.category_id ? 'border-color:#818CF8;color:#4338CA;background:#EEF2FF;' : ''">
+                            <option value="">{{ __('lecturer.qbank_filter_all_subjects') }}</option>
+                            @foreach($bankCategories as $cat)
+                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                            @endforeach
+                        </select>
+                        <svg style="position:absolute;right:7px;top:50%;transform:translateY(-50%);pointer-events:none;" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                    <div style="flex:1;min-width:120px;position:relative;">
                         <select x-model="bankFilter.collection_id"
                             style="width:100%;border-radius:8px;border:1.5px solid #E5E7EB;background:#fff;color:#374151;font-size:11.5px;font-weight:500;padding:6px 24px 6px 9px;appearance:none;-webkit-appearance:none;-moz-appearance:none;outline:none;cursor:pointer;box-sizing:border-box;"
                             :style="bankFilter.collection_id ? 'border-color:#818CF8;color:#4338CA;background:#EEF2FF;' : ''">
@@ -311,8 +324,8 @@
                             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
                         </button>
                     </div>
-                    <button x-show="bankFilter.type||bankFilter.difficulty||bankFilter.collection_id||bankFilter.search"
-                        @click="bankFilter={type:'',difficulty:'',collection_id:'',search:''}" type="button"
+                    <button x-show="bankFilter.type||bankFilter.difficulty||bankFilter.category_id||bankFilter.collection_id||bankFilter.search"
+                        @click="bankFilter={type:'',difficulty:'',category_id:'',collection_id:'',search:''}" type="button"
                         class="flex-shrink-0 rounded-lg border border-indigo-200 bg-indigo-50 font-semibold text-indigo-600 cursor-pointer whitespace-nowrap"
                         style="font-size:11px;padding:6px 10px;">× Clear</button>
                 </div>
@@ -738,7 +751,7 @@ function quizQuestionsManager(wire) {
         bankImporting: false,
         bankSelected:  [],
         previewId:     null,
-        bankFilter:    { type: '', difficulty: '', collection_id: '', search: '' },
+        bankFilter:    { type: '', difficulty: '', category_id: '', collection_id: '', search: '' },
 
         /* Modal */
         modalOpen:    false,
@@ -775,6 +788,7 @@ function quizQuestionsManager(wire) {
                 if (addedIds.has(bq.id) || addedSourceIds.has(bq.id)) return false;
                 if (this.bankFilter.type && bq.type !== this.bankFilter.type) return false;
                 if (this.bankFilter.difficulty && bq.difficulty !== this.bankFilter.difficulty) return false;
+                if (this.bankFilter.category_id && (!bq.category || bq.category.id !== this.bankFilter.category_id)) return false;
                 if (this.bankFilter.collection_id && (!bq.collection || bq.collection.id !== this.bankFilter.collection_id)) return false;
                 if (this.bankFilter.search) {
                     const s = this.bankFilter.search.toLowerCase();

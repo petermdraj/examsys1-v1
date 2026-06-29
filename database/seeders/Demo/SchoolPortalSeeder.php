@@ -18,11 +18,11 @@ class SchoolPortalSeeder extends Seeder
         // ── Categories ────────────────────────────────────────────────────
         $cats = [];
         foreach ([
-            ['name' => 'Mathematics',        'icon' => '📐', 'color' => '#7c3aed'],
-            ['name' => 'Science',            'icon' => '🔬', 'color' => '#0891b2'],
-            ['name' => 'English Language',   'icon' => '📖', 'color' => '#16a34a'],
-            ['name' => 'Social Studies',     'icon' => '🌍', 'color' => '#b45309'],
-            ['name' => 'Computer Science',   'icon' => '💻', 'color' => '#dc2626'],
+            ['name' => 'Basic Sciences',       'icon' => '🫀', 'color' => '#7c3aed'],
+            ['name' => 'Paraclinical Sciences','icon' => '🔬', 'color' => '#0891b2'],
+            ['name' => 'Clinical Sciences',    'icon' => '🩺', 'color' => '#16a34a'],
+            ['name' => 'Surgery & Emergency',    'icon' => '⚕️', 'color' => '#b45309'],
+            ['name' => 'OB/Gyn & Pediatrics',    'icon' => '👶', 'color' => '#dc2626'],
         ] as $c) {
             $slug = Str::slug($c['name']) . '-school';
             $cats[$c['name']] = Category::firstOrCreate(
@@ -34,11 +34,11 @@ class SchoolPortalSeeder extends Seeder
         // Sub-categories
         $subs = [];
         $subDefs = [
-            'Mathematics'      => ['Algebra', 'Geometry', 'Arithmetic', 'Statistics'],
-            'Science'          => ['Physics', 'Chemistry', 'Biology', 'Environmental Science'],
-            'English Language' => ['Grammar', 'Reading Comprehension', 'Vocabulary', 'Writing Skills'],
-            'Social Studies'   => ['World History', 'Geography', 'Civics', 'Economics'],
-            'Computer Science' => ['Programming Basics', 'Hardware & OS', 'Internet & Networking', 'MS Office'],
+            'Basic Sciences'        => ['Anatomy', 'Physiology', 'Biochemistry', 'Histology'],
+            'Paraclinical Sciences' => ['Pathology', 'Pharmacology', 'Microbiology', 'Forensic Medicine'],
+            'Clinical Sciences'     => ['Medicine', 'Surgery', 'Community Medicine', 'Radiology'],
+            'Surgery & Emergency'   => ['General Surgery', 'Orthopaedics', 'Emergency Medicine', 'Anaesthesia'],
+            'OB/Gyn & Pediatrics'   => ['Obstetrics', 'Gynecology', 'Pediatrics', 'Neonatology'],
         ];
         foreach ($subDefs as $parentName => $children) {
             foreach ($children as $child) {
@@ -52,26 +52,26 @@ class SchoolPortalSeeder extends Seeder
 
         // ── Lecturers ─────────────────────────────────────────────────────
         // ── Creators (Teachers) ───────────────────────────────────────────
-        $mathTeacher = User::firstOrCreate(
-            ['email' => 'david.math@school.demo'],
-            ['name' => 'Mr. David Chen', 'password' => Hash::make('password'), 'role' => 'lecturer',
+        $anatomyTeacher = User::firstOrCreate(
+            ['email' => 'david.anatomy@school.demo'],
+            ['name' => 'Dr. David Chen', 'password' => Hash::make('password'), 'role' => 'lecturer',
              'is_active' => true, 'ai_credits_free_remaining' => 10, 'email_verified_at' => now()]
         );
-        $mathTeacher->assignRole('lecturer');
+        $anatomyTeacher->assignRole('lecturer');
 
         $scienceTeacher = User::firstOrCreate(
-            ['email' => 'amara.science@school.demo'],
-            ['name' => 'Ms. Amara Osei', 'password' => Hash::make('password'), 'role' => 'lecturer',
+            ['email' => 'amara.pathology@school.demo'],
+            ['name' => 'Dr. Amara Osei', 'password' => Hash::make('password'), 'role' => 'lecturer',
              'is_active' => true, 'ai_credits_free_remaining' => 10, 'email_verified_at' => now()]
         );
         $scienceTeacher->assignRole('lecturer');
 
-        $engTeacher = User::firstOrCreate(
-            ['email' => 'sarah.english@school.demo'],
-            ['name' => 'Mrs. Sarah Mitchell', 'password' => Hash::make('password'), 'role' => 'lecturer',
+        $medTeacher = User::firstOrCreate(
+            ['email' => 'sarah.medicine@school.demo'],
+            ['name' => 'Dr. Sarah Mitchell', 'password' => Hash::make('password'), 'role' => 'lecturer',
              'is_active' => true, 'ai_credits_free_remaining' => 10, 'email_verified_at' => now()]
         );
-        $engTeacher->assignRole('lecturer');
+        $medTeacher->assignRole('lecturer');
 
         // ── Students ─────────────────────────────────────────
         foreach ([
@@ -92,30 +92,29 @@ class SchoolPortalSeeder extends Seeder
 
         // ── Quizzes ───────────────────────────────────────────────────────
         // Free tasters — entry points to the platform
-        $this->createQuiz($mathTeacher, $subs['Algebra'], 'Grade 9 Algebra — Linear Equations',
-            'Test your understanding of linear equations in one and two variables, including word problems and graphical solutions.',
-            $this->algebraQuestions(), 'mcq_single', false, 0);
+        $this->createQuiz($anatomyTeacher, $subs['Anatomy'], 'Upper Limb Anatomy — Bones & Muscles',
+            'Test your knowledge of the clavicle, scapula, humerus, and major muscles of the upper limb including innervation.',
+            $this->anatomyQuestions(), 'mcq_single', false, 0);
 
-        $this->createQuiz($scienceTeacher, $subs['Physics'], 'Physics — Motion, Force & Energy',
-            'Covers Newton\'s laws of motion, types of forces, kinetic and potential energy, and work-energy theorem for Grade 9.',
-            $this->physicsQuestions(), 'mcq_single', false, 0);
+        $this->createQuiz($anatomyTeacher, $subs['Physiology'], 'Cardiovascular Physiology — Pressure & Flow',
+            'Covers cardiac output, blood pressure regulation, Starling forces, and the renin-angiotensin system for Year 1 MBBS.',
+            $this->physiologyQuestions(), 'mcq_single', false, 0);
 
-        // Paid school quizzes
-        $this->createQuiz($mathTeacher, $subs['Geometry'], 'Geometry Fundamentals — Lines, Angles & Triangles',
-            'Covers properties of lines and angles, types of triangles, congruence, similarity, and the Pythagorean theorem.',
-            $this->geometryQuestions(), 'mcq_single', false, 0);
+        $this->createQuiz($anatomyTeacher, $subs['Biochemistry'], 'Amino Acids, Proteins & Enzymes',
+            'Understand essential amino acids, protein structure, enzyme kinetics, and key metabolic pathways.',
+            $this->biochemistryQuestions(), 'mcq_single', false, 0);
 
-        $this->createQuiz($scienceTeacher, $subs['Biology'], 'Human Body Systems — Grade 8',
-            'Explore the major systems of the human body including the digestive, respiratory, circulatory, and nervous systems.',
-            $this->biologyQuestions(), 'mcq_single', false, 0);
+        $this->createQuiz($scienceTeacher, $subs['Pathology'], 'General Pathology — Cell Injury & Inflammation',
+            'Explore reversible and irreversible cell injury, acute and chronic inflammation, and wound healing.',
+            $this->pathologyQuestions(), 'mcq_single', false, 0);
 
-        $this->createQuiz($scienceTeacher, $subs['Chemistry'], 'Elements, Compounds & Mixtures',
-            'Understand the difference between elements, compounds, and mixtures. Covers the periodic table, chemical bonding, and reactions.',
-            $this->chemistryQuestions(), 'mcq_single', false, 0);
+        $this->createQuiz($scienceTeacher, $subs['Pharmacology'], 'Antimicrobial Pharmacology',
+            'Covers mechanisms of antibiotics, resistance patterns, and clinical use of penicillins, cephalosporins, and aminoglycosides.',
+            $this->pharmacologyQuestions(), 'mcq_single', false, 0);
 
-        $this->createQuiz($engTeacher, $subs['Grammar'], 'English Grammar — Tenses & Parts of Speech',
-            'Practice identifying and using the correct tenses and parts of speech in sentences. Ideal for Grade 7–9 students.',
-            $this->grammarQuestions(), 'mcq_single', false, 0);
+        $this->createQuiz($medTeacher, $subs['Medicine'], 'Internal Medicine — History & Examination',
+            'Practice core clinical skills: taking a medical history, systems review, and cardiovascular examination findings.',
+            $this->medicineQuestions(), 'mcq_single', false, 0);
 
         // ── Theme: Ocean Pro — blue + amber, Sora + DM Sans ─────────────
         $settings = app(\App\Settings\PlatformSettings::class);
@@ -172,159 +171,159 @@ class SchoolPortalSeeder extends Seeder
         }
     }
 
-    private function algebraQuestions(): array
+    private function anatomyQuestions(): array
     {
         return [
-            ['q' => 'Solve for x: 3x + 7 = 22', 'exp' => '3x = 22 - 7 = 15, so x = 15/3 = 5.',
-             'options' => [['text'=>'x = 4','correct'=>false],['text'=>'x = 5','correct'=>true],['text'=>'x = 6','correct'=>false],['text'=>'x = 7','correct'=>false]]],
-            ['q' => 'Which of the following is a linear equation in two variables?', 'exp' => 'A linear equation in two variables is of the form ax + by + c = 0. The equation 2x + 3y = 6 is linear in two variables x and y.',
-             'options' => [['text'=>'x² + y = 5','correct'=>false],['text'=>'2x + 3y = 6','correct'=>true],['text'=>'xy = 4','correct'=>false],['text'=>'x² + y² = 9','correct'=>false]]],
-            ['q' => 'If 5x – 2(3 – x) = 4, what is x?', 'exp' => '5x – 6 + 2x = 4 → 7x = 10 → x = 10/7.',
-             'options' => [['text'=>'x = 1','correct'=>false],['text'=>'x = 10/7','correct'=>true],['text'=>'x = 2','correct'=>false],['text'=>'x = 7/10','correct'=>false]]],
-            ['q' => 'The graph of y = 3x + 2 passes through which point?', 'exp' => 'When x=0, y=2. So the y-intercept is (0,2). Check: y=3(0)+2=2. The graph passes through (0,2).',
-             'options' => [['text'=>'(0,3)','correct'=>false],['text'=>'(0,2)','correct'=>true],['text'=>'(2,0)','correct'=>false],['text'=>'(1,3)','correct'=>false]]],
-            ['q' => 'Factorise: x² + 5x + 6', 'exp' => 'We need two numbers that multiply to 6 and add to 5: those are 2 and 3. So x²+5x+6 = (x+2)(x+3).',
-             'options' => [['text'=>'(x+1)(x+6)','correct'=>false],['text'=>'(x+2)(x+3)','correct'=>true],['text'=>'(x–2)(x–3)','correct'=>false],['text'=>'(x+4)(x+2)','correct'=>false]]],
-            ['q' => 'The value of the expression 2a + 3b when a = 3 and b = 2 is:', 'exp' => '2(3) + 3(2) = 6 + 6 = 12.',
-             'options' => [['text'=>'10','correct'=>false],['text'=>'12','correct'=>true],['text'=>'14','correct'=>false],['text'=>'16','correct'=>false]]],
-            ['q' => 'Which property states that a(b + c) = ab + ac?', 'exp' => 'The Distributive Property of multiplication over addition states that a(b+c) = ab + ac.',
-             'options' => [['text'=>'Commutative Property','correct'=>false],['text'=>'Associative Property','correct'=>false],['text'=>'Distributive Property','correct'=>true],['text'=>'Identity Property','correct'=>false]]],
-            ['q' => 'If y = 2x and x + y = 12, find x.', 'exp' => 'Substituting y = 2x: x + 2x = 12 → 3x = 12 → x = 4.',
-             'options' => [['text'=>'3','correct'=>false],['text'=>'4','correct'=>true],['text'=>'6','correct'=>false],['text'=>'8','correct'=>false]]],
-            ['q' => 'Simplify: (x + 3)² = ?', 'exp' => '(x+3)² = x² + 2(x)(3) + 3² = x² + 6x + 9.',
-             'options' => [['text'=>'x² + 9','correct'=>false],['text'=>'x² + 6x + 9','correct'=>true],['text'=>'x² + 3x + 9','correct'=>false],['text'=>'x² + 6x + 6','correct'=>false]]],
-            ['q' => 'The slope of the line y = –4x + 7 is:', 'exp' => 'In slope-intercept form y = mx + c, m is the slope. For y = –4x + 7, slope m = –4.',
-             'options' => [['text'=>'7','correct'=>false],['text'=>'4','correct'=>false],['text'=>'–4','correct'=>true],['text'=>'–7','correct'=>false]]],
+            ['q' => 'Which bone forms the anterior part of the shoulder girdle?', 'exp' => 'The clavicle (collarbone) connects the sternum to the scapula and forms the anterior shoulder girdle.',
+             'options' => [['text'=>'Scapula','correct'=>false],['text'=>'Clavicle','correct'=>true],['text'=>'Humerus','correct'=>false],['text'=>'Radius','correct'=>false]]],
+            ['q' => 'The axillary nerve innervates which muscle?', 'exp' => 'The axillary nerve (C5-C6) supplies the deltoid and teres minor muscles.',
+             'options' => [['text'=>'Biceps brachii','correct'=>false],['text'=>'Deltoid','correct'=>true],['text'=>'Triceps','correct'=>false],['text'=>'Brachialis','correct'=>false]]],
+            ['q' => 'The median nerve passes through the:', 'exp' => 'The median nerve travels through the carpal tunnel at the wrist.',
+             'options' => [['text'=>'Guyon canal','correct'=>false],['text'=>'Carpal tunnel','correct'=>true],['text'=>'Cubital tunnel','correct'=>false],['text'=>'Anatomical snuffbox','correct'=>false]]],
+            ['q' => 'Which artery is palpated at the wrist for pulse?', 'exp' => 'The radial artery is commonly used to assess peripheral pulse at the wrist.',
+             'options' => [['text'=>'Ulnar artery','correct'=>false],['text'=>'Radial artery','correct'=>true],['text'=>'Brachial artery','correct'=>false],['text'=>'Axillary artery','correct'=>false]]],
+            ['q' => 'The rotator cuff consists of how many muscles?', 'exp' => 'The rotator cuff comprises supraspinatus, infraspinatus, teres minor, and subscapularis.',
+             'options' => [['text'=>'Two','correct'=>false],['text'=>'Four','correct'=>true],['text'=>'Six','correct'=>false],['text'=>'Eight','correct'=>false]]],
+            ['q' => 'Fracture of the scaphoid bone is clinically important because of risk of:', 'exp' => 'Scaphoid fractures may disrupt blood supply via the dorsal carpal branch, leading to avascular necrosis.',
+             'options' => [['text'=>'Compartment syndrome only','correct'=>false],['text'=>'Avascular necrosis','correct'=>true],['text'=>'Fat embolism only','correct'=>false],['text'=>'No complications','correct'=>false]]],
+            ['q' => 'The brachial plexus roots are derived from spinal segments:', 'exp' => 'The brachial plexus is formed by ventral rami of C5-T1.',
+             'options' => [['text'=>'C3-C6','correct'=>false],['text'=>'C5-T1','correct'=>true],['text'=>'C7-T2','correct'=>false],['text'=>'T1-T4','correct'=>false]]],
+            ['q' => 'Which vein is commonly used for venepuncture in the antecubital fossa?', 'exp' => 'The median cubital vein crosses the antecubital fossa and is a common site for blood draws.',
+             'options' => [['text'=>'Basilic vein only','correct'=>false],['text'=>'Median cubital vein','correct'=>true],['text'=>'Cephalic vein only in foot','correct'=>false],['text'=>'Great saphenous vein','correct'=>false]]],
+            ['q' => 'The olecranon process is part of which bone?', 'exp' => 'The olecranon is the proximal end of the ulna forming the point of the elbow.',
+             'options' => [['text'=>'Radius','correct'=>false],['text'=>'Ulna','correct'=>true],['text'=>'Humerus','correct'=>false],['text'=>'Scaphoid','correct'=>false]]],
+            ['q' => 'Erb-Duchenne palsy typically involves which nerve roots?', 'exp' => 'Erb palsy (waiter tip position) involves C5-C6 injury of the upper trunk.',
+             'options' => [['text'=>'C8-T1','correct'=>false],['text'=>'C5-C6','correct'=>true],['text'=>'T1-T2','correct'=>false],['text'=>'C3-C4','correct'=>false]]],
         ];
     }
 
-    private function geometryQuestions(): array
+    private function physiologyQuestions(): array
     {
         return [
-            ['q' => 'The sum of all interior angles of a triangle is:', 'exp' => 'The sum of all three interior angles of any triangle is always 180°.',
-             'options' => [['text'=>'90°','correct'=>false],['text'=>'180°','correct'=>true],['text'=>'270°','correct'=>false],['text'=>'360°','correct'=>false]]],
-            ['q' => 'Two lines that never intersect and are always the same distance apart are called:', 'exp' => 'Parallel lines are lines in the same plane that never intersect and remain equidistant from each other.',
-             'options' => [['text'=>'Perpendicular lines','correct'=>false],['text'=>'Parallel lines','correct'=>true],['text'=>'Concurrent lines','correct'=>false],['text'=>'Transversal lines','correct'=>false]]],
-            ['q' => 'If two sides of a triangle are 5 cm and 12 cm, and the angle between them is 90°, find the hypotenuse.', 'exp' => 'By Pythagoras theorem: h² = 5² + 12² = 25 + 144 = 169, so h = 13 cm.',
-             'options' => [['text'=>'10 cm','correct'=>false],['text'=>'13 cm','correct'=>true],['text'=>'15 cm','correct'=>false],['text'=>'17 cm','correct'=>false]]],
-            ['q' => 'An angle greater than 90° but less than 180° is called:', 'exp' => 'An obtuse angle is an angle greater than 90° but less than 180°.',
-             'options' => [['text'=>'Acute angle','correct'=>false],['text'=>'Right angle','correct'=>false],['text'=>'Obtuse angle','correct'=>true],['text'=>'Reflex angle','correct'=>false]]],
-            ['q' => 'The perimeter of a rectangle with length 12 cm and width 7 cm is:', 'exp' => 'Perimeter of rectangle = 2(l+w) = 2(12+7) = 2×19 = 38 cm.',
-             'options' => [['text'=>'19 cm','correct'=>false],['text'=>'84 cm','correct'=>false],['text'=>'38 cm','correct'=>true],['text'=>'26 cm','correct'=>false]]],
-            ['q' => 'Vertically opposite angles are always:', 'exp' => 'Vertically opposite angles (formed when two lines intersect) are always equal in measure.',
-             'options' => [['text'=>'Supplementary','correct'=>false],['text'=>'Complementary','correct'=>false],['text'=>'Equal','correct'=>true],['text'=>'Unequal','correct'=>false]]],
-            ['q' => 'A polygon with 8 sides is called:', 'exp' => 'An octagon is a polygon with eight sides and eight angles.',
-             'options' => [['text'=>'Hexagon','correct'=>false],['text'=>'Heptagon','correct'=>false],['text'=>'Octagon','correct'=>true],['text'=>'Nonagon','correct'=>false]]],
-            ['q' => 'In an equilateral triangle, each interior angle measures:', 'exp' => 'An equilateral triangle has all sides equal and all angles equal. Since total = 180°, each angle = 180°/3 = 60°.',
-             'options' => [['text'=>'45°','correct'=>false],['text'=>'60°','correct'=>true],['text'=>'90°','correct'=>false],['text'=>'120°','correct'=>false]]],
-            ['q' => 'The area of a triangle with base 10 cm and height 6 cm is:', 'exp' => 'Area of triangle = ½ × base × height = ½ × 10 × 6 = 30 cm².',
-             'options' => [['text'=>'60 cm²','correct'=>false],['text'=>'30 cm²','correct'=>true],['text'=>'16 cm²','correct'=>false],['text'=>'20 cm²','correct'=>false]]],
-            ['q' => 'Corresponding angles formed by a transversal cutting two parallel lines are:', 'exp' => 'When a transversal cuts two parallel lines, corresponding angles are in the same position at each intersection and are equal.',
-             'options' => [['text'=>'Supplementary','correct'=>false],['text'=>'Unequal','correct'=>false],['text'=>'Equal','correct'=>true],['text'=>'Complementary','correct'=>false]]],
+            ['q' => 'Cardiac output is calculated as:', 'exp' => 'CO = stroke volume × heart rate (L/min).',
+             'options' => [['text'=>'Blood pressure × heart rate','correct'=>false],['text'=>'Stroke volume × heart rate','correct'=>true],['text'=>'Preload × afterload','correct'=>false],['text'=>'MAP × resistance','correct'=>false]]],
+            ['q' => 'The Frank-Starling law states that:', 'exp' => 'Increased end-diastolic volume increases stroke volume up to a physiological limit.',
+             'options' => [['text'=>'Heart rate determines contractility only','correct'=>false],['text'=>'Increased preload increases stroke volume','correct'=>true],['text'=>'Afterload has no effect on output','correct'=>false],['text'=>'CO is independent of venous return','correct'=>false]]],
+            ['q' => 'Which receptor mediates increased heart rate from sympathetic stimulation?', 'exp' => 'Beta-1 adrenergic receptors in the SA node increase pacemaker activity.',
+             'options' => [['text'=>'Alpha-1','correct'=>false],['text'=>'Beta-1','correct'=>true],['text'=>'M2 muscarinic','correct'=>false],['text'=>'D2 dopamine','correct'=>false]]],
+            ['q' => 'Mean arterial pressure (MAP) approximates:', 'exp' => 'MAP ≈ DBP + 1/3(SBP − DBP).',
+             'options' => [['text'=>'SBP + DBP','correct'=>false],['text'=>'DBP + 1/3 pulse pressure','correct'=>true],['text'=>'SBP − DBP','correct'=>false],['text'=>'SBP/DBP ratio','correct'=>false]]],
+            ['q' => 'The baroreceptor reflex helps maintain:', 'exp' => 'Carotid and aortic baroreceptors detect pressure changes and adjust HR and vascular tone.',
+             'options' => [['text'=>'Blood glucose','correct'=>false],['text'=>'Arterial blood pressure','correct'=>true],['text'=>'Body temperature only','correct'=>false],['text'=>'Plasma osmolality','correct'=>false]]],
+            ['q' => 'During exercise, skeletal muscle blood flow increases primarily due to:', 'exp' => 'Local metabolites cause vasodilation (functional hyperaemia) in active muscle.',
+             'options' => [['text'=>'Increased sympathetic vasoconstriction everywhere','correct'=>false],['text'=>'Local metabolic vasodilation','correct'=>true],['text'=>'Decreased cardiac output','correct'=>false],['text'=>'Increased blood viscosity','correct'=>false]]],
+            ['q' => 'The P wave on ECG represents:', 'exp' => 'P wave = atrial depolarisation.',
+             'options' => [['text'=>'Ventricular depolarisation','correct'=>false],['text'=>'Atrial depolarisation','correct'=>true],['text'=>'Ventricular repolarisation','correct'=>false],['text'=>'AV node delay only','correct'=>false]]],
+            ['q' => 'Renin is released from the kidney in response to:', 'exp' => 'Decreased renal perfusion, sympathetic stimulation, and decreased NaCl at macula densa trigger renin.',
+             'options' => [['text'=>'Increased blood volume only','correct'=>false],['text'=>'Decreased renal perfusion pressure','correct'=>true],['text'=>'Hypernatraemia only','correct'=>false],['text'=>'High atrial stretch only','correct'=>false]]],
+            ['q' => 'Systemic vascular resistance is primarily determined by:', 'exp' => 'Arteriolar radius strongly influences resistance (Poiseuille: R ∝ 1/r⁴).',
+             'options' => [['text'=>'Venous capacitance only','correct'=>false],['text'=>'Arteriolar radius','correct'=>true],['text'=>'Blood glucose','correct'=>false],['text'=>'Plasma protein only','correct'=>false]]],
+            ['q' => 'The QT interval on ECG corresponds to:', 'exp' => 'QT interval covers ventricular depolarisation and repolarisation.',
+             'options' => [['text'=>'Atrial systole only','correct'=>false],['text'=>'Ventricular depolarisation and repolarisation','correct'=>true],['text'=>'AV conduction only','correct'=>false],['text'=>'Diastole only','correct'=>false]]],
         ];
     }
 
-    private function biologyQuestions(): array
+    private function biochemistryQuestions(): array
     {
         return [
-            ['q' => 'Which organ pumps blood to all parts of the body?', 'exp' => 'The heart is a muscular organ that pumps blood throughout the body via the circulatory system.',
-             'options' => [['text'=>'Lung','correct'=>false],['text'=>'Kidney','correct'=>false],['text'=>'Heart','correct'=>true],['text'=>'Liver','correct'=>false]]],
-            ['q' => 'The process by which the body breaks down food into nutrients is called:', 'exp' => 'Digestion is the process by which the digestive system breaks down food into simpler nutrients that can be absorbed into the bloodstream.',
-             'options' => [['text'=>'Respiration','correct'=>false],['text'=>'Digestion','correct'=>true],['text'=>'Excretion','correct'=>false],['text'=>'Absorption','correct'=>false]]],
-            ['q' => 'Which part of the cell contains DNA?', 'exp' => 'DNA (deoxyribonucleic acid) is found in the nucleus of eukaryotic cells, stored in the form of chromosomes.',
-             'options' => [['text'=>'Cell membrane','correct'=>false],['text'=>'Cytoplasm','correct'=>false],['text'=>'Nucleus','correct'=>true],['text'=>'Mitochondria','correct'=>false]]],
-            ['q' => 'Oxygen is carried in the blood by:', 'exp' => 'Haemoglobin, a protein in red blood cells, binds to oxygen in the lungs and carries it to tissues throughout the body.',
-             'options' => [['text'=>'White blood cells','correct'=>false],['text'=>'Haemoglobin in red blood cells','correct'=>true],['text'=>'Platelets','correct'=>false],['text'=>'Plasma','correct'=>false]]],
-            ['q' => 'The smallest unit of life is:', 'exp' => 'The cell is the basic structural, functional, and biological unit of all living organisms. It is the smallest unit of life.',
-             'options' => [['text'=>'Tissue','correct'=>false],['text'=>'Organ','correct'=>false],['text'=>'Cell','correct'=>true],['text'=>'Molecule','correct'=>false]]],
-            ['q' => 'Which gas do we inhale during breathing?', 'exp' => 'We inhale oxygen (O₂) during breathing. The oxygen is used in cellular respiration to produce energy.',
-             'options' => [['text'=>'Carbon dioxide','correct'=>false],['text'=>'Nitrogen','correct'=>false],['text'=>'Oxygen','correct'=>true],['text'=>'Hydrogen','correct'=>false]]],
-            ['q' => 'The human skeleton has how many bones in an adult?', 'exp' => 'An adult human skeleton has 206 bones. Babies are born with about 270–300 bones, which fuse over time.',
-             'options' => [['text'=>'150','correct'=>false],['text'=>'206','correct'=>true],['text'=>'270','correct'=>false],['text'=>'300','correct'=>false]]],
-            ['q' => 'Which organ is responsible for filtering blood and producing urine?', 'exp' => 'The kidneys filter blood to remove waste products and excess water, producing urine as a by-product.',
-             'options' => [['text'=>'Liver','correct'=>false],['text'=>'Lungs','correct'=>false],['text'=>'Kidney','correct'=>true],['text'=>'Spleen','correct'=>false]]],
-            ['q' => 'What is the function of the nervous system?', 'exp' => 'The nervous system controls and coordinates all the activities of the body by transmitting signals between different parts of the body and the brain.',
-             'options' => [['text'=>'To pump blood','correct'=>false],['text'=>'To digest food','correct'=>false],['text'=>'To control and coordinate body activities','correct'=>true],['text'=>'To filter waste','correct'=>false]]],
-            ['q' => 'Photosynthesis is carried out by plants using:', 'exp' => 'Chlorophyll is the green pigment in plant cells that absorbs sunlight to drive photosynthesis, converting CO₂ and water into glucose and oxygen.',
-             'options' => [['text'=>'Haemoglobin','correct'=>false],['text'=>'Chlorophyll','correct'=>true],['text'=>'Melanin','correct'=>false],['text'=>'Keratin','correct'=>false]]],
+            ['q' => 'Which amino acid is essential in humans?', 'exp' => 'Essential amino acids cannot be synthesised and must be obtained from diet; lysine is essential.',
+             'options' => [['text'=>'Alanine','correct'=>false],['text'=>'Lysine','correct'=>true],['text'=>'Glutamine','correct'=>false],['text'=>'Glycine','correct'=>false]]],
+            ['q' => 'The primary structure of a protein refers to:', 'exp' => 'Primary structure is the linear sequence of amino acids.',
+             'options' => [['text'=>'Alpha helix arrangement','correct'=>false],['text'=>'Amino acid sequence','correct'=>true],['text'=>'Quaternary subunit assembly','correct'=>false],['text'=>'Disulfide bonds only','correct'=>false]]],
+            ['q' => 'Km in enzyme kinetics represents:', 'exp' => 'Km is the substrate concentration at half-maximal velocity, reflecting enzyme-substrate affinity.',
+             'options' => [['text'=>'Maximum reaction velocity','correct'=>false],['text'=>'Substrate concentration at half Vmax','correct'=>true],['text'=>'Inhibitor concentration','correct'=>false],['text'=>'Product inhibition constant only','correct'=>false]]],
+            ['q' => 'Glycolysis occurs in the:', 'exp' => 'Glycolysis takes place in the cytoplasm, producing pyruvate and ATP.',
+             'options' => [['text'=>'Mitochondrial matrix only','correct'=>false],['text'=>'Cytoplasm','correct'=>true],['text'=>'Nucleus','correct'=>false],['text'=>'Peroxisome only','correct'=>false]]],
+            ['q' => 'The rate-limiting enzyme of glycolysis is:', 'exp' => 'Phosphofructokinase-1 (PFK-1) is a key regulatory step in glycolysis.',
+             'options' => [['text'=>'Hexokinase only always','correct'=>false],['text'=>'Phosphofructokinase-1','correct'=>true],['text'=>'Pyruvate kinase only in fasting','correct'=>false],['text'=>'Aldolase','correct'=>false]]],
+            ['q' => 'Competitive inhibitors increase apparent Km because:', 'exp' => 'Competitive inhibitors compete for active site; higher substrate needed to reach Vmax/2.',
+             'options' => [['text'=>'They denature the enzyme','correct'=>false],['text'=>'They compete with substrate for the active site','correct'=>true],['text'=>'They bind irreversibly always','correct'=>false],['text'=>'They increase Vmax','correct'=>false]]],
+            ['q' => 'The citric acid cycle produces (per acetyl-CoA):', 'exp' => 'One turn yields 3 NADH, 1 FADH2, 1 GTP, and 2 CO2 per acetyl-CoA.',
+             'options' => [['text'=>'Only CO2','correct'=>false],['text'=>'NADH, FADH2, and GTP','correct'=>true],['text'=>'Only ATP directly in large amounts','correct'=>false],['text'=>'Lactate','correct'=>false]]],
+            ['q' => 'HbA1c reflects average blood glucose over approximately:', 'exp' => 'Glycated haemoglobin reflects glucose control over ~2–3 months.',
+             'options' => [['text'=>'1 week','correct'=>false],['text'=>'2–3 months','correct'=>true],['text'=>'24 hours','correct'=>false],['text'=>'1 year','correct'=>false]]],
+            ['q' => 'DNA replication is semiconservative meaning:', 'exp' => 'Each new double helix contains one original and one newly synthesised strand.',
+             'options' => [['text'=>'Both strands are entirely new','correct'=>false],['text'=>'Each daughter molecule has one old and one new strand','correct'=>true],['text'=>'Only one strand is copied','correct'=>false],['text'=>'RNA replaces DNA','correct'=>false]]],
+            ['q' => 'Urea cycle removes excess nitrogen primarily as:', 'exp' => 'The urea cycle converts ammonia to urea for renal excretion.',
+             'options' => [['text'=>'Uric acid','correct'=>false],['text'=>'Urea','correct'=>true],['text'=>'Creatinine','correct'=>false],['text'=>'Bilirubin','correct'=>false]]],
         ];
     }
 
-    private function chemistryQuestions(): array
+    private function pathologyQuestions(): array
     {
         return [
-            ['q' => 'Which of the following is a pure substance?', 'exp' => 'Distilled water (H₂O) is a pure substance (compound) with a definite chemical composition. Sea water and air are mixtures.',
-             'options' => [['text'=>'Sea water','correct'=>false],['text'=>'Air','correct'=>false],['text'=>'Distilled water','correct'=>true],['text'=>'Soil','correct'=>false]]],
-            ['q' => 'The number of protons in an atom is called its:', 'exp' => 'The atomic number of an element equals the number of protons in the nucleus of that atom.',
-             'options' => [['text'=>'Atomic mass','correct'=>false],['text'=>'Atomic number','correct'=>true],['text'=>'Mass number','correct'=>false],['text'=>'Valence','correct'=>false]]],
-            ['q' => 'Water is a compound because:', 'exp' => 'Water (H₂O) is a compound because it consists of two different elements (hydrogen and oxygen) chemically combined in a fixed ratio.',
-             'options' => [['text'=>'It is liquid','correct'=>false],['text'=>'It contains only one type of atom','correct'=>false],['text'=>'It is made of two elements combined chemically','correct'=>true],['text'=>'It can be separated by filtering','correct'=>false]]],
-            ['q' => 'Which method is used to separate a mixture of salt and water?', 'exp' => 'Evaporation is used to separate salt from water. When the water is evaporated, the salt remains behind.',
-             'options' => [['text'=>'Filtration','correct'=>false],['text'=>'Distillation','correct'=>false],['text'=>'Evaporation','correct'=>true],['text'=>'Magnetic separation','correct'=>false]]],
-            ['q' => 'The symbol for Gold in the periodic table is:', 'exp' => 'Gold\'s symbol is Au, derived from the Latin word "Aurum".',
-             'options' => [['text'=>'Go','correct'=>false],['text'=>'Gd','correct'=>false],['text'=>'Au','correct'=>true],['text'=>'Ag','correct'=>false]]],
-            ['q' => 'An atom of Carbon has 6 protons and 6 neutrons. Its mass number is:', 'exp' => 'Mass number = protons + neutrons = 6 + 6 = 12.',
-             'options' => [['text'=>'6','correct'=>false],['text'=>'12','correct'=>true],['text'=>'18','correct'=>false],['text'=>'24','correct'=>false]]],
-            ['q' => 'Which of the following is a chemical change?', 'exp' => 'Burning of paper (combustion) is a chemical change because new substances (ash, CO₂, water vapour) are formed and the change is irreversible.',
-             'options' => [['text'=>'Melting of ice','correct'=>false],['text'=>'Dissolving sugar in water','correct'=>false],['text'=>'Burning of paper','correct'=>true],['text'=>'Cutting of glass','correct'=>false]]],
-            ['q' => 'Which element has the chemical symbol Fe?', 'exp' => 'Fe is the chemical symbol for Iron, derived from the Latin name "Ferrum".',
-             'options' => [['text'=>'Fluorine','correct'=>false],['text'=>'Francium','correct'=>false],['text'=>'Iron','correct'=>true],['text'=>'Fermium','correct'=>false]]],
-            ['q' => 'The process of converting a liquid to vapour by heating is called:', 'exp' => 'Evaporation is the process by which liquid water (or any liquid) changes into water vapour (gas) when heated.',
-             'options' => [['text'=>'Condensation','correct'=>false],['text'=>'Melting','correct'=>false],['text'=>'Evaporation','correct'=>true],['text'=>'Freezing','correct'=>false]]],
-            ['q' => 'Hydrogen and oxygen combine to form water in the ratio:', 'exp' => 'Water (H₂O) is always composed of hydrogen and oxygen in the mass ratio 1:8, or the mole ratio 2:1.',
-             'options' => [['text'=>'1:1','correct'=>false],['text'=>'1:8','correct'=>true],['text'=>'2:3','correct'=>false],['text'=>'1:4','correct'=>false]]],
+            ['q' => 'Acute inflammation is characterised histologically by:', 'exp' => 'Neutrophils dominate the early inflammatory infiltrate.',
+             'options' => [['text'=>'Plasma cells only','correct'=>false],['text'=>'Neutrophils','correct'=>true],['text'=>'Fibrosis first','correct'=>false],['text'=>'Caseating granulomas always','correct'=>false]]],
+            ['q' => 'Reversible cell injury may show:', 'exp' => 'Cellular swelling and fatty change can be reversible if the insult is removed.',
+             'options' => [['text'=>'Karyolysis only','correct'=>false],['text'=>'Cellular swelling and fatty change','correct'=>true],['text'=>'Coagulative necrosis always','correct'=>false],['text'=>'Immediate apoptosis only','correct'=>false]]],
+            ['q' => 'Caseous necrosis is typical of:', 'exp' => 'TB granulomas show cheese-like (caseous) necrosis.',
+             'options' => [['text'=>'Myocardial infarction','correct'=>false],['text'=>'Tuberculosis','correct'=>true],['text'=>'Brain infarct','correct'=>false],['text'=>'Breast fat necrosis only','correct'=>false]]],
+            ['q' => 'Metaplasia is defined as:', 'exp' => 'Reversible change of one differentiated cell type to another, often due to chronic irritation.',
+             'options' => [['text'=>'Malignant transformation','correct'=>false],['text'=>'Reversible change from one cell type to another','correct'=>true],['text'=>'Decrease in cell size','correct'=>false],['text'=>'Increase in cell number only','correct'=>false]]],
+            ['q' => 'Granulation tissue contains:', 'exp' => 'Granulation tissue has new capillaries, fibroblasts, and inflammatory cells during healing.',
+             'options' => [['text'=>'Only keratin','correct'=>false],['text'=>'Capillaries, fibroblasts, and inflammatory cells','correct'=>true],['text'=>'Mature scar collagen only','correct'=>false],['text'=>'No vessels','correct'=>false]]],
+            ['q' => 'Dysplasia indicates:', 'exp' => 'Disordered growth with cytological atypia; may precede malignancy.',
+             'options' => [['text'=>'Normal adaptation','correct'=>false],['text'=>'Disordered pre-neoplastic cellular changes','correct'=>true],['text'=>'Benign hypertrophy only','correct'=>false],['text'=>'Complete healing','correct'=>false]]],
+            ['q' => 'Apoptosis differs from necrosis by:', 'exp' => 'Apoptosis is programmed, energy-dependent, and non-inflammatory.',
+             'options' => [['text'=>'Membrane rupture and inflammation','correct'=>false],['text'=>'Programmed cell death without inflammation','correct'=>true],['text'=>'Always pathogenic infection required','correct'=>false],['text'=>'Random DNA damage only','correct'=>false]]],
+            ['q' => 'An abscess is:', 'exp' => 'A localised collection of pus (neutrophils and debris) in a cavity.',
+             'options' => [['text'=>'Generalised vasculitis','correct'=>false],['text'=>'Localised collection of pus','correct'=>true],['text'=>'Benign tumour','correct'=>false],['text'=>'Chronic granuloma only','correct'=>false]]],
+            ['q' => 'Staging of cancer refers to:', 'exp' => 'Staging describes extent/spread (TNM); grading describes differentiation.',
+             'options' => [['text'=>'Histological grade only','correct'=>false],['text'=>'Extent and spread of disease','correct'=>true],['text'=>'Patient age','correct'=>false],['text'=>'Blood group','correct'=>false]]],
+            ['q' => 'Chronic inflammation is dominated by:', 'exp' => 'Macrophages, lymphocytes, and plasma cells characterise chronic inflammation.',
+             'options' => [['text'=>'Neutrophils only','correct'=>false],['text'=>'Macrophages and lymphocytes','correct'=>true],['text'=>'Eosinophils only always','correct'=>false],['text'=>'No inflammatory cells','correct'=>false]]],
         ];
     }
 
-    private function grammarQuestions(): array
+    private function pharmacologyQuestions(): array
     {
         return [
-            ['q' => 'Identify the noun in: "The dog chased the ball."', 'exp' => '"Dog" and "ball" are both nouns. "Dog" is the subject noun.',
-             'options' => [['text'=>'chased','correct'=>false],['text'=>'dog','correct'=>true],['text'=>'the','correct'=>false],['text'=>'quickly','correct'=>false]]],
-            ['q' => 'Which sentence is in the Simple Past tense?', 'exp' => '"She cooked dinner" uses the simple past form "cooked" (past tense of cook).',
-             'options' => [['text'=>'She cooks dinner.','correct'=>false],['text'=>'She cooked dinner.','correct'=>true],['text'=>'She is cooking dinner.','correct'=>false],['text'=>'She will cook dinner.','correct'=>false]]],
-            ['q' => 'The word "quickly" in the sentence "She ran quickly" is a:', 'exp' => '"Quickly" describes how she ran. A word that modifies a verb, adjective, or another adverb is called an adverb.',
-             'options' => [['text'=>'Noun','correct'=>false],['text'=>'Adjective','correct'=>false],['text'=>'Adverb','correct'=>true],['text'=>'Pronoun','correct'=>false]]],
-            ['q' => 'Choose the correct article: "___ honest man always tells the truth."', 'exp' => 'We use "An" before words beginning with a vowel sound. "Honest" begins with a silent "H" and sounds like "onest", so we use "An".',
-             'options' => [['text'=>'A','correct'=>false],['text'=>'An','correct'=>true],['text'=>'The','correct'=>false],['text'=>'No article needed','correct'=>false]]],
-            ['q' => 'Which of the following is a conjunction?', 'exp' => '"Because" is a subordinating conjunction used to connect a dependent clause to a main clause.',
-             'options' => [['text'=>'Beautiful','correct'=>false],['text'=>'Quickly','correct'=>false],['text'=>'Because','correct'=>true],['text'=>'On','correct'=>false]]],
-            ['q' => 'The plural of "child" is:', 'exp' => 'Child has an irregular plural form: children. It does not follow the standard rule of adding -s or -es.',
-             'options' => [['text'=>'Childs','correct'=>false],['text'=>'Childes','correct'=>false],['text'=>'Children','correct'=>true],['text'=>'Childrens','correct'=>false]]],
-            ['q' => '"She has been studying for three hours." This sentence is in which tense?', 'exp' => 'The structure "has/have + been + verb-ing" indicates Present Perfect Continuous (Progressive) tense.',
-             'options' => [['text'=>'Simple Present','correct'=>false],['text'=>'Present Perfect','correct'=>false],['text'=>'Present Perfect Continuous','correct'=>true],['text'=>'Past Continuous','correct'=>false]]],
-            ['q' => 'Choose the correct form: "Neither of the boys ___ ready."', 'exp' => '"Neither" is singular in this construction, so it takes a singular verb. "Neither of the boys is ready."',
-             'options' => [['text'=>'are','correct'=>false],['text'=>'were','correct'=>false],['text'=>'is','correct'=>true],['text'=>'have been','correct'=>false]]],
-            ['q' => 'A word that replaces a noun is called a:', 'exp' => 'A pronoun is a word used in place of a noun. Examples: he, she, it, they, we, I.',
-             'options' => [['text'=>'Adjective','correct'=>false],['text'=>'Pronoun','correct'=>true],['text'=>'Verb','correct'=>false],['text'=>'Adverb','correct'=>false]]],
-            ['q' => 'Which sentence uses the correct punctuation?', 'exp' => 'A question must end with a question mark. "What is your name?" is correctly punctuated.',
-             'options' => [['text'=>'What is your name.','correct'=>false],['text'=>'What is your name?','correct'=>true],['text'=>'What is your name!','correct'=>false],['text'=>'What is your name,','correct'=>false]]],
+            ['q' => 'Penicillins act by inhibiting:', 'exp' => 'Beta-lactams block transpeptidase-mediated peptidoglycan cross-linking.',
+             'options' => [['text'=>'DNA gyrase','correct'=>false],['text'=>'Cell wall synthesis','correct'=>true],['text'=>'30S ribosome','correct'=>false],['text'=>'Folate pathway','correct'=>false]]],
+            ['q' => 'Gentamicin toxicity includes:', 'exp' => 'Aminoglycosides cause dose-related nephrotoxicity and ototoxicity.',
+             'options' => [['text'=>'Hepatic failure only','correct'=>false],['text'=>'Nephrotoxicity and ototoxicity','correct'=>true],['text'=>'Photosensitivity only','correct'=>false],['text'=>'No significant toxicity','correct'=>false]]],
+            ['q' => 'MRSA is typically treated with:', 'exp' => 'Vancomycin (or alternatives like linezolid/daptomycin) for serious MRSA infections.',
+             'options' => [['text'=>'Amoxicillin alone','correct'=>false],['text'=>'Vancomycin','correct'=>true],['text'=>'Metronidazole alone','correct'=>false],['text'=>'Fluconazole','correct'=>false]]],
+            ['q' => 'Macrolides (e.g. azithromycin) bind the:', 'exp' => 'Macrolides inhibit the 50S ribosomal subunit.',
+             'options' => [['text'=>'30S subunit','correct'=>false],['text'=>'50S subunit','correct'=>true],['text'=>'DNA gyrase','correct'=>false],['text'=>'Cell wall','correct'=>false]]],
+            ['q' => 'Beta-lactamase inhibitors like clavulanate:', 'exp' => 'Clavulanate protects beta-lactams from enzymatic degradation.',
+             'options' => [['text'=>'Kill anaerobes directly','correct'=>false],['text'=>'Protect beta-lactams from beta-lactamase','correct'=>true],['text'=>'Increase renal excretion only','correct'=>false],['text'=>'Block protein synthesis','correct'=>false]]],
+            ['q' => 'Fluoroquinolones are contraindicated in children because of:', 'exp' => 'Risk of cartilage damage/tendinopathy limits paediatric use.',
+             'options' => [['text'=>'Hepatotoxicity only in adults','correct'=>false],['text'=>'Risk of cartilage damage','correct'=>true],['text'=>'No contraindications','correct'=>false],['text'=>'Red man syndrome','correct'=>false]]],
+            ['q' => 'Metronidazole is first-line for:', 'exp' => 'Metronidazole covers anaerobes and protozoa (e.g. C. difficile, Giardia).',
+             'options' => [['text'=>'Gram-positive cocci only','correct'=>false],['text'=>'Anaerobic infections and certain protozoa','correct'=>true],['text'=>'Viral infections','correct'=>false],['text'=>'Fungal meningitis','correct'=>false]]],
+            ['q' => 'Therapeutic index is defined as:', 'exp' => 'TI = TD50/ED50; larger values suggest wider safety margin.',
+             'options' => [['text'=>'ED50/TD50','correct'=>false],['text'=>'TD50/ED50','correct'=>true],['text'=>'LD50 only','correct'=>false],['text'=>'Cmax/AUC','correct'=>false]]],
+            ['q' => 'Tetracyclines should not be given with milk because:', 'exp' => 'Divalent cations chelate tetracyclines, reducing absorption.',
+             'options' => [['text'=>'They cause milk allergy','correct'=>false],['text'=>'Calcium chelation reduces absorption','correct'=>true],['text'=>'They increase milk production','correct'=>false],['text'=>'No interaction exists','correct'=>false]]],
+            ['q' => 'Rifampicin induces cytochrome P450, causing:', 'exp' => 'Enzyme induction increases metabolism of many co-administered drugs.',
+             'options' => [['text'=>'Decreased metabolism of other drugs','correct'=>false],['text'=>'Increased metabolism of other drugs','correct'=>true],['text'=>'No drug interactions','correct'=>false],['text'=>'Renal failure always','correct'=>false]]],
         ];
     }
 
-    private function physicsQuestions(): array
+    private function medicineQuestions(): array
     {
         return [
-            ['q' => 'Newton\'s First Law of Motion is also known as:', 'exp' => 'Newton\'s First Law states that an object remains at rest or in uniform motion unless acted upon by a net external force. This is the Law of Inertia.',
-             'options' => [['text'=>'Law of Acceleration','correct'=>false],['text'=>'Law of Inertia','correct'=>true],['text'=>'Law of Action-Reaction','correct'=>false],['text'=>'Law of Gravitation','correct'=>false]]],
-            ['q' => 'The SI unit of force is:', 'exp' => 'The SI unit of force is the Newton (N), named after Sir Isaac Newton. 1 N = 1 kg·m/s².',
-             'options' => [['text'=>'Joule','correct'=>false],['text'=>'Watt','correct'=>false],['text'=>'Newton','correct'=>true],['text'=>'Pascal','correct'=>false]]],
-            ['q' => 'A body moving at constant speed in a circular path has:', 'exp' => 'Even at constant speed in circular motion, the direction of velocity changes continuously. Hence, the object is accelerating (centripetal acceleration).',
-             'options' => [['text'=>'No acceleration','correct'=>false],['text'=>'Centripetal acceleration','correct'=>true],['text'=>'Zero velocity','correct'=>false],['text'=>'Constant velocity','correct'=>false]]],
-            ['q' => 'Which type of energy does a stretched rubber band possess?', 'exp' => 'A stretched rubber band stores elastic potential energy — energy stored due to deformation of an elastic object.',
-             'options' => [['text'=>'Kinetic energy','correct'=>false],['text'=>'Thermal energy','correct'=>false],['text'=>'Elastic potential energy','correct'=>true],['text'=>'Chemical energy','correct'=>false]]],
-            ['q' => 'The formula for calculating work done is:', 'exp' => 'Work done = Force × Displacement × cos(θ), where θ is the angle between force and displacement. When θ=0°, W = F×d.',
-             'options' => [['text'=>'W = m × a','correct'=>false],['text'=>'W = F × d','correct'=>true],['text'=>'W = ½mv²','correct'=>false],['text'=>'W = mgh','correct'=>false]]],
-            ['q' => 'Sound cannot travel through:', 'exp' => 'Sound is a mechanical wave that requires a medium (solid, liquid, or gas) to travel. It cannot travel through a vacuum.',
-             'options' => [['text'=>'Water','correct'=>false],['text'=>'Steel','correct'=>false],['text'=>'Vacuum','correct'=>true],['text'=>'Air','correct'=>false]]],
-            ['q' => 'When you drop an object from a height, its potential energy converts to:', 'exp' => 'As an object falls, its height decreases, so gravitational potential energy decreases and converts to kinetic energy.',
-             'options' => [['text'=>'Chemical energy','correct'=>false],['text'=>'Thermal energy','correct'=>false],['text'=>'Kinetic energy','correct'=>true],['text'=>'Nuclear energy','correct'=>false]]],
-            ['q' => 'Friction is a force that acts:', 'exp' => 'Friction is a contact force that always opposes the relative motion or tendency of motion between two surfaces in contact.',
-             'options' => [['text'=>'In the direction of motion','correct'=>false],['text'=>'Perpendicular to motion','correct'=>false],['text'=>'Opposite to the direction of motion','correct'=>true],['text'=>'At an angle to motion','correct'=>false]]],
-            ['q' => 'The rate of change of velocity is called:', 'exp' => 'Acceleration is defined as the rate of change of velocity with respect to time. a = (v–u)/t.',
-             'options' => [['text'=>'Speed','correct'=>false],['text'=>'Momentum','correct'=>false],['text'=>'Acceleration','correct'=>true],['text'=>'Displacement','correct'=>false]]],
-            ['q' => 'Which law states that for every action there is an equal and opposite reaction?', 'exp' => 'Newton\'s Third Law of Motion states that for every action, there is an equal and opposite reaction.',
-             'options' => [['text'=>'Newton\'s First Law','correct'=>false],['text'=>'Newton\'s Second Law','correct'=>false],['text'=>'Newton\'s Third Law','correct'=>true],['text'=>'Law of Gravitation','correct'=>false]]],
+            ['q' => 'Which component is NOT part of the standard medical history (SOCRATES applies to pain)?', 'exp' => 'Past medical, drug, family, and social history are core; SOCRATES is for pain characterisation.',
+             'options' => [['text'=>'Past medical history','correct'=>false],['text'=>'Patient\'s favourite colour','correct'=>true],['text'=>'Drug history','correct'=>false],['text'=>'Family history','correct'=>false]]],
+            ['q' => 'JVP elevation suggests:', 'exp' => 'Raised JVP indicates increased central venous pressure, e.g. right heart failure or fluid overload.',
+             'options' => [['text'=>'Hypovolaemia','correct'=>false],['text'=>'Raised central venous pressure','correct'=>true],['text'=>'Normal finding always','correct'=>false],['text'=>'Primary lung disease only','correct'=>false]]],
+            ['q' => 'Bilateral pitting oedema may indicate:', 'exp' => 'Systemic causes include heart failure, renal disease, liver disease, and hypoalbuminaemia.',
+             'options' => [['text'=>'Local lymphatic obstruction only','correct'=>false],['text'=>'Heart, renal, or liver disease','correct'=>true],['text'=>'Normal ageing only','correct'=>false],['text'=>'Isolated DVT always','correct'=>false]]],
+            ['q' => 'A pansystolic murmur at the apex radiating to the axilla suggests:', 'exp' => 'Mitral regurgitation classically causes apical pansystolic murmur radiating to axilla.',
+             'options' => [['text'=>'Aortic stenosis','correct'=>false],['text'=>'Mitral regurgitation','correct'=>true],['text'=>'Pulmonary stenosis','correct'=>false],['text'=>'Tricuspid stenosis only','correct'=>false]]],
+            ['q' => 'Clubbing of fingers is associated with:', 'exp' => 'Clubbing occurs in chronic hypoxia, IBD, cirrhosis, and congenital heart disease among others.',
+             'options' => [['text'=>'Acute viral illness only','correct'=>false],['text'=>'Chronic hypoxia and other systemic diseases','correct'=>true],['text'=>'Iron deficiency only always','correct'=>false],['text'=>'Never clinically significant','correct'=>false]]],
+            ['q' => 'Kussmaul breathing indicates:', 'exp' => 'Deep, sighing respirations occur in metabolic acidosis as respiratory compensation.',
+             'options' => [['text'=>'Metabolic alkalosis','correct'=>false],['text'=>'Metabolic acidosis','correct'=>true],['text'=>'Pure respiratory alkalosis only','correct'=>false],['text'=>'Normal sleep pattern','correct'=>false]]],
+            ['q' => 'The first step in managing an unresponsive patient is to:', 'exp' => 'Assess responsiveness and airway per basic life support algorithms.',
+             'options' => [['text'=>'Order CT scan','correct'=>false],['text'=>'Check responsiveness and airway','correct'=>true],['text'=>'Administer antibiotics','correct'=>false],['text'=>'Discharge home','correct'=>false]]],
+            ['q' => 'Haemoptysis is defined as:', 'exp' => 'Coughing up blood originating from the lower respiratory tract.',
+             'options' => [['text'=>'Blood in stool','correct'=>false],['text'=>'Coughing up blood from the respiratory tract','correct'=>true],['text'=>'Blood in urine','correct'=>false],['text'=>'Nosebleed only','correct'=>false]]],
+            ['q' => 'Orthopnoea is a symptom commonly associated with:', 'exp' => 'Difficulty breathing when lying flat suggests pulmonary oedema/heart failure.',
+             'options' => [['text'=>'Left ventricular failure','correct'=>true],['text'=>'Appendicitis','correct'=>false],['text'=>'Hypothyroidism only','correct'=>false],['text'=>'Normal variant always','correct'=>false]]],
+            ['q' => 'When taking a drug history, it is important to ask about:', 'exp' => 'Include prescription, OTC, herbal, and allergy/intolerance details.',
+             'options' => [['text'=>'Prescription drugs only','correct'=>false],['text'=>'Prescription, OTC, and herbal medicines plus allergies','correct'=>true],['text'=>'Vitamins only','correct'=>false],['text'=>'No drug history needed','correct'=>false]]],
         ];
     }
 }

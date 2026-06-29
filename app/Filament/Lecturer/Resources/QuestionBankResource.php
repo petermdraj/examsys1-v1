@@ -3,6 +3,7 @@
 namespace App\Filament\Lecturer\Resources;
 
 use App\Filament\Lecturer\Resources\QuestionBankResource\Pages;
+use App\Models\Category;
 use App\Models\Question;
 use App\Models\QuestionCollection;
 use App\Models\QuestionOption;
@@ -59,6 +60,13 @@ class QuestionBankResource extends Resource
                         'hard'   => __('lecturer.qbank_diff_hard'),
                     ])
                     ->nullable()->columnSpan(1),
+                Forms\Components\Select::make('category_id')
+                    ->label(__('lecturer.qbank_field_subject'))
+                    ->options(fn () => Category::active()->pluck('name', 'id'))
+                    ->searchable()
+                    ->nullable()
+                    ->helperText(__('lecturer.qbank_subject_helper'))
+                    ->columnSpan(1),
                 Forms\Components\Select::make('collection_id')
                     ->label(__('lecturer.qbank_field_collection'))
                     ->relationship('collection', 'name',
@@ -72,7 +80,7 @@ class QuestionBankResource extends Resource
                         'name'       => $data['name'],
                         'color'      => $data['color'] ?? null,
                     ])->id)
-                    ->nullable()->columnSpan(2),
+                    ->nullable()->columnSpan(1),
                 Forms\Components\Textarea::make('content')
                     ->label(__('lecturer.qbank_field_content'))->required()->rows(3)->columnSpan(2),
                 Forms\Components\Textarea::make('explanation')
@@ -143,6 +151,8 @@ class QuestionBankResource extends Resource
                     ->width(90),
                 Tables\Columns\TextColumn::make('collection.name')
                     ->label(__('lecturer.qbank_field_collection'))->default('—')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('category.name')
+                    ->label(__('lecturer.qbank_field_subject'))->default('—')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('content')
                     ->label(__('lecturer.qbank_field_content_short'))->limit(80)->searchable(),
                 Tables\Columns\TextColumn::make('marks')->label(__('lecturer.qbank_field_marks'))->sortable()->width(70),
@@ -169,8 +179,25 @@ class QuestionBankResource extends Resource
                     ->label(__('lecturer.qbank_field_collection'))
                     ->options(fn() => QuestionCollection::where('lecturer_id', auth()->id())
                         ->pluck('name', 'id')->toArray()),
+                Tables\Filters\SelectFilter::make('category_id')
+                    ->label(__('lecturer.qbank_field_subject'))
+                    ->options(fn() => Category::active()->pluck('name', 'id')->toArray()),
             ])
             ->headerActions([
+                Tables\Actions\Action::make('sample_excel')
+                    ->label(__('lecturer.qbank_action_sample_excel'))
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->color('gray')
+                    ->action(function () {
+                        $path = (new QuestionBankService())->sampleExcel();
+
+                        return response()->download(
+                            $path,
+                            'question-bank-sample.xlsx',
+                            ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+                        )->deleteFileAfterSend();
+                    }),
+
                 Tables\Actions\Action::make('export_excel')
                     ->label(__('lecturer.qbank_action_export_excel'))
                     ->icon('heroicon-o-arrow-down-tray')
@@ -255,6 +282,7 @@ class QuestionBankResource extends Resource
                             'hint'           => $record->hint,
                             'difficulty'     => $record->difficulty,
                             'collection_id'  => $record->collection_id,
+                            'category_id'    => $record->category_id,
                             'sort_order'     => 0,
                         ]);
 

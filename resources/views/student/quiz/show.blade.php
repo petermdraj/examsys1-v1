@@ -216,46 +216,6 @@
             <span class="qs-fav-label">{{ __('quiz.save_to_favourites') }}</span>
         </div>
         @endauth
-
-        <div class="share-label">{{ __('quiz.share_this_quiz') }}</div>
-        <div class="share-row">
-          {{-- Copy link --}}
-          <button type="button" class="share-btn" id="copyLinkBtn" title="Copy link">
-            <svg id="copyIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/></svg>
-            <svg id="checkIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" hidden><path d="M5 13l4 4L19 7"/></svg>
-          </button>
-          {{-- WhatsApp --}}
-          <a class="share-btn share-btn--wa" target="_blank" rel="noopener"
-             href="https://wa.me/?text={{ urlencode('Check out this quiz: ' . $quiz->title . ' ' . request()->url()) }}"
-             title="Share on WhatsApp">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.27-.13-1.57-.77-1.81-.86s-.42-.13-.6.13-.69.86-.84 1.03-.31.19-.58.06a7.34 7.34 0 01-2.16-1.33 8.07 8.07 0 01-1.5-1.86c-.16-.27 0-.42.12-.55s.27-.31.4-.47a1.84 1.84 0 00.26-.44.48.48 0 000-.46c-.06-.13-.6-1.44-.82-1.97s-.43-.45-.59-.46h-.51a1 1 0 00-.72.34 3 3 0 00-.93 2.23 5.24 5.24 0 001.1 2.78 12 12 0 004.58 4.06c.64.27 1.14.44 1.53.56a3.69 3.69 0 001.69.11 2.76 2.76 0 001.81-1.28 2.24 2.24 0 00.16-1.28c-.06-.11-.24-.17-.51-.3zM12 2a10 10 0 00-8.67 14.95L2 22l5.23-1.37A10 10 0 1012 2z"/></svg>
-          </a>
-          {{-- Telegram --}}
-          <a class="share-btn share-btn--tg" target="_blank" rel="noopener"
-             href="https://t.me/share/url?url={{ urlencode(request()->url()) }}&text={{ urlencode('Check out this quiz: ' . $quiz->title) }}"
-             title="Share on Telegram">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.7 8c-.12.54-.46.67-.93.42l-2.57-1.9-1.24 1.19c-.14.14-.25.25-.51.25l.18-2.6 4.7-4.25c.2-.18-.04-.28-.32-.1l-5.82 3.67-2.5-.78c-.54-.17-.55-.54.12-.8l9.77-3.77c.45-.16.85.11.82.67z"/></svg>
-          </a>
-          {{-- LinkedIn --}}
-          <a class="share-btn share-btn--li" target="_blank" rel="noopener"
-             href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(request()->url()) }}"
-             title="Share on LinkedIn">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46C23.21 24 24 23.23 24 22.27V1.73C24 .77 23.21 0 22.23 0z"/></svg>
-          </a>
-          {{-- Facebook --}}
-          <a class="share-btn share-btn--fb" target="_blank" rel="noopener"
-             href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}"
-             title="Share on Facebook">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.95.93-1.95 1.88v2.27h3.32l-.53 3.49h-2.79V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
-          </a>
-          {{-- Twitter / X --}}
-          <a class="share-btn share-btn--tw" target="_blank" rel="noopener"
-             href="https://twitter.com/intent/tweet?url={{ urlencode(request()->url()) }}&text={{ urlencode('Just took: ' . $quiz->title . ' — try it!') }}"
-             title="Share on X (Twitter)">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.8a8 8 0 01-2.3.6 4 4 0 001.8-2.2 8 8 0 01-2.5 1A4 4 0 0012 8.8a11 11 0 01-8-4 4 4 0 001.2 5.3A4 4 0 013 9.5a4 4 0 003.2 4 4 4 0 01-1.8.1 4 4 0 003.7 2.8A8 8 0 012 18.6a11 11 0 006 1.8c7.2 0 11.2-6 11.2-11.2v-.5A8 8 0 0022 5.8z"/></svg>
-          </a>
-        </div>
-        <div id="copyToast" class="qs-copy-toast">{{ __('quiz.link_copied') }}</div>
       </div>
     </aside>
   </div>
@@ -348,32 +308,5 @@
 </script>
 @endpush
 @endif
-
-@push('scripts')
-<script>
-(function () {
-'use strict';
-  const btn   = document.getElementById('copyLinkBtn');
-  const copy  = document.getElementById('copyIcon');
-  const check = document.getElementById('checkIcon');
-  const toast = document.getElementById('copyToast');
-  if (!btn) return;
-  btn.addEventListener('click', function () {
-    navigator.clipboard.writeText(window.location.href).then(function () {
-      copy.style.display  = 'none';
-      check.style.display = '';
-      btn.style.color     = 'var(--success,#22c55e)';
-      toast.style.display = '';
-      setTimeout(function () {
-        copy.style.display  = '';
-        check.style.display = 'none';
-        btn.style.color     = '';
-        toast.style.display = 'none';
-      }, 2000);
-    });
-  });
-})();
-</script>
-@endpush
 
 @endsection

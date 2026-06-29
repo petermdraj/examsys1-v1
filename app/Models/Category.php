@@ -14,6 +14,7 @@ class Category extends Model
     public function parent()   { return $this->belongsTo(Category::class, 'parent_id'); }
     public function children() { return $this->hasMany(Category::class, 'parent_id')->where('is_active', true)->orderBy('sort_order'); }
     public function quizzes()  { return $this->hasMany(Quiz::class); }
+    public function questions() { return $this->hasMany(Question::class); }
 
     /**
      * All descendant IDs at any depth (recursive, uses cached flat list to avoid N+1).

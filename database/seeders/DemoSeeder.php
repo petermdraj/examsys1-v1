@@ -91,22 +91,22 @@ class DemoSeeder extends Seeder
 
         DB::table('ai_generation_logs')->whereIn('user_id', $userIds)->delete();
         User::withTrashed()->whereIn('email', $demoEmails)->forceDelete();
-        StudentBatch::whereIn('code', ['CS-2026-A', 'CS-2026-B'])->delete();
+        StudentBatch::whereIn('code', ['MBBS-2026-A', 'MBBS-2026-B'])->delete();
     }
 
     private function seedBatches(): array
     {
         return [
             'a' => StudentBatch::create([
-                'name'        => 'Computer Science 2026 — Group A',
-                'code'        => 'CS-2026-A',
-                'description' => 'Demo batch for first-year CS students.',
+                'name'        => 'MBBS 2026 — Group A',
+                'code'        => 'MBBS-2026-A',
+                'description' => 'Demo batch for first-year medical students.',
                 'is_active'   => true,
             ]),
             'b' => StudentBatch::create([
-                'name'        => 'Computer Science 2026 — Group B',
-                'code'        => 'CS-2026-B',
-                'description' => 'Demo batch for second cohort.',
+                'name'        => 'MBBS 2026 — Group B',
+                'code'        => 'MBBS-2026-B',
+                'description' => 'Demo batch for second medical cohort.',
                 'is_active'   => true,
             ]),
         ];
@@ -118,9 +118,9 @@ class DemoSeeder extends Seeder
     private function seedLecturers(): array
     {
         $data = [
-            ['name'=>'Priya Sharma',    'email'=>'priya@demo.quiz',   'credits'=>8],
-            ['name'=>'Rahul Mehta',     'email'=>'rahul@demo.quiz',   'credits'=>3],
-            ['name'=>'Sofia Rodriguez', 'email'=>'sofia@demo.quiz',   'credits'=>10],
+            ['name'=>'Dr. Priya Sharma',    'email'=>'priya@demo.quiz',   'credits'=>8],
+            ['name'=>'Dr. Rahul Mehta',     'email'=>'rahul@demo.quiz',   'credits'=>3],
+            ['name'=>'Dr. Sofia Rodriguez', 'email'=>'sofia@demo.quiz',   'credits'=>10],
         ];
         return User::unguarded(function () use ($data) {
             return array_map(function ($d) {
@@ -255,30 +255,35 @@ class DemoSeeder extends Seeder
     private function seedQuizzes(array $creators): array
     {
         $cats = Category::pluck('id', 'slug');
-        $tech  = $cats['technology']       ?? Category::first()->id;
-        $sci   = $cats['science']          ?? $tech;
-        $math  = $cats['mathematics']      ?? $tech;
-        $eng   = $cats['english-language'] ?? $tech;
-        $hist  = $cats['history']          ?? $tech;
+        $medicine     = $cats['medicine']     ?? Category::first()->id;
+        $surgery      = $cats['surgery']      ?? $medicine;
+        $obstetrics   = $cats['obstetrics']   ?? $medicine;
+        $gynecology   = $cats['gynecology']   ?? $medicine;
+        $pediatrics   = $cats['pediatrics']   ?? $medicine;
+        $pharmacology = $cats['pharmacology'] ?? $medicine;
+        $anatomy      = $cats['anatomy']      ?? $medicine;
+        $physiology   = $cats['physiology']   ?? $medicine;
+        $pathology    = $cats['pathology']    ?? $medicine;
+        $microbiology = $cats['microbiology'] ?? $medicine;
 
         $quizDefs = [
-            ['title'=>'PHP & Laravel Fundamentals',        'cat'=>$tech,  'lecturer'=>$creators[0],   'duration'=>30, 'pass'=>60, 'neg'=>false, 'cert'=>true],
-            ['title'=>'JavaScript ES6+ Mastery',           'cat'=>$tech,  'lecturer'=>$creators[0], 'duration'=>45, 'pass'=>65, 'neg'=>true,  'cert'=>true],
-            ['title'=>'Human Body Systems',                'cat'=>$sci,   'lecturer'=>$creators[1],   'duration'=>20, 'pass'=>60, 'neg'=>false, 'cert'=>false],
-            ['title'=>'Basic Algebra & Equations',         'cat'=>$math,  'lecturer'=>$creators[1],  'duration'=>30, 'pass'=>70, 'neg'=>false, 'cert'=>true],
-            ['title'=>'World History: Ancient Civilizations','cat'=>$hist, 'lecturer'=>$creators[2],   'duration'=>25, 'pass'=>60, 'neg'=>false, 'cert'=>false],
-            ['title'=>'English Grammar & Usage',           'cat'=>$eng,   'lecturer'=>$creators[2], 'duration'=>30, 'pass'=>60, 'neg'=>false, 'cert'=>true],
-            ['title'=>'Data Structures & Algorithms',      'cat'=>$tech,  'lecturer'=>$creators[0], 'duration'=>60, 'pass'=>65, 'neg'=>true,  'cert'=>true],
-            ['title'=>'General Science — Class 10',        'cat'=>$sci,   'lecturer'=>$creators[1],   'duration'=>20, 'pass'=>60, 'neg'=>false, 'cert'=>false],
-            ['title'=>'Aptitude: Reasoning & Puzzles',     'cat'=>$math,  'lecturer'=>$creators[2],   'duration'=>20, 'pass'=>60, 'neg'=>false, 'cert'=>false],
-            ['title'=>'Computer Networks Essentials',      'cat'=>$tech,  'lecturer'=>$creators[0], 'duration'=>40, 'pass'=>65, 'neg'=>false, 'cert'=>true],
+            ['title'=>'Internal Medicine — Heart Failure & Hypertension', 'cat'=>$medicine,     'lecturer'=>$creators[0], 'duration'=>30, 'pass'=>60, 'neg'=>false, 'cert'=>true],
+            ['title'=>'General Surgery — Wounds & Healing',              'cat'=>$surgery,      'lecturer'=>$creators[1], 'duration'=>45, 'pass'=>65, 'neg'=>true,  'cert'=>true],
+            ['title'=>'Obstetrics — Antenatal Care',                     'cat'=>$obstetrics,   'lecturer'=>$creators[2], 'duration'=>20, 'pass'=>60, 'neg'=>false, 'cert'=>false],
+            ['title'=>'Gynecology — Menstrual Disorders',                'cat'=>$gynecology,   'lecturer'=>$creators[2], 'duration'=>30, 'pass'=>70, 'neg'=>false, 'cert'=>true],
+            ['title'=>'Pediatrics — Immunization & Growth',              'cat'=>$pediatrics,   'lecturer'=>$creators[1], 'duration'=>25, 'pass'=>60, 'neg'=>false, 'cert'=>false],
+            ['title'=>'Pharmacology — Antibiotics & Mechanisms',         'cat'=>$pharmacology, 'lecturer'=>$creators[0], 'duration'=>30, 'pass'=>60, 'neg'=>false, 'cert'=>true],
+            ['title'=>'Human Anatomy — Cardiovascular System',           'cat'=>$anatomy,      'lecturer'=>$creators[1], 'duration'=>60, 'pass'=>65, 'neg'=>true,  'cert'=>true],
+            ['title'=>'Physiology — Renal Function',                       'cat'=>$physiology,   'lecturer'=>$creators[0], 'duration'=>20, 'pass'=>60, 'neg'=>false, 'cert'=>false],
+            ['title'=>'Pathology — Inflammation & Neoplasia',            'cat'=>$pathology,    'lecturer'=>$creators[2], 'duration'=>20, 'pass'=>60, 'neg'=>false, 'cert'=>false],
+            ['title'=>'Microbiology — Bacteria & Staining',              'cat'=>$microbiology, 'lecturer'=>$creators[0], 'duration'=>40, 'pass'=>65, 'neg'=>false, 'cert'=>true],
         ];
 
         $quizzes = [];
         $allQuestionBanks = [
-            $this->phpQs(), $this->jsQs(), $this->bodyQs(),
-            $this->algebraQs(), $this->historyQs(), $this->grammarQs(),
-            $this->dsaQs(), $this->scienceQs(), $this->aptitudeQs(), $this->networkQs(),
+            $this->medicineQs(), $this->surgeryQs(), $this->obstetricsQs(), $this->gynecologyQs(),
+            $this->pediatricsQs(), $this->pharmacologyQs(), $this->anatomyQs(), $this->physiologyQs(),
+            $this->pathologyQs(), $this->microbiologyQs(),
         ];
 
         foreach ($quizDefs as $i => $def) {
@@ -340,133 +345,133 @@ class DemoSeeder extends Seeder
     // ──────────────────────────────────────────
     // Question banks (10 Qs each quiz)
     // ──────────────────────────────────────────
-    private function phpQs(): array { return [
-        ['type'=>'mcq_single','content'=>'Which keyword prevents class inheritance in PHP?','explanation'=>'The `final` keyword prevents a class from being extended.','options'=>[['content'=>'abstract','is_correct'=>false],['content'=>'interface','is_correct'=>false],['content'=>'final','is_correct'=>true],['content'=>'static','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'What does PSR stand for?','options'=>[['content'=>'PHP Standard Routine','is_correct'=>false],['content'=>'PHP Standards Recommendation','is_correct'=>true],['content'=>'PHP Script Runtime','is_correct'=>false],['content'=>'PHP System Reference','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'A PHP trait can implement an interface.','explanation'=>'Traits cannot implement interfaces.','options'=>[['content'=>'True','is_correct'=>false],['content'=>'False','is_correct'=>true]]],
-        ['type'=>'mcq_single','content'=>'Which Laravel helper returns a URL for a named route?','options'=>[['content'=>'url()','is_correct'=>false],['content'=>'route()','is_correct'=>true],['content'=>'path()','is_correct'=>false],['content'=>'link()','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'What is the default queue driver in a fresh Laravel install?','options'=>[['content'=>'redis','is_correct'=>false],['content'=>'beanstalkd','is_correct'=>false],['content'=>'sync','is_correct'=>true],['content'=>'database','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'The PHP function to check if a variable is set and not null is ______.','blank_answers'=>['isset']],
-        ['type'=>'mcq_single','content'=>'Which Artisan command creates a new Eloquent model?','options'=>[['content'=>'php artisan create:model','is_correct'=>false],['content'=>'php artisan make:model','is_correct'=>true],['content'=>'php artisan generate:model','is_correct'=>false],['content'=>'php artisan new:model','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'Laravel Eloquent uses the Active Record pattern.','explanation'=>'Eloquent implements the Active Record ORM pattern.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Which method is used to eager load relationships in Eloquent?','options'=>[['content'=>'load()','is_correct'=>false],['content'=>'with()','is_correct'=>true],['content'=>'join()','is_correct'=>false],['content'=>'attach()','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'What does `->nullable()` do in a Laravel migration?','options'=>[['content'=>'Sets default to null','is_correct'=>false],['content'=>'Allows the column to store NULL','is_correct'=>true],['content'=>'Skips the column if empty','is_correct'=>false],['content'=>'Removes a column','is_correct'=>false]]],
+    private function medicineQs(): array { return [
+        ['type'=>'mcq_single','content'=>'Which drug class is first-line for chronic heart failure with reduced ejection fraction?','explanation'=>'ACE inhibitors (or ARNI) are cornerstone therapy for HFrEF.','options'=>[['content'=>'Calcium channel blockers','is_correct'=>false],['content'=>'ACE inhibitors','is_correct'=>true],['content'=>'Alpha blockers','is_correct'=>false],['content'=>'Thiazolidinediones','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'B-type natriuretic peptide (BNP) is elevated in acute decompensated heart failure.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'A blood pressure of 148/92 mmHg on two separate occasions is classified as:','options'=>[['content'=>'Normal','is_correct'=>false],['content'=>'Elevated','is_correct'=>false],['content'=>'Stage 1 hypertension','is_correct'=>true],['content'=>'Hypertensive emergency','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'The most common cause of secondary hypertension in young adults is renal ______ disease.','blank_answers'=>['parenchymal','parenchymal disease']],
+        ['type'=>'mcq_single','content'=>'Which finding is most specific for left ventricular failure?','options'=>[['content'=>'Jugular venous distension','is_correct'=>false],['content'=>'Bilateral basal crackles','is_correct'=>true],['content'=>'Peripheral oedema alone','is_correct'=>false],['content'=>'Tachycardia','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Metformin is contraindicated in which condition?','options'=>[['content'=>'Type 2 diabetes with obesity','is_correct'=>false],['content'=>'Severe renal impairment (eGFR <30)','is_correct'=>true],['content'=>'Hypertension','is_correct'=>false],['content'=>'Hyperlipidaemia','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Digoxin toxicity can cause visual disturbances such as yellow-green halos.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which electrolyte abnormality predisposes to torsades de pointes?','options'=>[['content'=>'Hyperkalaemia','is_correct'=>false],['content'=>'Hypomagnesaemia','is_correct'=>true],['content'=>'Hypernatraemia','is_correct'=>false],['content'=>'Hypercalcaemia','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'The JVP "a" wave is absent in:','options'=>[['content'=>'Tricuspid regurgitation','is_correct'=>false],['content'=>'Atrial fibrillation','is_correct'=>true],['content'=>'Right heart failure','is_correct'=>false],['content'=>'Pulmonary embolism','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'The gold standard investigation for diagnosing pulmonary embolism is CT pulmonary ______.','blank_answers'=>['angiography','angiogram']],
     ]; }
 
-    private function jsQs(): array { return [
-        ['type'=>'mcq_single','content'=>'What does the spread operator (...) do in JavaScript?','options'=>[['content'=>'Multiplies array elements','is_correct'=>false],['content'=>'Expands iterable into individual elements','is_correct'=>true],['content'=>'Creates a deep copy','is_correct'=>false],['content'=>'Concatenates strings','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'`const` creates an immutable binding, not an immutable value.','explanation'=>'const prevents reassignment but the object can still be mutated.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Which method returns a new array with elements passing a test?','options'=>[['content'=>'map()','is_correct'=>false],['content'=>'filter()','is_correct'=>true],['content'=>'find()','is_correct'=>false],['content'=>'some()','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'The keyword to pause execution inside an async function is ______.','blank_answers'=>['await']],
-        ['type'=>'mcq_single','content'=>'What is the output of `typeof null`?','options'=>[['content'=>'"null"','is_correct'=>false],['content'=>'"undefined"','is_correct'=>false],['content'=>'"object"','is_correct'=>true],['content'=>'"boolean"','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Which ES6 feature allows extracting properties from objects?','options'=>[['content'=>'Template literals','is_correct'=>false],['content'=>'Arrow functions','is_correct'=>false],['content'=>'Destructuring assignment','is_correct'=>true],['content'=>'Generators','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'Promises in JavaScript are always resolved synchronously.','options'=>[['content'=>'True','is_correct'=>false],['content'=>'False','is_correct'=>true]]],
-        ['type'=>'mcq_single','content'=>'What does `Array.from({length:3},(_,i)=>i)` return?','options'=>[['content'=>'[1,2,3]','is_correct'=>false],['content'=>'[0,1,2]','is_correct'=>true],['content'=>'[undefined×3]','is_correct'=>false],['content'=>'Error','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Which creates a shallow copy of an array?','options'=>[['content'=>'Array.clone()','is_correct'=>false],['content'=>'[...arr]','is_correct'=>true],['content'=>'JSON.parse(JSON.stringify(arr))','is_correct'=>false],['content'=>'arr.copy()','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'What is a closure in JavaScript?','options'=>[['content'=>'A function with no parameters','is_correct'=>false],['content'=>'A function retaining access to its outer scope','is_correct'=>true],['content'=>'An IIFE','is_correct'=>false],['content'=>'A recursive function','is_correct'=>false]]],
+    private function surgeryQs(): array { return [
+        ['type'=>'mcq_single','content'=>'Which phase of wound healing involves collagen deposition and scar formation?','explanation'=>'Proliferative phase involves granulation tissue and collagen synthesis.','options'=>[['content'=>'Inflammatory phase','is_correct'=>false],['content'=>'Proliferative phase','is_correct'=>true],['content'=>'Haemostasis','is_correct'=>false],['content'=>'Remodelling only','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Primary intention healing occurs when wound edges are approximated with sutures.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'The most common organism in surgical site infections is:','options'=>[['content'=>'Escherichia coli','is_correct'=>false],['content'=>'Staphylococcus aureus','is_correct'=>true],['content'=>'Pseudomonas aeruginosa','is_correct'=>false],['content'=>'Streptococcus pyogenes','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'Prophylactic antibiotics for clean-contaminated surgery should ideally be given within ______ minutes before incision.','blank_answers'=>['60','sixty']],
+        ['type'=>'mcq_single','content'=>'Which sign indicates raised intracranial pressure after head injury?','options'=>[['content'=>'Bilateral pupil constriction','is_correct'=>false],['content'=>'Unilateral fixed dilated pupil','is_correct'=>true],['content'=>'Bradycardia with hypotension only','is_correct'=>false],['content'=>'Normal GCS','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Acute appendicitis classically presents with pain migrating to the:','options'=>[['content'=>'Left iliac fossa','is_correct'=>false],['content'=>'Right iliac fossa','is_correct'=>true],['content'=>'Epigastrium','is_correct'=>false],['content'=>'Umbilicus only','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Tetanus prophylaxis is required for contaminated puncture wounds.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which fluid is preferred for initial resuscitation in haemorrhagic shock?','options'=>[['content'=>'5% dextrose','is_correct'=>false],['content'=>'Isotonic crystalloid (0.9% saline or balanced solution)','is_correct'=>true],['content'=>'Hypotonic saline','is_correct'=>false],['content'=>'Fresh frozen plasma alone','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'A patient with suspected bowel obstruction should NOT receive:','options'=>[['content'=>'IV fluids','is_correct'=>false],['content'=>'Nasogastric decompression','is_correct'=>false],['content'=>'Oral laxatives','is_correct'=>true],['content'=>'Surgical review','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'The surgical instrument used to clamp blood vessels is called a ______.','blank_answers'=>['haemostat','hemostat','artery forceps']],
     ]; }
 
-    private function bodyQs(): array { return [
-        ['type'=>'mcq_single','content'=>'Which organ pumps blood throughout the body?','options'=>[['content'=>'Liver','is_correct'=>false],['content'=>'Heart','is_correct'=>true],['content'=>'Kidney','is_correct'=>false],['content'=>'Lungs','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'The human body has 206 bones in adulthood.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Which blood cells carry oxygen?','options'=>[['content'=>'White blood cells','is_correct'=>false],['content'=>'Platelets','is_correct'=>false],['content'=>'Red blood cells','is_correct'=>true],['content'=>'Plasma','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'The largest organ of the human body is the ______.','blank_answers'=>['skin']],
-        ['type'=>'mcq_single','content'=>'Which part of the brain controls balance and coordination?','options'=>[['content'=>'Cerebrum','is_correct'=>false],['content'=>'Medulla','is_correct'=>false],['content'=>'Cerebellum','is_correct'=>true],['content'=>'Hypothalamus','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Where does protein digestion primarily begin?','options'=>[['content'=>'Mouth','is_correct'=>false],['content'=>'Stomach','is_correct'=>true],['content'=>'Small intestine','is_correct'=>false],['content'=>'Large intestine','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'Insulin is produced by the liver.','explanation'=>'Insulin is produced by the pancreas.','options'=>[['content'=>'True','is_correct'=>false],['content'=>'False','is_correct'=>true]]],
-        ['type'=>'mcq_single','content'=>'How many chambers does the human heart have?','options'=>[['content'=>'2','is_correct'=>false],['content'=>'3','is_correct'=>false],['content'=>'4','is_correct'=>true],['content'=>'6','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Which vitamin is produced when skin is exposed to sunlight?','options'=>[['content'=>'Vitamin A','is_correct'=>false],['content'=>'Vitamin C','is_correct'=>false],['content'=>'Vitamin D','is_correct'=>true],['content'=>'Vitamin K','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'The basic unit of the nervous system is called a ______.','blank_answers'=>['neuron','nerve cell']],
+    private function obstetricsQs(): array { return [
+        ['type'=>'mcq_single','content'=>'How many antenatal visits are recommended in an uncomplicated pregnancy (WHO model)?','options'=>[['content'=>'4','is_correct'=>false],['content'=>'8','is_correct'=>true],['content'=>'12','is_correct'=>false],['content'=>'2','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Folic acid supplementation should begin at least one month before conception.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'The first fetal movement (quickening) is typically felt at approximately:','options'=>[['content'=>'8 weeks','is_correct'=>false],['content'=>'18–20 weeks','is_correct'=>true],['content'=>'28 weeks','is_correct'=>false],['content'=>'32 weeks','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'Gestational diabetes is usually screened with an oral glucose ______ test at 24–28 weeks.','blank_answers'=>['tolerance','tolerance test']],
+        ['type'=>'mcq_single','content'=>'Which vaccine is routinely recommended in every pregnancy?','options'=>[['content'=>'MMR','is_correct'=>false],['content'=>'Influenza and Tdap','is_correct'=>true],['content'=>'Varicella','is_correct'=>false],['content'=>'HPV','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Fundal height at 20 weeks gestation is approximately at the level of the:','options'=>[['content'=>'Symphysis pubis','is_correct'=>false],['content'=>'Umbilicus','is_correct'=>true],['content'=>'Xiphisternum','is_correct'=>false],['content'=>'Costal margin','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Preeclampsia is defined by hypertension and proteinuria after 20 weeks gestation.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which ultrasound measurement is used for dating in early pregnancy?','options'=>[['content'=>'Femur length','is_correct'=>false],['content'=>'Crown-rump length','is_correct'=>true],['content'=>'Abdominal circumference','is_correct'=>false],['content'=>'Biparietal diameter only in third trimester','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'The normal fetal heart rate range is approximately:','options'=>[['content'=>'60–80 bpm','is_correct'=>false],['content'=>'110–160 bpm','is_correct'=>true],['content'=>'180–200 bpm','is_correct'=>false],['content'=>'90–100 bpm','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'The hormone detected in urine pregnancy tests is human chorionic ______.','blank_answers'=>['gonadotropin','gonadotrophin','hcg']],
     ]; }
 
-    private function algebraQs(): array { return [
-        ['type'=>'mcq_single','content'=>'Solve for x: 2x + 5 = 13','options'=>[['content'=>'3','is_correct'=>false],['content'=>'4','is_correct'=>true],['content'=>'5','is_correct'=>false],['content'=>'6','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'Every quadratic equation has two distinct real roots.','explanation'=>'It can have 0, 1, or 2 real roots.','options'=>[['content'=>'True','is_correct'=>false],['content'=>'False','is_correct'=>true]]],
-        ['type'=>'mcq_single','content'=>'What is the slope of y = 3x − 7?','options'=>[['content'=>'−7','is_correct'=>false],['content'=>'3','is_correct'=>true],['content'=>'7','is_correct'=>false],['content'=>'1/3','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'The positive square root of 25 is ______.','blank_answers'=>['5']],
-        ['type'=>'mcq_single','content'=>'Which is a linear equation?','options'=>[['content'=>'y = x²','is_correct'=>false],['content'=>'y = 2x+1','is_correct'=>true],['content'=>'y = x³','is_correct'=>false],['content'=>'y = 1/x','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'What is 3x when x = 4?','options'=>[['content'=>'7','is_correct'=>false],['content'=>'12','is_correct'=>true],['content'=>'9','is_correct'=>false],['content'=>'1','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'The equation 0x = 5 has no solution.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Which property allows a(b+c) = ab+ac?','options'=>[['content'=>'Commutative','is_correct'=>false],['content'=>'Associative','is_correct'=>false],['content'=>'Distributive','is_correct'=>true],['content'=>'Identity','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'If 4x − 8 = 0, what is x?','options'=>[['content'=>'1','is_correct'=>false],['content'=>'2','is_correct'=>true],['content'=>'4','is_correct'=>false],['content'=>'8','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'The y-intercept of y = 5x + 3 is ______.','blank_answers'=>['3']],
+    private function gynecologyQs(): array { return [
+        ['type'=>'mcq_single','content'=>'The most common cause of secondary amenorrhoea is:','options'=>[['content'=>'Asherman syndrome','is_correct'=>false],['content'=>'Pregnancy','is_correct'=>true],['content'=>'Turner syndrome','is_correct'=>false],['content'=>'Müllerian agenesis','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Polycystic ovary syndrome (PCOS) is associated with insulin resistance.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which hormone is elevated in PCOS?','options'=>[['content'=>'FSH','is_correct'=>false],['content'=>'LH (relative to FSH)','is_correct'=>true],['content'=>'Prolactin always normal','is_correct'=>false],['content'=>'TSH','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'Dysmenorrhoea caused by endometrial tissue outside the uterus is called ______.','blank_answers'=>['endometriosis']],
+        ['type'=>'mcq_single','content'=>'The most common type of uterine fibroid is:','options'=>[['content'=>'Subserosal','is_correct'=>false],['content'=>'Intramural','is_correct'=>true],['content'=>'Submucosal','is_correct'=>false],['content'=>'Cervical','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'First-line treatment for heavy menstrual bleeding without structural pathology is:','options'=>[['content'=>'Hysterectomy','is_correct'=>false],['content'=>'Combined oral contraceptive pill or levonorgestrel IUD','is_correct'=>true],['content'=>'Clomiphene','is_correct'=>false],['content'=>'Danazol as first line','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Cervical cancer screening with HPV testing/Pap smear reduces mortality.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which condition presents with cyclical pelvic pain and dyspareunia?','options'=>[['content'=>'Bacterial vaginosis','is_correct'=>false],['content'=>'Endometriosis','is_correct'=>true],['content'=>'Vulvovaginal candidiasis','is_correct'=>false],['content'=>'Trichomoniasis','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'The normal pH of the vagina in reproductive age is approximately:','options'=>[['content'=>'7.0–8.0','is_correct'=>false],['content'=>'3.8–4.5','is_correct'=>true],['content'=>'6.5–7.0','is_correct'=>false],['content'=>'2.0–3.0','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'The most common bacterial cause of pelvic inflammatory disease is Neisseria ______ or Chlamydia trachomatis.','blank_answers'=>['gonorrhoeae','gonorrhoeae']],
     ]; }
 
-    private function historyQs(): array { return [
-        ['type'=>'mcq_single','content'=>'Which river was central to Ancient Egyptian civilization?','options'=>[['content'=>'Tigris','is_correct'=>false],['content'=>'Nile','is_correct'=>true],['content'=>'Euphrates','is_correct'=>false],['content'=>'Indus','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'The Roman Empire fell in 476 CE.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Who initiated construction of the Great Wall of China?','options'=>[['content'=>'Emperor Qin Shi Huang','is_correct'=>true],['content'=>'Genghis Khan','is_correct'=>false],['content'=>'Kublai Khan','is_correct'=>false],['content'=>'Emperor Wu','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'The city-state of Athens is located in ______.','blank_answers'=>['Greece','greece']],
-        ['type'=>'mcq_single','content'=>'Mesopotamia was located between which two rivers?','options'=>[['content'=>'Nile and Ganges','is_correct'=>false],['content'=>'Tigris and Euphrates','is_correct'=>true],['content'=>'Amazon and Mississippi','is_correct'=>false],['content'=>'Rhine and Danube','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'What writing system did ancient Mesopotamians develop?','options'=>[['content'=>'Hieroglyphics','is_correct'=>false],['content'=>'Cuneiform','is_correct'=>true],['content'=>'Latin script','is_correct'=>false],['content'=>'Sanskrit','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'Alexander the Great was born in Macedonia.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Which wonder was located in Alexandria, Egypt?','options'=>[['content'=>'Colossus of Rhodes','is_correct'=>false],['content'=>'Hanging Gardens','is_correct'=>false],['content'=>'Lighthouse of Alexandria','is_correct'=>true],['content'=>'Temple of Artemis','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Julius Caesar was assassinated in which year BCE?','options'=>[['content'=>'55 BCE','is_correct'=>false],['content'=>'44 BCE','is_correct'=>true],['content'=>'27 BCE','is_correct'=>false],['content'=>'100 BCE','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'Alexander the Great\'s teacher was ______.','blank_answers'=>['Aristotle','aristotle']],
+    private function pediatricsQs(): array { return [
+        ['type'=>'mcq_single','content'=>'At what age is the first dose of MMR vaccine typically given?','options'=>[['content'=>'Birth','is_correct'=>false],['content'=>'12–15 months','is_correct'=>true],['content'=>'5 years only','is_correct'=>false],['content'=>'6 weeks','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Exclusive breastfeeding is recommended for the first six months of life.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which milestone is expected at approximately 6 months of age?','options'=>[['content'=>'Walking independently','is_correct'=>false],['content'=>'Sitting without support','is_correct'=>true],['content'=>'Speaking two-word sentences','is_correct'=>false],['content'=>'Running','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'A newborn with physiological jaundice appearing after 24 hours has elevated ______.','blank_answers'=>['bilirubin']],
+        ['type'=>'mcq_single','content'=>'The most common cause of bronchiolitis in infants is:','options'=>[['content'=>'Rhinovirus','is_correct'=>false],['content'=>'Respiratory syncytial virus (RSV)','is_correct'=>true],['content'=>'Influenza A only','is_correct'=>false],['content'=>'Streptococcus pneumoniae','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which sign suggests dehydration in a child?','options'=>[['content'=>'Moist mucous membranes','is_correct'=>false],['content'=>'Sunken fontanelle and reduced skin turgor','is_correct'=>true],['content'=>'Bounding pulses','is_correct'=>false],['content'=>'Increased urine output','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Febrile seizures in children aged 6 months to 5 years are usually benign.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Oral rehydration solution (ORS) is used to treat:','options'=>[['content'=>'Hypertension','is_correct'=>false],['content'=>'Mild to moderate dehydration from gastroenteritis','is_correct'=>true],['content'=>'Asthma exacerbation','is_correct'=>false],['content'=>'Diabetic ketoacidosis as sole treatment','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which vaccine prevents Haemophilus influenzae type b meningitis?','options'=>[['content'=>'BCG','is_correct'=>false],['content'=>'Hib conjugate vaccine','is_correct'=>true],['content'=>'Hepatitis A','is_correct'=>false],['content'=>'Rotavirus only','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'The WHO growth chart plots weight-for-age and length/height-for-______ in children.','blank_answers'=>['age']],
     ]; }
 
-    private function grammarQs(): array { return [
-        ['type'=>'mcq_single','content'=>'Which article precedes "hour"?','options'=>[['content'=>'a','is_correct'=>false],['content'=>'an','is_correct'=>true],['content'=>'the','is_correct'=>false],['content'=>'no article','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'"Data" is the plural of "datum".','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Choose the correct sentence:','options'=>[['content'=>'She don\'t like coffee.','is_correct'=>false],['content'=>'She doesn\'t likes coffee.','is_correct'=>false],['content'=>'She doesn\'t like coffee.','is_correct'=>true],['content'=>'She not like coffee.','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'The past tense of "go" is ______.','blank_answers'=>['went']],
-        ['type'=>'mcq_single','content'=>'Which sentence uses passive voice?','options'=>[['content'=>'The dog chased the cat.','is_correct'=>false],['content'=>'The cat was chased by the dog.','is_correct'=>true],['content'=>'The cat ran away.','is_correct'=>false],['content'=>'Dogs chase cats.','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Superlative form of "good"?','options'=>[['content'=>'Gooder','is_correct'=>false],['content'=>'Better','is_correct'=>false],['content'=>'Best','is_correct'=>true],['content'=>'Goodest','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'A conjunction joins words, phrases, or clauses.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Which word is a preposition in "The book is on the table"?','options'=>[['content'=>'book','is_correct'=>false],['content'=>'is','is_correct'=>false],['content'=>'on','is_correct'=>true],['content'=>'table','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'The opposite of "ancient" is ______.','blank_answers'=>['modern','new','contemporary']],
-        ['type'=>'mcq_single','content'=>'Which is grammatically correct?','options'=>[['content'=>'Him and me went.','is_correct'=>false],['content'=>'He and I went.','is_correct'=>true],['content'=>'He and me went.','is_correct'=>false],['content'=>'Him and I went.','is_correct'=>false]]],
+    private function pharmacologyQs(): array { return [
+        ['type'=>'mcq_single','content'=>'Penicillins inhibit bacterial cell wall synthesis by blocking:','explanation'=>'Beta-lactams bind penicillin-binding proteins (transpeptidases).','options'=>[['content'=>'DNA gyrase','is_correct'=>false],['content'=>'Peptidoglycan cross-linking','is_correct'=>true],['content'=>'30S ribosomal subunit','is_correct'=>false],['content'=>'Folate synthesis','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Aminoglycosides are bactericidal and require oxygen for uptake (ineffective against anaerobes).','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which antibiotic class inhibits the 50S ribosomal subunit?','options'=>[['content'=>'Tetracyclines','is_correct'=>false],['content'=>'Macrolides','is_correct'=>true],['content'=>'Aminoglycosides','is_correct'=>false],['content'=>'Fluoroquinolones','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'Vancomycin is used primarily against Gram-______ cocci including MRSA.','blank_answers'=>['positive']],
+        ['type'=>'mcq_single','content'=>'The main toxicity of gentamicin is:','options'=>[['content'=>'Hepatotoxicity','is_correct'=>false],['content'=>'Nephrotoxicity and ototoxicity','is_correct'=>true],['content'=>'Bone marrow suppression only','is_correct'=>false],['content'=>'Peripheral neuropathy','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Metronidazole is effective against:','options'=>[['content'=>'Gram-positive aerobes only','is_correct'=>false],['content'=>'Anaerobic bacteria and certain protozoa','is_correct'=>true],['content'=>'Mycobacteria','is_correct'=>false],['content'=>'Fungi','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Ciprofloxacin is contraindicated in children due to risk of cartilage damage.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which mechanism describes bacterial beta-lactamase production?','options'=>[['content'=>'Efflux pump','is_correct'=>false],['content'=>'Enzymatic inactivation of antibiotic','is_correct'=>true],['content'=>'Target site mutation only','is_correct'=>false],['content'=>'Decreased permeability only','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Rifampicin discolours body fluids:','options'=>[['content'=>'Blue','is_correct'=>false],['content'=>'Orange-red','is_correct'=>true],['content'=>'Green','is_correct'=>false],['content'=>'Purple','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'The combination of amoxicillin and clavulanic acid prevents beta-______ degradation.','blank_answers'=>['lactamase','lactam']],
     ]; }
 
-    private function dsaQs(): array { return [
-        ['type'=>'mcq_single','content'=>'Time complexity of binary search?','options'=>[['content'=>'O(n)','is_correct'=>false],['content'=>'O(log n)','is_correct'=>true],['content'=>'O(n²)','is_correct'=>false],['content'=>'O(1)','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'A stack follows FIFO order.','explanation'=>'Stack is LIFO. Queue is FIFO.','options'=>[['content'=>'True','is_correct'=>false],['content'=>'False','is_correct'=>true]]],
-        ['type'=>'mcq_single','content'=>'Which uses nodes with pointers to the next node?','options'=>[['content'=>'Array','is_correct'=>false],['content'=>'Linked List','is_correct'=>true],['content'=>'Hash Map','is_correct'=>false],['content'=>'Stack','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'The divide-and-conquer sorting algorithm with O(n log n) average is ______.','blank_answers'=>['merge sort','mergesort']],
-        ['type'=>'mcq_single','content'=>'A complete binary tree is:','options'=>[['content'=>'Every node has exactly 2 children','is_correct'=>false],['content'=>'All levels full except possibly last, filled left to right','is_correct'=>true],['content'=>'Left and right subtrees equal height','is_correct'=>false],['content'=>'No duplicate values','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Best algorithm for shortest path in an unweighted graph?','options'=>[['content'=>'DFS','is_correct'=>false],['content'=>'BFS','is_correct'=>true],['content'=>'Dijkstra','is_correct'=>false],['content'=>'Bellman-Ford','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'Hash tables provide O(1) average-case lookup.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Space complexity of naive recursive Fibonacci?','options'=>[['content'=>'O(1)','is_correct'=>false],['content'=>'O(n)','is_correct'=>true],['content'=>'O(n²)','is_correct'=>false],['content'=>'O(log n)','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Which traversal visits root → left → right?','options'=>[['content'=>'In-order','is_correct'=>false],['content'=>'Post-order','is_correct'=>false],['content'=>'Pre-order','is_correct'=>true],['content'=>'Level-order','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'The data structure used to implement recursion internally is a ______.','blank_answers'=>['stack','call stack']],
+    private function anatomyQs(): array { return [
+        ['type'=>'mcq_single','content'=>'Which chamber of the heart receives oxygenated blood from the lungs?','options'=>[['content'=>'Right atrium','is_correct'=>false],['content'=>'Left atrium','is_correct'=>true],['content'=>'Right ventricle','is_correct'=>false],['content'=>'Left ventricle','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'The aortic valve has three cusps.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'The coronary artery that supplies the anterior interventricular septum is the:','options'=>[['content'=>'Right coronary artery','is_correct'=>false],['content'=>'Left anterior descending (LAD) artery','is_correct'=>true],['content'=>'Circumflex artery only','is_correct'=>false],['content'=>'Posterior descending artery always from RCA','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'Blood flows from the right ventricle to the lungs via the pulmonary ______.','blank_answers'=>['artery','arteries']],
+        ['type'=>'mcq_single','content'=>'The sinoatrial (SA) node is located in the:','options'=>[['content'=>'Interventricular septum','is_correct'=>false],['content'=>'Right atrium near the SVC opening','is_correct'=>true],['content'=>'Left ventricle','is_correct'=>false],['content'=>'Aortic root','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which structure prevents backflow from the left ventricle to the left atrium?','options'=>[['content'=>'Tricuspid valve','is_correct'=>false],['content'=>'Mitral (bicuspid) valve','is_correct'=>true],['content'=>'Pulmonary valve','is_correct'=>false],['content'=>'Aortic valve','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'The bundle of His conducts impulses from the AV node to the ventricles.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'The great cardiac vein drains into the:','options'=>[['content'=>'Superior vena cava','is_correct'=>false],['content'=>'Coronary sinus','is_correct'=>true],['content'=>'Pulmonary vein','is_correct'=>false],['content'=>'Inferior vena cava directly','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which layer of the heart wall is composed of cardiac muscle?','options'=>[['content'=>'Epicardium','is_correct'=>false],['content'=>'Myocardium','is_correct'=>true],['content'=>'Endocardium only','is_correct'=>false],['content'=>'Pericardium only','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'The fibrous skeleton of the heart separates the atria from the ______.','blank_answers'=>['ventricles','ventricle']],
     ]; }
 
-    private function scienceQs(): array { return [
-        ['type'=>'mcq_single','content'=>'Most abundant gas in Earth\'s atmosphere?','options'=>[['content'=>'Oxygen','is_correct'=>false],['content'=>'Carbon dioxide','is_correct'=>false],['content'=>'Nitrogen','is_correct'=>true],['content'=>'Argon','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'Sound travels faster in water than in air.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Chemical symbol for Gold?','options'=>[['content'=>'Go','is_correct'=>false],['content'=>'Gd','is_correct'=>false],['content'=>'Au','is_correct'=>true],['content'=>'Ag','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'Plants make food using sunlight through ______.','blank_answers'=>['photosynthesis']],
-        ['type'=>'mcq_single','content'=>'Which law states F = ma?','options'=>[['content'=>'Newton\'s First Law','is_correct'=>false],['content'=>'Newton\'s Second Law','is_correct'=>true],['content'=>'Newton\'s Third Law','is_correct'=>false],['content'=>'Ohm\'s Law','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Unit of electric current?','options'=>[['content'=>'Volt','is_correct'=>false],['content'=>'Watt','is_correct'=>false],['content'=>'Ampere','is_correct'=>true],['content'=>'Ohm','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'Acids have a pH value greater than 7.','explanation'=>'Acids: pH < 7. Bases: pH > 7.','options'=>[['content'=>'True','is_correct'=>false],['content'=>'False','is_correct'=>true]]],
-        ['type'=>'mcq_single','content'=>'The Red Planet is?','options'=>[['content'=>'Venus','is_correct'=>false],['content'=>'Jupiter','is_correct'=>false],['content'=>'Mars','is_correct'=>true],['content'=>'Saturn','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'The smallest unit of matter is an ______.','blank_answers'=>['atom']],
-        ['type'=>'mcq_single','content'=>'Rock formed from cooling lava?','options'=>[['content'=>'Sedimentary','is_correct'=>false],['content'=>'Metamorphic','is_correct'=>false],['content'=>'Igneous','is_correct'=>true],['content'=>'Fossil rock','is_correct'=>false]]],
+    private function physiologyQs(): array { return [
+        ['type'=>'mcq_single','content'=>'The functional unit of the kidney is the:','options'=>[['content'=>'Glomerulus alone','is_correct'=>false],['content'=>'Nephron','is_correct'=>true],['content'=>'Collecting duct only','is_correct'=>false],['content'=>'Loop of Henle only','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'ADH (vasopressin) increases water reabsorption in the collecting ducts.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Most glucose reabsorption occurs in the:','options'=>[['content'=>'Loop of Henle','is_correct'=>false],['content'=>'Proximal convoluted tubule','is_correct'=>true],['content'=>'Distal convoluted tubule','is_correct'=>false],['content'=>'Collecting duct','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'The hormone that promotes sodium reabsorption in the distal nephron is ______.','blank_answers'=>['aldosterone']],
+        ['type'=>'mcq_single','content'=>'GFR is primarily determined by:','options'=>[['content'=>'Tubular secretion rate','is_correct'=>false],['content'=>'Glomerular capillary hydrostatic and oncotic pressures','is_correct'=>true],['content'=>'Urine flow rate only','is_correct'=>false],['content'=>'ADH level only','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which part of the nephron is impermeable to water?','options'=>[['content'=>'Proximal tubule','is_correct'=>false],['content'=>'Ascending limb of loop of Henle','is_correct'=>true],['content'=>'Medullary collecting duct with ADH','is_correct'=>false],['content'=>'Descending limb of loop of Henle','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Renin is secreted by juxtaglomerular cells in response to decreased renal perfusion.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'The normal range for serum creatinine in adults is approximately:','options'=>[['content'=>'0.1–0.3 mg/dL','is_correct'=>false],['content'=>'0.6–1.2 mg/dL','is_correct'=>true],['content'=>'3.0–5.0 mg/dL','is_correct'=>false],['content'=>'10–15 mg/dL','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Bicarbonate is primarily reabsorbed in the:','options'=>[['content'=>'Proximal tubule','is_correct'=>true],['content'=>'Thin descending limb only','is_correct'=>false],['content'=>'Papilla only','is_correct'=>false],['content'=>'Bowman capsule','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'The countercurrent multiplier mechanism concentrates urine in the renal ______.','blank_answers'=>['medulla']],
     ]; }
 
-    private function aptitudeQs(): array { return [
-        ['type'=>'mcq_single','content'=>'Next number: 2, 4, 8, 16, __','options'=>[['content'=>'24','is_correct'=>false],['content'=>'32','is_correct'=>true],['content'=>'30','is_correct'=>false],['content'=>'20','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'If A > B and B > C, then A > C.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Train at 60 km/h — distance in 2.5 hours?','options'=>[['content'=>'100 km','is_correct'=>false],['content'=>'120 km','is_correct'=>false],['content'=>'150 km','is_correct'=>true],['content'=>'130 km','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'The even prime number is ______.','blank_answers'=>['2']],
-        ['type'=>'mcq_single','content'=>'Which shape has no corners?','options'=>[['content'=>'Triangle','is_correct'=>false],['content'=>'Square','is_correct'=>false],['content'=>'Circle','is_correct'=>true],['content'=>'Rectangle','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'If today is Monday, what day is it after 100 days?','options'=>[['content'=>'Saturday','is_correct'=>false],['content'=>'Sunday','is_correct'=>false],['content'=>'Wednesday','is_correct'=>true],['content'=>'Thursday','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'Sum of angles in any triangle is 180°.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'What comes next: Z, Y, X, W, __','options'=>[['content'=>'U','is_correct'=>false],['content'=>'V','is_correct'=>true],['content'=>'A','is_correct'=>false],['content'=>'T','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Clock shows 3:00 — angle between hands?','options'=>[['content'=>'30°','is_correct'=>false],['content'=>'60°','is_correct'=>false],['content'=>'90°','is_correct'=>true],['content'=>'180°','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'Number of seconds in one minute is ______.','blank_answers'=>['60']],
+    private function pathologyQs(): array { return [
+        ['type'=>'mcq_single','content'=>'The cardinal signs of acute inflammation include:','options'=>[['content'=>'Rubor, calor, tumor, dolor','is_correct'=>true],['content'=>'Atrophy, metaplasia, dysplasia','is_correct'=>false],['content'=>'Necrosis, apoptosis, autophagy only','is_correct'=>false],['content'=>'Fibrosis, scarring, keloid','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Neutrophils are the predominant cell in acute inflammation.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which type of necrosis is associated with tuberculosis?','options'=>[['content'=>'Coagulative','is_correct'=>false],['content'=>'Caseous','is_correct'=>true],['content'=>'Liquefactive','is_correct'=>false],['content'=>'Fat necrosis','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'Spread of malignant cells through lymphatics to regional nodes is called lymphatic ______.','blank_answers'=>['spread','metastasis','metastases']],
+        ['type'=>'mcq_single','content'=>'Dysplasia is characterised by:','options'=>[['content'=>'Normal cell size and organisation','is_correct'=>false],['content'=>'Disordered cellular proliferation and atypia','is_correct'=>true],['content'=>'Complete loss of differentiation only','is_correct'=>false],['content'=>'Benign hypertrophy','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'The most common site of metastasis for carcinomas is:','options'=>[['content'=>'Brain only','is_correct'=>false],['content'=>'Regional lymph nodes','is_correct'=>true],['content'=>'Skin only','is_correct'=>false],['content'=>'Muscle','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Grading of tumours refers to histological differentiation and aggressiveness.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which immunohistochemical marker is used for epithelial tumours?','options'=>[['content'=>'CD20','is_correct'=>false],['content'=>'Cytokeratin','is_correct'=>true],['content'=>'S100','is_correct'=>false],['content'=>'CD3','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Apoptosis differs from necrosis because it is:','options'=>[['content'=>'Always pathological and inflammatory','is_correct'=>false],['content'=>'Programmed, energy-dependent cell death without inflammation','is_correct'=>true],['content'=>'Always caused by infection','is_correct'=>false],['content'=>'Irreversible membrane rupture first','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'Chronic inflammation is characterised by infiltration of ______ and plasma cells.','blank_answers'=>['lymphocytes','macrophages']],
     ]; }
 
-    private function networkQs(): array { return [
-        ['type'=>'mcq_single','content'=>'How many layers does the OSI model have?','options'=>[['content'=>'5','is_correct'=>false],['content'=>'6','is_correct'=>false],['content'=>'7','is_correct'=>true],['content'=>'4','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'UDP is a connection-oriented protocol.','explanation'=>'UDP is connectionless; TCP is connection-oriented.','options'=>[['content'=>'True','is_correct'=>false],['content'=>'False','is_correct'=>true]]],
-        ['type'=>'mcq_single','content'=>'Which protocol resolves domain names to IPs?','options'=>[['content'=>'DHCP','is_correct'=>false],['content'=>'FTP','is_correct'=>false],['content'=>'DNS','is_correct'=>true],['content'=>'ARP','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'Default port for HTTPS is ______.','blank_answers'=>['443']],
-        ['type'=>'mcq_single','content'=>'Which OSI layer handles MAC addresses?','options'=>[['content'=>'Network layer','is_correct'=>false],['content'=>'Data Link layer','is_correct'=>true],['content'=>'Transport layer','is_correct'=>false],['content'=>'Physical layer','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'What does IP stand for in TCP/IP?','options'=>[['content'=>'Internet Provider','is_correct'=>false],['content'=>'Internet Protocol','is_correct'=>true],['content'=>'Internal Process','is_correct'=>false],['content'=>'Intranet Protocol','is_correct'=>false]]],
-        ['type'=>'true_false','content'=>'255.255.255.0 subnet mask equals /24 CIDR.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'HTTP method to create a resource?','options'=>[['content'=>'GET','is_correct'=>false],['content'=>'DELETE','is_correct'=>false],['content'=>'POST','is_correct'=>true],['content'=>'HEAD','is_correct'=>false]]],
-        ['type'=>'mcq_single','content'=>'Primary purpose of a firewall?','options'=>[['content'=>'Speeds up internet','is_correct'=>false],['content'=>'Monitors and controls network traffic','is_correct'=>true],['content'=>'Assigns IP addresses','is_correct'=>false],['content'=>'Stores web pages locally','is_correct'=>false]]],
-        ['type'=>'fill_blank','content'=>'The loopback IP address is ______.','blank_answers'=>['127.0.0.1']],
+    private function microbiologyQs(): array { return [
+        ['type'=>'mcq_single','content'=>'Gram-positive bacteria retain crystal violet because they have a thick:','options'=>[['content'=>'Outer membrane','is_correct'=>false],['content'=>'Peptidoglycan layer','is_correct'=>true],['content'=>'Capsule only','is_correct'=>false],['content'=>'Lipopolysaccharide layer','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Mycobacteria are acid-fast due to mycolic acid in their cell wall.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which stain is used to identify Mycobacterium tuberculosis?','options'=>[['content'=>'Gram stain','is_correct'=>false],['content'=>'Ziehl-Neelsen (acid-fast) stain','is_correct'=>true],['content'=>'Giemsa stain only','is_correct'=>false],['content'=>'India ink','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'Bacteria that require oxygen for growth are called ______.','blank_answers'=>['obligate aerobes','aerobes','obligate aerobic']],
+        ['type'=>'mcq_single','content'=>'Staphylococcus aureus is catalase:','options'=>[['content'=>'Negative','is_correct'=>false],['content'=>'Positive','is_correct'=>true],['content'=>'Variable only in MRSA','is_correct'=>false],['content'=>'Not tested','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which organism causes gas gangrene (clostridial myonecrosis)?','options'=>[['content'=>'Clostridium difficile','is_correct'=>false],['content'=>'Clostridium perfringens','is_correct'=>true],['content'=>'Clostridium tetani only in wounds without gas','is_correct'=>false],['content'=>'Bacillus anthracis','is_correct'=>false]]],
+        ['type'=>'true_false','content'=>'Endotoxin is a component of the outer membrane of Gram-negative bacteria.','options'=>[['content'=>'True','is_correct'=>true],['content'=>'False','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'The coagulase test distinguishes:','options'=>[['content'=>'S. aureus from S. epidermidis','is_correct'=>true],['content'=>'E. coli from Klebsiella','is_correct'=>false],['content'=>'Streptococcus pyogenes from pneumoniae','is_correct'=>false],['content'=>'Salmonella from Shigella','is_correct'=>false]]],
+        ['type'=>'mcq_single','content'=>'Which medium is selective for Gram-negative enteric bacilli?','options'=>[['content'=>'Blood agar','is_correct'=>false],['content'=>'MacConkey agar','is_correct'=>true],['content'=>'Chocolate agar only','is_correct'=>false],['content'=>'Sabouraud dextrose agar','is_correct'=>false]]],
+        ['type'=>'fill_blank','content'=>'The toxin responsible for botulism is produced by Clostridium ______.','blank_answers'=>['botulinum']],
     ]; }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services\QuestionBank;
 
+use App\Models\Category;
 use App\Models\FillBlankAnswer;
 use App\Models\Question;
 use App\Models\QuestionCollection;
@@ -28,6 +29,7 @@ class QuestionBankService
         'explanation',
         'hint',
         'collection_name',
+        'subject',
         'option_1',
         'correct_1',
         'option_2',
@@ -127,6 +129,7 @@ class QuestionBankService
             'hint'          => $question->hint,
             'difficulty'    => $question->difficulty,
             'collection_id' => $collectionId,
+            'category_id'   => $question->category_id ?? $question->quiz?->category_id,
             'sort_order'    => 0,
         ]);
 
@@ -156,11 +159,13 @@ class QuestionBankService
         int $count,
         ?string $collectionId = null,
         ?string $difficulty = null,
-        ?string $type = null
+        ?string $type = null,
+        ?string $categoryId = null
     ): int {
         $ids = Question::whereNull('quiz_id')
             ->where('lecturer_id', $creatorId)
             ->when($collectionId, fn($q) => $q->where('collection_id', $collectionId))
+            ->when($categoryId,   fn($q) => $q->where('category_id', $categoryId))
             ->when($difficulty,   fn($q) => $q->where('difficulty', $difficulty))
             ->when($type,         fn($q) => $q->where('type', $type))
             ->inRandomOrder()
@@ -186,7 +191,7 @@ class QuestionBankService
 
         Question::whereNull('quiz_id')
             ->where('lecturer_id', $creatorId)
-            ->with(['options', 'fillBlankAnswers', 'collection'])
+            ->with(['options', 'fillBlankAnswers', 'collection', 'category'])
             ->orderBy('created_at')
             ->chunk(100, function ($chunk) use ($sheet, &$row, &$count) {
                 foreach ($chunk as $q) {
@@ -200,6 +205,7 @@ class QuestionBankService
                         $q->explanation ?? '',
                         $q->hint ?? '',
                         $q->collection?->name ?? '',
+                        $q->category?->name ?? '',
                     ];
 
                     for ($i = 0; $i < self::EXCEL_OPTION_COUNT; $i++) {
@@ -226,6 +232,86 @@ class QuestionBankService
             ->log('bank_export_generated');
 
         $path = tempnam(sys_get_temp_dir(), 'qbank_') . '.xlsx';
+        (new Xlsx($spreadsheet))->save($path);
+
+        return $path;
+    }
+
+    /**
+     * Generate a sample Excel template with headers and example rows.
+     */
+    public function sampleExcel(): string
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet       = $spreadsheet->getActiveSheet();
+        $sheet->fromArray([self::EXCEL_HEADERS], null, 'A1');
+
+        $examples = [
+            [
+                'mcq_single',
+                'What is 2 + 2?',
+                'easy',
+                1,
+                0,
+                'Basic arithmetic.',
+                '',
+                'Math Basics',
+                'Mathematics',
+                '3', 'no',
+                '4', 'yes',
+                '5', 'no',
+                '6', 'no',
+                '', '',
+                '', '',
+                '', '',
+                '',
+            ],
+            [
+                'true_false',
+                'PHP is a compiled language.',
+                'medium',
+                1,
+                0.25,
+                'PHP is interpreted, not compiled.',
+                '',
+                'PHP Snippets',
+                'Programming',
+                'True', 'no',
+                'False', 'yes',
+                '', '',
+                '', '',
+                '', '',
+                '', '',
+                '',
+            ],
+            [
+                'fill_blank',
+                'The capital of France is ____.',
+                'easy',
+                1,
+                0,
+                'Paris is the capital and largest city of France.',
+                '',
+                'Europe Capitals',
+                'Geography',
+                '', '',
+                '', '',
+                '', '',
+                '', '',
+                '', '',
+                '', '',
+                '', '',
+                'Paris',
+            ],
+        ];
+
+        $row = 2;
+        foreach ($examples as $line) {
+            $sheet->fromArray([$line], null, 'A' . $row);
+            $row++;
+        }
+
+        $path = tempnam(sys_get_temp_dir(), 'qbank_sample_') . '.xlsx';
         (new Xlsx($spreadsheet))->save($path);
 
         return $path;
@@ -304,6 +390,10 @@ class QuestionBankService
                 $collectionId = $col->id;
             }
 
+            $categoryId = $this->resolveCategoryId(
+                $row['subject'] ?? $row['category_name'] ?? $row['category'] ?? null
+            );
+
             $q = Question::create([
                 'quiz_id'        => null,
                 'lecturer_id'     => $creatorId,
@@ -316,6 +406,7 @@ class QuestionBankService
                 'difficulty'     => in_array($row['difficulty'] ?? '', ['easy', 'medium', 'hard'], true)
                     ? $row['difficulty'] : null,
                 'collection_id'  => $collectionId,
+                'category_id'    => $categoryId,
                 'sort_order'     => 0,
             ]);
 
@@ -377,6 +468,7 @@ class QuestionBankService
             'explanation'     => $row['explanation'] ?? '',
             'hint'            => $row['hint'] ?? '',
             'collection_name' => $row['collection_name'] ?? ($row['collection'] ?? ''),
+            'subject'         => $row['subject'] ?? ($row['category_name'] ?? ($row['category'] ?? '')),
             'options'         => $options,
             'blank_answers'   => $blankAnswers,
         ];
@@ -395,6 +487,19 @@ class QuestionBankService
     private function parseExcelBoolean(string $value): bool
     {
         return in_array(strtolower(trim($value)), ['1', 'yes', 'y', 'true', 'correct'], true);
+    }
+
+    private function resolveCategoryId(?string $name): ?string
+    {
+        $name = trim((string) $name);
+        if ($name === '') {
+            return null;
+        }
+
+        return Category::query()
+            ->where('is_active', true)
+            ->whereRaw('LOWER(name) = ?', [mb_strtolower($name)])
+            ->value('id');
     }
 
     /** @deprecated Use importQuestions() or importExcel() */

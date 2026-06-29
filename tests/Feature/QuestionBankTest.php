@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\FillBlankAnswer;
+use App\Models\Category;
 use Spatie\Permission\Models\Role;
 use App\Models\Question;
 use App\Models\QuestionCollection;
@@ -12,6 +13,7 @@ use App\Models\User;
 use App\Services\QuestionBank\QuestionBankService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Tests\TestCase;
 
 class QuestionBankTest extends TestCase
@@ -272,6 +274,12 @@ class QuestionBankTest extends TestCase
             'lecturer_id' => $this->creator->id,
             'name'       => 'Excel Collection',
         ]);
+        $cat = Category::create([
+            'name'       => 'Mathematics',
+            'slug'       => 'mathematics',
+            'is_active'  => true,
+            'sort_order' => 1,
+        ]);
 
         $bankQ = Question::factory()->create([
             'lecturer_id'    => $this->creator->id,
@@ -282,6 +290,7 @@ class QuestionBankTest extends TestCase
             'marks'         => 2,
             'negative_marks'=> 0.5,
             'collection_id' => $col->id,
+            'category_id'   => $cat->id,
         ]);
 
         QuestionOption::create([
@@ -313,8 +322,49 @@ class QuestionBankTest extends TestCase
         $imported = Question::whereNull('quiz_id')->where('lecturer_id', $this->creator->id)->first();
         $this->assertSame('Excel round trip question?', $imported->content);
         $this->assertSame('easy', $imported->difficulty);
+        $this->assertSame($cat->id, $imported->category_id);
         $this->assertCount(2, $imported->options);
         $this->assertTrue($imported->options->firstWhere('content', 'Option A')->is_correct);
+    }
+
+    public function test_import_questions_resolves_subject_category(): void
+    {
+        $cat = Category::create([
+            'name'       => 'Mathematics',
+            'slug'       => 'mathematics',
+            'is_active'  => true,
+            'sort_order' => 1,
+        ]);
+
+        $result = $this->service->importQuestions($this->creator->id, [
+            [
+                'type'    => 'mcq_single',
+                'content' => 'Unique subject tag question 999?',
+                'subject' => 'Mathematics',
+                'options' => [],
+                'blank_answers' => [],
+            ],
+        ]);
+
+        $this->assertSame(1, $result['imported']);
+
+        $question = Question::where('content', 'Unique subject tag question 999?')->first();
+        $this->assertSame($cat->id, $question->category_id);
+    }
+
+    public function test_sample_excel_has_headers_and_examples(): void
+    {
+        $path = $this->service->sampleExcel();
+
+        $this->assertFileExists($path);
+
+        $rows = IOFactory::load($path)->getActiveSheet()->toArray(null, true, true, false);
+        @unlink($path);
+
+        $this->assertGreaterThanOrEqual(4, count($rows));
+        $this->assertSame('type', strtolower(trim((string) $rows[0][0])));
+        $this->assertSame('subject', strtolower(trim((string) $rows[0][8])));
+        $this->assertSame('mcq_single', $rows[1][0]);
     }
 
     // ── T9-15: saveToBank detects duplicate per creator ──────────────

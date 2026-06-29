@@ -8,7 +8,7 @@ class Question extends Model
 {
     use HasFactory, HasUuid;
     protected $fillable = ['quiz_id','lecturer_id','type','content','explanation','marks','negative_marks',
-        'time_limit_seconds','sort_order','is_mandatory','hint','difficulty','collection_id','source_bank_question_id'];
+        'time_limit_seconds','sort_order','is_mandatory','hint','difficulty','collection_id','category_id','source_bank_question_id'];
 
     protected function casts(): array {
         return ['marks' => 'decimal:2', 'negative_marks' => 'decimal:2', 'is_mandatory' => 'boolean'];
@@ -20,6 +20,7 @@ class Question extends Model
     public function fillBlankAnswers() { return $this->hasMany(FillBlankAnswer::class); }
     public function attemptAnswers() { return $this->hasMany(AttemptAnswer::class); }
     public function collection() { return $this->belongsTo(QuestionCollection::class); }
+    public function category() { return $this->belongsTo(Category::class); }
     public function sourceQuestion() { return $this->belongsTo(Question::class, 'source_bank_question_id'); }
     public function derivedQuestions() { return $this->hasMany(Question::class, 'source_bank_question_id'); }
 
