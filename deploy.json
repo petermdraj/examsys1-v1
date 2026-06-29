@@ -1,5 +1,5 @@
 {
-  "DEPLOYPATH": "/home/testsub/public_html/scimeeducation/",
+  "DEPLOYPATH": "/home/testsub/public_html/nextcoach/",
   "task": {
     "0": "index.php",
     "1": "app",
