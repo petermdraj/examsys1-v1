@@ -43,7 +43,7 @@ class InstallerWizard extends Component
 
     // Demo data (step 3)
     public bool   $installDemo = false;
-    public string $demoType    = 'competition'; // competition | school | professional
+    public string $demoType    = 'school'; // school | professional | competition
 
     // Step 4 — Install
     public int    $currentStep  = 0;   // 0 = not started; 1-9 = step in progress

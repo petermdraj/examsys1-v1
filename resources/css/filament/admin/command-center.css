@@ -192,3 +192,43 @@
 .dark .fi-input-wrp .fi-select-input {
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E") !important;
 }
+
+/* Filament buttons — ensure readable contrast on dashboard cards and header */
+.fi-main .cc-card .fi-btn.fi-btn-outlined.fi-color-gray,
+.fi-main .cc-widget .fi-btn.fi-btn-outlined.fi-color-gray {
+    color: rgb(55 65 81) !important;
+    border-color: rgb(209 213 219) !important;
+    background-color: rgb(255 255 255) !important;
+}
+
+.fi-main .cc-card .fi-btn.fi-btn-outlined.fi-color-gray .fi-btn-icon,
+.fi-main .cc-widget .fi-btn.fi-btn-outlined.fi-color-gray .fi-btn-icon {
+    color: rgb(107 114 128) !important;
+}
+
+.dark .fi-main .cc-card .fi-btn.fi-btn-outlined.fi-color-gray,
+.dark .fi-main .cc-widget .fi-btn.fi-btn-outlined.fi-color-gray {
+    color: rgb(243 244 246) !important;
+    border-color: rgb(75 85 99) !important;
+    background-color: rgb(31 41 55) !important;
+}
+
+.dark .fi-main .cc-card .fi-btn.fi-btn-outlined.fi-color-gray .fi-btn-icon,
+.dark .fi-main .cc-widget .fi-btn.fi-btn-outlined.fi-color-gray .fi-btn-icon {
+    color: rgb(156 163 175) !important;
+}
+
+.fi-main .fi-btn.fi-color-primary:not(.fi-btn-outlined),
+.fi-topbar .fi-btn.fi-color-primary:not(.fi-btn-outlined),
+.fi-header .fi-ac-btn-action.fi-color-primary,
+.settings-form-actions .fi-btn.fi-color-primary:not(.fi-btn-outlined) {
+    background-color: rgb(var(--primary-600, 108 46 99)) !important;
+    color: #ffffff !important;
+}
+
+.fi-main .fi-btn.fi-color-primary:not(.fi-btn-outlined) .fi-btn-icon,
+.fi-topbar .fi-btn.fi-color-primary:not(.fi-btn-outlined) .fi-btn-icon,
+.fi-header .fi-ac-btn-action.fi-color-primary .fi-btn-icon,
+.settings-form-actions .fi-btn.fi-color-primary:not(.fi-btn-outlined) .fi-btn-icon {
+    color: #ffffff !important;
+}

@@ -799,6 +799,7 @@ class Settings extends Page
         return [
             Action::make('save')
                 ->label(__('admin.settings_btn_save'))
+                ->color('primary')
                 ->action('save')
                 ->keyBindings(['mod+s']),
         ];
@@ -809,6 +810,7 @@ class Settings extends Page
         return [
             Action::make('save')
                 ->label(__('admin.settings_btn_save'))
+                ->color('primary')
                 ->submit('save')
                 ->keyBindings(['mod+s']),
         ];

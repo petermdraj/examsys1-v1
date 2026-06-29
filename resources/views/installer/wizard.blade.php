@@ -14,6 +14,13 @@ $svgPaths = [
     'credit-card'   => '<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/>',
     'rocket-launch' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>',
 ];
+
+$demoThemes = [
+    ['value' => 'school',       'label' => 'Medical School',       'sub' => 'Anatomy, Physiology, Biochemistry, Pathology', 'icon' => '🫀'],
+    ['value' => 'professional', 'label' => 'Clinical Specialties', 'sub' => 'Medicine, Surgery, OB/Gyn, Pediatrics',      'icon' => '🩺'],
+    ['value' => 'competition',  'label' => 'Licensing Exams',      'sub' => 'USMLE, PLAB, NEET PG, Medical Ethics',      'icon' => '📝'],
+];
+$demoTypeName = collect($demoThemes)->firstWhere('value', $demoType)['label'] ?? ucfirst($demoType);
 @endphp
 
 {{-- ─── Main card ─────────────────────────────────────────────────────────── --}}
@@ -294,7 +301,7 @@ $svgPaths = [
         <div class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl">
             <div>
                 <p class="text-sm font-semibold text-slate-800">Install sample data</p>
-                <p class="text-xs text-slate-500 mt-0.5">Pre-populate your platform with categories, exams, and users so it's ready to demo.</p>
+                <p class="text-xs text-slate-500 mt-0.5">Pre-populate your platform with medical categories, sample exams, and demo users.</p>
             </div>
             <button type="button" wire:click="toggleDemo"
                 class="relative flex-shrink-0 w-12 h-6 rounded-full transition-colors duration-200 focus:outline-none
@@ -306,11 +313,7 @@ $svgPaths = [
 
         @if($installDemo)
         <div class="grid grid-cols-3 gap-3">
-            @foreach([
-                ['value' => 'competition', 'label' => 'Competition Exams', 'sub' => 'UPSC, SSC, Banking, Railway', 'icon' => '🏆'],
-                ['value' => 'school',      'label' => 'School Portal',      'sub' => 'Math, Science, English, History', 'icon' => '🏫'],
-                ['value' => 'professional','label' => 'Professional Tests', 'sub' => 'PHP, JS, PM, Marketing, HR', 'icon' => '💼'],
-            ] as $demo)
+            @foreach($demoThemes as $demo)
             <button type="button" wire:click="setDemoType('{{ $demo['value'] }}')"
                 class="text-left p-4 rounded-xl border-2 transition-all
                     {{ $demoType === $demo['value'] ? 'border-violet-500 bg-violet-50' : 'border-slate-200 bg-slate-50 hover:border-slate-300' }}">
@@ -366,7 +369,7 @@ $installStepDefs = array_filter([
     3 => 'Seeding default data',
     4 => 'Creating admin account',
     5 => 'Linking storage directory',
-    6 => $installDemo ? 'Installing demo data (' . $demoType . ')' : null,
+    6 => $installDemo ? 'Installing demo data (' . $demoTypeName . ')' : null,
     7 => 'Finalising setup',
 ]);
 
@@ -530,7 +533,7 @@ $progressPct    = $totalInstallSteps > 0
             ['App URL',    $appUrl],
             ['Database',   $dbName . ' @ ' . $dbHost . ':' . $dbPort],
             ['Admin Email',$adminEmail],
-            ['Demo Data',  $installDemo ? ucfirst($demoType) . ' demo' : '— None'],
+            ['Demo Data',  $installDemo ? $demoTypeName . ' demo' : '— None'],
         ] as [$lbl, $val])
         <div class="flex items-center justify-between px-5 py-3">
             <span class="text-sm text-slate-500">{{ $lbl }}</span>
