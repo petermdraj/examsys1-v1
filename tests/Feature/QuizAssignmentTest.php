@@ -8,7 +8,6 @@ use App\Models\Quiz;
 use App\Models\StudentBatch;
 use App\Models\User;
 use App\Services\Quiz\QuizAssignmentService;
-use App\Settings\PlatformSettings;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -91,40 +90,9 @@ class QuizAssignmentTest extends TestCase
             ->assertRedirect();
     }
 
-    public function test_student_registration_is_rejected(): void
+    public function test_public_registration_route_is_not_available(): void
     {
-        $settings = app(PlatformSettings::class);
-        $settings->allow_registration = true;
-        $settings->lecturer_registration_open = true;
-        $settings->save();
-
-        $this->post(route('register.post'), [
-            'name'                  => 'New Student',
-            'email'                 => 'student-new@example.com',
-            'password'              => 'password123',
-            'password_confirmation' => 'password123',
-            'role'                  => 'student',
-        ])->assertSessionHasErrors('role');
-    }
-
-    public function test_lecturer_registration_still_works_when_open(): void
-    {
-        $settings = app(PlatformSettings::class);
-        $settings->allow_registration = true;
-        $settings->lecturer_registration_open = true;
-        $settings->save();
-
-        $this->post(route('register.post'), [
-            'name'                  => 'New Lecturer',
-            'email'                 => 'lecturer-new@example.com',
-            'password'              => 'password123',
-            'password_confirmation' => 'password123',
-            'role'                  => 'lecturer',
-        ])->assertRedirect('/lecturer');
-
-        $this->assertDatabaseHas('users', [
-            'email' => 'lecturer-new@example.com',
-            'role'  => 'lecturer',
-        ]);
+        $this->get('/register')->assertNotFound();
+        $this->post('/register', [])->assertNotFound();
     }
 }

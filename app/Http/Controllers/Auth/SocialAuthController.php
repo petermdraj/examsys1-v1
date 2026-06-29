@@ -42,7 +42,7 @@ class SocialAuthController extends Controller
         if (! $user) {
             return redirect()->route('login')->with(
                 'error',
-                'No account found for this email. Students are added by an administrator; lecturers must register with email and password.'
+                'No account found for this email. Accounts are created by an administrator.'
             );
         }
 

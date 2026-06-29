@@ -30,8 +30,8 @@ class OtpController extends Controller
         $user   = User::find($userId);
 
         if (! $user) {
-            return redirect()->route('register')
-                ->withErrors(['otp' => 'Session expired. Please register again.']);
+            return redirect()->route('login')
+                ->withErrors(['otp' => 'Session expired. Please log in again.']);
         }
 
         if (! $user->verifyEmailOtp($request->otp)) {

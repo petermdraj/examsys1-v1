@@ -38,10 +38,25 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function canAccessAdminPanel(): bool
+    {
+        return in_array($this->role, ['super_admin', 'admin'], true);
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
         return match ($panel->getId()) {
-            'admin'    => $this->role === 'super_admin',
+            'admin'    => $this->canAccessAdminPanel(),
             'lecturer' => in_array($this->role, ['lecturer', 'super_admin'], true),
             default    => false,
         };
@@ -49,12 +64,36 @@ class User extends Authenticatable implements FilamentUser
 
     public function canImpersonate(): bool
     {
-        return $this->role === 'super_admin';
+        return $this->isSuperAdmin();
     }
 
     public function canBeImpersonated(): bool
     {
-        return $this->role !== 'super_admin';
+        return ! $this->isSuperAdmin();
+    }
+
+    public function canManageStaffUser(self $target): bool
+    {
+        return $this->isSuperAdmin() || ! $target->isSuperAdmin();
+    }
+
+    /** @return array<string, string> */
+    public static function assignableStaffRoleOptions(?self $actor = null): array
+    {
+        $actor ??= auth()->user();
+
+        if ($actor?->isSuperAdmin()) {
+            return [
+                'super_admin' => __('admin.user_role_super_admin'),
+                'admin'       => __('admin.user_role_admin'),
+                'lecturer'    => __('admin.user_role_lecturer'),
+            ];
+        }
+
+        return [
+            'admin'    => __('admin.user_role_admin'),
+            'lecturer' => __('admin.user_role_lecturer'),
+        ];
     }
 
     public function assignEmailOtp(string $otp): void

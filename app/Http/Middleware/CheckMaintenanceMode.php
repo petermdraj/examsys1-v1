@@ -31,7 +31,7 @@ class CheckMaintenanceMode
         }
 
         // Allow authenticated admins through
-        if ($request->user() && $request->user()->hasRole('super_admin')) {
+        if ($request->user()?->hasAnyRole(['super_admin', 'admin'])) {
             return $next($request);
         }
 

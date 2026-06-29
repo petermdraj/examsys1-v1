@@ -9,7 +9,6 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\Student\AttemptController;
 use App\Http\Controllers\Student\CertificateController;
@@ -38,8 +37,6 @@ Route::get('/certificate/{uuid}', [CertificateController::class, 'verify'])->nam
 Route::middleware('guest')->group(function () {
     Route::get('/login',    [LoginController::class, 'create'])->name('login');
     Route::post('/login',   [LoginController::class, 'store'])->name('login.post');
-    Route::get('/register', [RegisterController::class, 'create'])->name('register');
-    Route::post('/register', [RegisterController::class, 'store'])->name('register.post');
     Route::get('/auth/google',          [SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');
     Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
     Route::get('/forgot-password',       [PasswordResetLinkController::class, 'create'])->name('password.request');

@@ -28,7 +28,6 @@ class LecturerPanelProvider extends PanelProvider
             ->id('lecturer')
             ->path('lecturer')
             ->login()
-            ->registration(\App\Filament\Lecturer\Pages\Auth\Register::class)
             ->colors(function () {
                 $primary = rescue(fn () => app(PlatformSettings::class)->primary_color, '#6C2E63', false);
                 return [

@@ -47,7 +47,7 @@ class StaffResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return (string) User::query()->whereIn('role', ['super_admin', 'lecturer'])->count();
+        return (string) User::query()->whereIn('role', ['super_admin', 'admin', 'lecturer'])->count();
     }
 
     public static function getNavigationBadgeColor(): ?string
@@ -57,7 +57,7 @@ class StaffResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->whereIn('role', ['super_admin', 'lecturer']);
+        return parent::getEloquentQuery()->whereIn('role', ['super_admin', 'admin', 'lecturer']);
     }
 
     public static function form(Form $form): Form
@@ -85,11 +85,9 @@ class StaffResource extends Resource
                         ->helperText(__('admin.user_password_helper')),
                     Forms\Components\Select::make('role')
                         ->label(__('admin.user_col_role'))
-                        ->options([
-                            'super_admin' => __('admin.user_role_super_admin'),
-                            'lecturer'    => __('admin.user_role_lecturer'),
-                        ])
-                        ->required(),
+                        ->options(fn () => User::assignableStaffRoleOptions())
+                        ->required()
+                        ->disabled(fn (?User $record) => $record?->isSuperAdmin() && ! auth()->user()?->isSuperAdmin()),
                     Forms\Components\TextInput::make('phone')
                         ->label(__('admin.user_field_phone'))
                         ->maxLength(30),
@@ -143,11 +141,13 @@ class StaffResource extends Resource
                     ->badge()
                     ->color(fn ($state) => match ($state) {
                         'super_admin' => 'danger',
+                        'admin'       => 'warning',
                         'lecturer'    => 'success',
                         default       => 'gray',
                     })
                     ->formatStateUsing(fn ($state) => match ($state) {
                         'super_admin' => __('admin.user_role_super_admin'),
+                        'admin'       => __('admin.user_role_admin'),
                         'lecturer'    => __('admin.user_role_lecturer'),
                         default       => ucfirst(str_replace('_', ' ', $state)),
                     }),
@@ -185,7 +185,7 @@ class StaffResource extends Resource
                     ->icon('heroicon-o-arrow-right-on-rectangle')
                     ->redirectTo(fn ($record) => match ($record->role) {
                         'lecturer'    => route('filament.lecturer.pages.dashboard'),
-                        'super_admin' => route('filament.admin.pages.dashboard'),
+                        'super_admin', 'admin' => route('filament.admin.pages.dashboard'),
                         default       => route('filament.admin.pages.dashboard'),
                     })
                     ->backTo(route('filament.admin.resources.staff.index')),
@@ -194,7 +194,7 @@ class StaffResource extends Resource
                     ->label(fn ($record) => $record->is_active ? __('admin.user_action_suspend') : __('admin.user_action_activate'))
                     ->icon(fn ($record) => $record->is_active ? 'heroicon-o-no-symbol' : 'heroicon-o-check-circle')
                     ->color(fn ($record) => $record->is_active ? 'danger' : 'success')
-                    ->hidden(fn ($record) => $record->role === 'super_admin')
+                    ->hidden(fn ($record) => $record->isSuperAdmin())
                     ->requiresConfirmation()
                     ->modalHeading(fn ($record) => $record->is_active ? __('admin.user_modal_suspend_heading') : __('admin.user_modal_activate_heading'))
                     ->modalDescription(fn ($record) => $record->is_active
@@ -219,7 +219,8 @@ class StaffResource extends Resource
                         Notification::make()->title(__('admin.user_credits_granted', ['count' => $data['credits']]))->success()->send();
                     }),
 
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->hidden(fn (User $record) => ! auth()->user()?->canManageStaffUser($record)),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -235,10 +236,10 @@ class StaffResource extends Resource
                         ->icon('heroicon-o-no-symbol')
                         ->color('danger')
                         ->requiresConfirmation()
-                        ->action(fn ($records) => $records->reject(fn ($r) => $r->role === 'super_admin')->each->update(['is_active' => false]))
+                        ->action(fn ($records) => $records->reject(fn ($r) => $r->isSuperAdmin())->each->update(['is_active' => false]))
                         ->deselectRecordsAfterCompletion(),
                     Tables\Actions\DeleteBulkAction::make()
-                        ->action(fn ($records) => $records->reject(fn ($r) => $r->role === 'super_admin')->each->delete()),
+                        ->action(fn ($records) => $records->reject(fn ($r) => $r->isSuperAdmin())->each->delete()),
                 ]),
             ])
             ->defaultSort('created_at', 'desc')
@@ -246,9 +247,20 @@ class StaffResource extends Resource
             ->poll('60s');
     }
 
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        $actor = auth()->user();
+
+        return $actor instanceof User
+            && $actor->canManageStaffUser($record)
+            && parent::canEdit($record);
+    }
+
     public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
     {
-        return $record->role !== 'super_admin';
+        return $record instanceof User
+            && auth()->user()?->canManageStaffUser($record)
+            && ! $record->isSuperAdmin();
     }
 
     public static function getPages(): array

@@ -28,6 +28,12 @@ class Settings extends Page
     public static function getNavigationLabel(): string { return __('admin.nav_settings'); }
     public static function getNavigationGroup(): ?string { return __('admin.nav_group_configuration'); }
     public function getTitle(): string { return __('admin.nav_settings'); }
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->can('admin.manage_settings') ?? false;
+    }
+
     protected static string  $view            = 'filament.admin.pages.settings';
 
     public ?array $data = [];
@@ -424,12 +430,6 @@ class Settings extends Page
                         Forms\Components\Tabs\Tab::make(__('admin.settings_tab_registration'))
                             ->icon('heroicon-o-user-plus')
                             ->schema([
-                                Forms\Components\Toggle::make('allow_registration')
-                                    ->label(__('admin.settings_field_allow_reg'))
-                                    ->helperText(__('admin.settings_helper_allow_reg')),
-                                Forms\Components\Toggle::make('lecturer_registration_open')
-                                    ->label(__('admin.settings_field_creator_reg'))
-                                    ->helperText(__('admin.settings_helper_creator_reg')),
                                 Forms\Components\Toggle::make('require_email_verification')
                                     ->label(__('admin.settings_field_email_verify'))
                                     ->helperText(__('admin.settings_helper_email_verify')),

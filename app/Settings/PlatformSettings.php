@@ -23,12 +23,10 @@ class PlatformSettings extends Settings
     public string $font_size_base = '16px';           // root font-size (14px–20px)
 
     // Registration & Auth
-    public bool   $allow_registration         = true;
     public bool   $require_email_verification = false;
     public bool   $allow_social_login         = false;
     public string $google_client_id           = '';
     public string $google_client_secret       = '';
-    public bool   $lecturer_registration_open  = true;
 
     // AI / OpenAI
     public string $openai_api_key              = '';

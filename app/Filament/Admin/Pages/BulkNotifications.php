@@ -89,7 +89,7 @@ class BulkNotifications extends Page implements HasForms
         match ($data['audience']) {
             'all_students'    => $query->where('role', 'student'),
             'active_students' => $query->where('role', 'student'),
-            'lecturers'       => $query->whereIn('role', ['lecturer', 'super_admin']),
+            'lecturers'       => $query->whereIn('role', ['lecturer', 'admin', 'super_admin']),
             default           => $query->where('role', 'student'),
         };
 

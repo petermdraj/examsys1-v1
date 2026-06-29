@@ -20,6 +20,11 @@ class TranslationDashboard extends Page
         return false;
     }
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->can('admin.manage_settings') ?? false;
+    }
+
     public static function getNavigationGroup(): ?string
     {
         return __('admin.nav_group_configuration');

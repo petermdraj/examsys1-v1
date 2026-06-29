@@ -42,11 +42,19 @@ class RoleAndPermissionSeeder extends Seeder
 
         // ── Roles ──────────────────────────────────────────────────────────
         $superAdmin = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+        $admin      = Role::firstOrCreate(['name' => 'admin',        'guard_name' => 'web']);
         $creator    = Role::firstOrCreate(['name' => 'lecturer',     'guard_name' => 'web']);
-        $customer   = Role::firstOrCreate(['name' => 'student',    'guard_name' => 'web']);
+        $customer   = Role::firstOrCreate(['name' => 'student',      'guard_name' => 'web']);
 
         // ── Role → Permission assignments ──────────────────────────────────
         $superAdmin->syncPermissions(Permission::all());
+
+        $admin->syncPermissions([
+            'admin.manage_users',
+            'admin.view_all_reports',
+            'admin.monitor_live_exams',
+            'admin.send_bulk_notifications',
+        ]);
 
         $creator->syncPermissions([
             'quiz.create', 'quiz.edit', 'quiz.delete', 'quiz.publish',

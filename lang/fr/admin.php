@@ -38,6 +38,7 @@ return [
     'user_col_ai_credits'           => 'AI credits',
     'user_col_active'               => 'Active',
     'user_role_super_admin'         => 'Super Admin',
+    'user_role_admin'               => 'Administrateur',
     'user_role_lecturer'            => 'Lecteur',
     'user_role_student'             => 'Étudiant',
     'user_action_activate'          => 'Activate',
@@ -319,8 +320,6 @@ return [
     'settings_field_links'           => 'Links',
     'settings_field_link_text'       => 'Link Text',
     'settings_field_url'             => 'URL',
-    'settings_field_allow_reg'       => 'Allow New Registrations',
-    'settings_field_creator_reg'     => 'Open Creator Registration',
     'settings_field_email_verify'    => 'Require Email Verification',
     'settings_field_google_login'    => 'Enable Google Login',
     'settings_field_client_id'       => 'Client ID',
@@ -393,8 +392,6 @@ return [
     'settings_helper_maintenance'     => 'Displays a maintenance page to all visitors. Admin panel remains accessible.',
 
     // Settings — helper texts
-    'settings_helper_allow_reg'       => 'Turn off to make the platform invite-only',
-    'settings_helper_creator_reg'     => 'Allow users to self-register as creators',
     'settings_helper_email_verify'    => 'Users must verify email before accessing the platform',
     'settings_helper_google_login'    => 'Requires Google OAuth credentials below',
     'settings_razorpay_currency_warning' => 'Your platform currency is <strong>:currency</strong> but Razorpay only supports <strong>INR</strong>. Razorpay payments will fail until you change the currency to INR (General tab), or remove the Razorpay keys and use Stripe instead.',

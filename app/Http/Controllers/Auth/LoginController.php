@@ -31,7 +31,7 @@ class LoginController extends Controller
 
         app(LoginHistoryService::class)->record($user, $request);
 
-        if ($user->role === 'super_admin') {
+        if ($user->canAccessAdminPanel()) {
             return redirect()->intended('/admin');
         }
 

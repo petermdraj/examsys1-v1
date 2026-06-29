@@ -71,9 +71,6 @@
       </div>
       <button type="submit" class="btn btn-primary btn-block btn-lg">{{ __('auth.login_submit') }}</button>
     </form>
-    <p class="lgn-footer">
-      {{ __('auth.login_no_account') }} <a href="{{ route('register') }}" class="lgn-footer-link">{{ __('auth.login_signup_link') }}</a>
-    </p>
   </div>
 </div>
 @endsection

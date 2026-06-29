@@ -96,7 +96,6 @@
 
     @guest
       <a href="{{ route('login') }}" class="nav-item-light topnav-auth">{{ __('common.nav_login') }}</a>
-      <a href="{{ route('register') }}" class="btn-nav-accent topnav-auth">{{ __('common.nav_signup') }}</a>
     @else
       <div class="usermenu" id="userMenu">
         <button class="user-btn" id="userBtn" onclick="document.getElementById('userPop').classList.toggle('show')">
@@ -148,7 +147,6 @@
   <div class="mobile-nav-sep"></div>
   @guest
     <a href="{{ route('login') }}" class="mobile-nav-item">{{ __('common.nav_login') }}</a>
-    <a href="{{ route('register') }}" class="mobile-nav-item mobile-nav-cta">{{ __('common.nav_signup') }}</a>
   @else
     @if(in_array(auth()->user()->role, ['lecturer','super_admin']))
       <a href="{{ url('/lecturer') }}" class="mobile-nav-item">{{ __('common.user_lecturer_dashboard') }}</a>
