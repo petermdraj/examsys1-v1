@@ -16,6 +16,7 @@ class CreateQuiz extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['lecturer_id'] = auth()->id();
+        QuizResource::applyResultsReleaseMode($data);
 
         return $data;
     }

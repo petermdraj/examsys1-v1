@@ -79,8 +79,8 @@ class StaffResource extends Resource
                     Forms\Components\TextInput::make('password')
                         ->label(__('admin.user_field_password'))
                         ->password()
-                        ->dehydrateStateUsing(fn ($s) => bcrypt($s))
-                        ->dehydrated(fn ($s) => filled($s))
+                        ->dehydrateStateUsing(fn ($state) => bcrypt($state))
+                        ->dehydrated(fn ($state) => filled($state))
                         ->required(fn (string $operation) => $operation === 'create')
                         ->helperText(__('admin.user_password_helper')),
                     Forms\Components\Select::make('role')

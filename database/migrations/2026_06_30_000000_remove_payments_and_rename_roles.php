@@ -59,7 +59,7 @@ return new class extends Migration
             DB::table('users')->where('role', 'creator')->update(['role' => 'lecturer']);
 
             if (DB::getDriverName() === 'mysql') {
-                DB::statement("ALTER TABLE users MODIFY role ENUM('super_admin','lecturer','student') NOT NULL DEFAULT 'student'");
+                DB::statement("ALTER TABLE users MODIFY role ENUM('super_admin','admin','lecturer','student') NOT NULL DEFAULT 'student'");
             }
         }
 

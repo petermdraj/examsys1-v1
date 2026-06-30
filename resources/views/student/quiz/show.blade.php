@@ -106,13 +106,14 @@
             {{ __('quiz.unlock_all_questions', ['count' => $quiz->total_questions]) }}
           </div>
           @auth
-            @if(($isAssigned ?? false) || ($isEnrolled ?? false))
-              <form method="POST" action="{{ route('attempt.start', $quiz->slug) }}">@csrf
-                <button type="submit" class="btn btn-primary">{{ __('quiz.enroll_start_exam') }}</button>
-              </form>
-            @elseif(auth()->user()->role === 'student')
-              <p class="muted">{{ __('quiz.not_assigned') }}</p>
-            @endif
+            @include('student.quiz.partials.start-exam-action', [
+                'quiz' => $quiz,
+                'canAttempt' => $canAttempt,
+                'attemptBlockReason' => $attemptBlockReason,
+                'isAssigned' => $isAssigned,
+                'isEnrolled' => $isEnrolled,
+                'label' => __('quiz.enroll_start_exam'),
+            ])
           @else
             <a href="{{ route('login') }}" class="btn btn-primary">{{ __('quiz.login_to_start') }}</a>
           @endauth
@@ -157,19 +158,17 @@
       @endif
 
       <div class="card buy">
-        @if($isEnrolled || ($isAssigned ?? false))
-          <form method="POST" action="{{ route('attempt.start', $quiz->slug) }}" class="qs-mt20">@csrf
-            <button type="submit" class="btn btn-primary btn-lg btn-block">{{ __('quiz.start_exam') }}</button>
-          </form>
-        @else
-          @auth
-            @if(auth()->user()->role === 'student')
-              <p class="muted qs-mt20" style="text-align:center;font-size:14px;">{{ __('quiz.not_assigned') }}</p>
-            @endif
-          @else
-            <a href="{{ route('login') }}" class="btn btn-primary btn-lg btn-block qs-mt20">{{ __('quiz.login_to_start') }}</a>
-          @endauth
-        @endif
+        @include('student.quiz.partials.start-exam-action', [
+            'quiz' => $quiz,
+            'canAttempt' => $canAttempt,
+            'attemptBlockReason' => $attemptBlockReason,
+            'isAssigned' => $isAssigned,
+            'isEnrolled' => $isEnrolled,
+            'label' => __('quiz.start_exam'),
+            'buttonClass' => 'btn btn-primary btn-lg btn-block',
+            'formClass' => 'qs-mt20',
+            'blockedClass' => 'qs-mt20',
+        ])
 
         <div class="buy-pills">
           <div class="buy-pill">
@@ -269,32 +268,37 @@
     if (startMs && now < startMs) {
       wrap.style.display = '';
       applyTheme('linear-gradient(135deg,#fffbeb,#fef3c7)', '#f59e0b', '#92400e', '#f59e0b');
-      label.textContent = 'Starts in';
+      label.textContent = @json(__('quiz.countdown_starts_in'));
       timer.textContent = fmt(startMs - now);
-      sub.textContent   = `Opens ${localDateStr(startMs)}`;
+      sub.textContent   = @json(__('quiz.countdown_opens_at', ['time' => '__TIME__'])).replace('__TIME__', localDateStr(startMs));
       sub.style.color   = '#92400e';
-      return;
-    }
-
-    if (endMs && now < endMs) {
-      wrap.style.display = '';
-      applyTheme('linear-gradient(135deg,#ecfdf5,#d1fae5)', '#10b981', '#065f46', '#10b981');
-      label.textContent = 'Ends in';
-      timer.textContent = fmt(endMs - now);
-      sub.textContent   = `Closes ${localDateStr(endMs)}`;
-      sub.style.color   = '#065f46';
       return;
     }
 
     if (endMs && now >= endMs) {
       wrap.style.display = '';
       applyTheme('#f9fafb', '#d1d5db', '#6b7280', '#9ca3af');
-      label.textContent = 'Quiz ended';
+      label.textContent = @json(__('quiz.countdown_ended'));
       timer.textContent = '—';
       timer.style.fontSize = '28px';
-      sub.textContent   = `Ended ${localDateStr(endMs)}`;
+      sub.textContent   = @json(__('quiz.countdown_ended_at', ['time' => '__TIME__'])).replace('__TIME__', localDateStr(endMs));
       sub.style.color   = '#9ca3af';
+      document.querySelectorAll('.js-start-exam-form').forEach(el => el.remove());
       clearInterval(interval);
+      return;
+    }
+
+    document.querySelectorAll('.js-start-blocked-msg').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.js-start-exam-form').forEach(el => { el.style.display = ''; });
+    document.querySelectorAll('.js-start-exam-btn').forEach(btn => { btn.disabled = false; });
+
+    if (endMs && now < endMs) {
+      wrap.style.display = '';
+      applyTheme('linear-gradient(135deg,#ecfdf5,#d1fae5)', '#10b981', '#065f46', '#10b981');
+      label.textContent = @json(__('quiz.countdown_ends_in'));
+      timer.textContent = fmt(endMs - now);
+      sub.textContent   = @json(__('quiz.countdown_closes_at', ['time' => '__TIME__'])).replace('__TIME__', localDateStr(endMs));
+      sub.style.color   = '#065f46';
       return;
     }
 

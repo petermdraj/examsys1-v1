@@ -26,20 +26,59 @@ class QuizPublishService
         $quiz->update(['status' => 'draft']);
     }
 
+    public function publishDueScheduled(): int
+    {
+        $count = 0;
+
+        Quiz::query()
+            ->where('status', 'scheduled')
+            ->whereNotNull('start_at')
+            ->where('start_at', '<=', now())
+            ->where('total_questions', '>', 0)
+            ->each(function (Quiz $quiz) use (&$count) {
+                $this->publish($quiz);
+                $count++;
+            });
+
+        return $count;
+    }
+
     public function canAttempt(Quiz $quiz): bool
     {
+        return $this->attemptBlockReason($quiz) === null;
+    }
+
+    public function attemptBlockReason(Quiz $quiz): ?string
+    {
         if ($quiz->status !== 'published') {
-            return false;
+            return 'not_published';
         }
 
         if ($quiz->start_at && now()->lt($quiz->start_at)) {
-            return false;
+            return 'before_start';
         }
 
         if ($quiz->end_at && now()->gt($quiz->end_at)) {
-            return false;
+            return 'after_end';
         }
 
-        return true;
+        return null;
+    }
+
+    public function effectiveDurationSeconds(Quiz $quiz): int
+    {
+        $duration = $quiz->duration_minutes ? (int) $quiz->duration_minutes * 60 : 0;
+
+        if (! $quiz->end_at || now()->gte($quiz->end_at)) {
+            return $duration;
+        }
+
+        $remaining = max(0, (int) ceil(now()->floatDiffInSeconds($quiz->end_at, false)));
+
+        if ($duration === 0) {
+            return $remaining;
+        }
+
+        return min($duration, $remaining);
     }
 }

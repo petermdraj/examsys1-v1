@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Attempt;
 use App\Services\Exam\ScoringService;
+use App\Services\Quiz\QuizPublishService;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
@@ -63,7 +64,7 @@ class ExamPanel extends Component
             }
         }
 
-        $this->durationSeconds = $quiz->duration_minutes ? $quiz->duration_minutes * 60 : 0;
+        $this->durationSeconds = app(QuizPublishService::class)->effectiveDurationSeconds($quiz);
     }
 
     public function submit(): mixed

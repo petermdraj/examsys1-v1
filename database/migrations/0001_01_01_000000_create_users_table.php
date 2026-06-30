@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('country_code', 5)->nullable();
             $table->string('timezone')->default('UTC');
-            $table->enum('role', ['super_admin', 'lecturer', 'student'])->default('student');
+            $table->enum('role', ['super_admin', 'admin', 'lecturer', 'student'])->default('student');
             $table->boolean('is_active')->default(true);
             $table->integer('ai_credits_used')->default(0);
             $table->integer('ai_credits_free_remaining')->default(0);

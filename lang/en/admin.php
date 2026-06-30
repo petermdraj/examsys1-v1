@@ -82,6 +82,7 @@ return [
     'staff_cannot_manage_super_admin' => 'You cannot modify a Super Admin account.',
     'staff_cannot_assign_super_admin' => 'Only a Super Admin can assign the Super Admin role.',
     'staff_invalid_role'              => 'You are not allowed to assign this role.',
+    'user_save_failed'                => 'Could not save user',
     'student_user_model_label'      => 'Student',
     'student_user_model_label_plural' => 'Students',
     'student_user_section_desc'     => 'Students log in on the public site and must belong to a batch.',

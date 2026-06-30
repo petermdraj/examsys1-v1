@@ -22,8 +22,8 @@ class LoginController extends Controller
 
         if (! auth()->attempt($credentials, $request->boolean('remember'))) {
             return back()
-                ->withErrors(['email' => __('auth.failed')], 'login')
-                ->onlyInput('email');
+                ->withInput($request->only('email'))
+                ->with('error', __('auth.failed'));
         }
 
         $request->session()->regenerate();

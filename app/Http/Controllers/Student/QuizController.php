@@ -5,11 +5,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Quiz;
 use App\Services\Quiz\QuizAssignmentService;
+use App\Services\Quiz\QuizPublishService;
 use Illuminate\Support\Facades\Cache;
 
 class QuizController extends Controller
 {
-    public function __construct(private QuizAssignmentService $assignmentService) {}
+    public function __construct(
+        private QuizAssignmentService $assignmentService,
+        private QuizPublishService $publishService,
+    ) {}
 
     public function categories()
     {
@@ -80,6 +84,13 @@ class QuizController extends Controller
             });
         }
 
-        return view('student.quiz.show', compact('quiz', 'isEnrolled', 'isAssigned', 'leaderboard'));
+        return view('student.quiz.show', [
+            'quiz'                => $quiz,
+            'isEnrolled'          => $isEnrolled,
+            'isAssigned'          => $isAssigned,
+            'leaderboard'         => $leaderboard,
+            'canAttempt'          => $this->publishService->canAttempt($quiz),
+            'attemptBlockReason'  => $this->publishService->attemptBlockReason($quiz),
+        ]);
     }
 }

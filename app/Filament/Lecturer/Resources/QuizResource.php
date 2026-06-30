@@ -309,14 +309,20 @@ class QuizResource extends Resource
                                 ->label(__('lecturer.field_shuffle_options'))
                                 ->default(false)
                                 ->helperText(__('lecturer.shuffle_options_helper')),
-                            Forms\Components\Toggle::make('show_result_immediately')
-                                ->label(__('lecturer.field_show_result'))
-                                ->default(true)
-                                ->helperText(__('lecturer.show_result_helper')),
-                            Forms\Components\Toggle::make('hold_results_until_published')
-                                ->label(__('lecturer.field_hold_results'))
-                                ->default(false)
-                                ->helperText(__('lecturer.hold_results_helper')),
+                            Forms\Components\Radio::make('results_release_mode')
+                                ->label(__('lecturer.field_results_release'))
+                                ->options([
+                                    'immediate' => __('lecturer.results_release_immediate'),
+                                    'held'      => __('lecturer.results_release_held'),
+                                ])
+                                ->descriptions([
+                                    'immediate' => __('lecturer.show_result_helper'),
+                                    'held'      => __('lecturer.hold_results_helper'),
+                                ])
+                                ->default('immediate')
+                                ->required()
+                                ->dehydrated(false)
+                                ->columnSpanFull(),
                             Forms\Components\Toggle::make('allow_review_after_submit')
                                 ->label(__('lecturer.field_allow_review'))
                                 ->default(true)
@@ -352,6 +358,11 @@ class QuizResource extends Resource
                     ->icon('heroicon-o-rocket-launch')
                     ->schema([
                         Forms\Components\Section::make(__('lecturer.section_publish_settings'))->schema([
+                            Forms\Components\Placeholder::make('batch_exam_workflow')
+                                ->label(__('lecturer.batch_exam_workflow_heading'))
+                                ->content(__('lecturer.batch_exam_workflow_body'))
+                                ->columnSpanFull(),
+
                             Forms\Components\Select::make('status')
                                 ->label(__('lecturer.field_status'))
                                 ->options([
@@ -369,17 +380,26 @@ class QuizResource extends Resource
                                 }),
 
                             Forms\Components\DateTimePicker::make('start_at')
-                                ->label(fn (Forms\Get $get) => $get('status') === 'scheduled' ? __('lecturer.field_start_at_scheduled') : __('lecturer.field_start_at_optional'))
+                                ->label(fn (Forms\Get $get) => $get('status') === 'scheduled'
+                                    ? __('lecturer.field_publish_open_at')
+                                    : __('lecturer.field_exam_opens'))
                                 ->helperText(fn (Forms\Get $get) => $get('status') === 'scheduled'
                                     ? __('lecturer.start_at_helper_scheduled')
-                                    : __('lecturer.start_at_helper_optional'))
+                                    : __('lecturer.field_exam_opens_helper'))
                                 ->required(fn (Forms\Get $get) => $get('status') === 'scheduled')
                                 ->after('now'),
 
                             Forms\Components\DateTimePicker::make('end_at')
-                                ->label(__('lecturer.field_end_at'))
-                                ->helperText(__('lecturer.end_at_helper'))
-                                ->after('start_at'),
+                                ->label(__('lecturer.field_exam_closes'))
+                                ->helperText(__('lecturer.field_exam_closes_helper'))
+                                ->after('start_at')
+                                ->live(),
+
+                            Forms\Components\Toggle::make('force_submit_at_end')
+                                ->label(__('lecturer.field_force_submit_at_end'))
+                                ->helperText(__('lecturer.field_force_submit_at_end_helper'))
+                                ->default(false)
+                                ->visible(fn (Forms\Get $get) => filled($get('end_at'))),
                         ])->columns(1),
 
                         Forms\Components\Section::make(__('lecturer.section_seo'))->schema([
@@ -609,5 +629,29 @@ class QuizResource extends Resource
             'edit'      => Pages\EditQuiz::route('/{record}/edit'),
             'questions' => Pages\ManageQuestions::route('/{record}/questions'),
         ];
+    }
+
+    public static function resultsReleaseModeFromQuiz(Quiz $quiz): string
+    {
+        if ($quiz->hold_results_until_published) {
+            return 'held';
+        }
+
+        return 'immediate';
+    }
+
+    public static function applyResultsReleaseMode(array &$data, ?string $mode = null): void
+    {
+        $mode = $mode ?? ($data['results_release_mode'] ?? 'immediate');
+
+        if ($mode === 'held') {
+            $data['show_result_immediately']      = false;
+            $data['hold_results_until_published'] = true;
+        } else {
+            $data['show_result_immediately']      = true;
+            $data['hold_results_until_published'] = false;
+        }
+
+        unset($data['results_release_mode']);
     }
 }

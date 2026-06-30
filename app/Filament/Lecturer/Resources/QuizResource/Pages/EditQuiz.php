@@ -14,6 +14,20 @@ class EditQuiz extends EditRecord
 {
     protected static string $resource = QuizResource::class;
 
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['results_release_mode'] = QuizResource::resultsReleaseModeFromQuiz($this->record);
+
+        return $data;
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        QuizResource::applyResultsReleaseMode($data);
+
+        return $data;
+    }
+
     protected function getHeaderActions(): array
     {
         return [

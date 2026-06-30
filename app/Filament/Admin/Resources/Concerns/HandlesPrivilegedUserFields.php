@@ -4,12 +4,42 @@ namespace App\Filament\Admin\Resources\Concerns;
 
 use App\Models\User;
 use App\Services\Quiz\QuizAssignmentService;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 trait HandlesPrivilegedUserFields
 {
+    public function create(bool $another = false): void
+    {
+        try {
+            parent::create($another);
+        } catch (ValidationException $exception) {
+            $this->notifyUserSaveValidationFailure($exception);
+
+            throw $exception;
+        } catch (Throwable $exception) {
+            report($exception);
+            $this->notifyUserSaveFailure($exception);
+        }
+    }
+
+    public function save(bool $shouldRedirect = true, bool $shouldSendSavedNotification = true): void
+    {
+        try {
+            parent::save($shouldRedirect, $shouldSendSavedNotification);
+        } catch (ValidationException $exception) {
+            $this->notifyUserSaveValidationFailure($exception);
+
+            throw $exception;
+        } catch (Throwable $exception) {
+            report($exception);
+            $this->notifyUserSaveFailure($exception);
+        }
+    }
+
     protected function createUserWithPrivilegedFields(array $data): User
     {
         $privileged = Arr::only($data, [
@@ -112,5 +142,30 @@ trait HandlesPrivilegedUserFields
         }
 
         $user->syncRoles([$user->role]);
+    }
+
+    protected function notifyUserSaveFailure(Throwable $exception): void
+    {
+        Notification::make()
+            ->title(__('admin.user_save_failed'))
+            ->body($exception->getMessage())
+            ->danger()
+            ->persistent()
+            ->send();
+    }
+
+    protected function notifyUserSaveValidationFailure(ValidationException $exception): void
+    {
+        $message = collect($exception->errors())->flatten()->first();
+
+        if (! $message) {
+            return;
+        }
+
+        Notification::make()
+            ->title(__('admin.user_save_failed'))
+            ->body($message)
+            ->danger()
+            ->send();
     }
 }

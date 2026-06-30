@@ -14,7 +14,7 @@ class Quiz extends Model
 
     protected $fillable = [
         'lecturer_id', 'category_id', 'title', 'slug', 'description', 'cover_image', 'status',
-        'visibility', 'duration_minutes', 'start_at', 'end_at', 'max_attempts', 'pass_percentage',
+        'visibility', 'duration_minutes', 'start_at', 'end_at', 'force_submit_at_end', 'max_attempts', 'pass_percentage',
         'shuffle_questions', 'shuffle_options', 'show_result_immediately', 'hold_results_until_published',
         'results_published_at', 'allow_review_after_submit',
         'negative_marking_enabled', 'proctoring_enabled', 'certificate_enabled', 'certificate_template',
@@ -39,6 +39,7 @@ class Quiz extends Model
             'average_score'              => 'decimal:2',
             'start_at'                   => 'datetime',
             'end_at'                     => 'datetime',
+            'force_submit_at_end'        => 'boolean',
         ];
     }
 
@@ -63,11 +64,11 @@ class Quiz extends Model
 
     public function resultsAreVisible(): bool
     {
-        if (! $this->hold_results_until_published) {
-            return true;
+        if ($this->hold_results_until_published) {
+            return $this->results_published_at !== null;
         }
 
-        return $this->results_published_at !== null;
+        return $this->show_result_immediately;
     }
 
     public function hasPendingResults(): bool

@@ -50,14 +50,14 @@
     </div>
     @endif
 
-    @if($errors->loginBag->any())
-      <div class="lgn-alert">
-        {{ $errors->loginBag->first() }}
-      </div>
-    @endif
     @if(session('error'))
       <div class="lgn-alert">
         {{ session('error') }}
+      </div>
+    @endif
+    @if($errors->any())
+      <div class="lgn-alert">
+        {{ $errors->first() }}
       </div>
     @endif
     <form method="POST" action="{{ route('login.post') }}">@csrf

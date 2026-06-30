@@ -8,5 +8,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 \Illuminate\Support\Facades\Schedule::command('examsys:recalculate-stats --published')->daily()->runInBackground();
+\Illuminate\Support\Facades\Schedule::command('examsys:publish-scheduled')->everyMinute();
+\Illuminate\Support\Facades\Schedule::command('examsys:close-exam-windows')->everyMinute();
 \Illuminate\Support\Facades\Schedule::job(\App\Jobs\HardDeleteExpiredUsersJob::class)->daily();
 \Illuminate\Support\Facades\Schedule::job(\App\Jobs\SendWeeklyDigestJob::class)->weeklyOn(1, '8:00');
