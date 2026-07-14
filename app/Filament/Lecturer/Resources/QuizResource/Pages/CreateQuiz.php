@@ -6,8 +6,11 @@ use App\Filament\Lecturer\Resources\QuizResource;
 use App\Models\FillBlankAnswer;
 use App\Models\Question;
 use App\Models\QuestionOption;
+use App\Models\Quiz;
 use App\Services\QuestionBank\QuestionBankService;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Arr;
 
 class CreateQuiz extends CreateRecord
 {
@@ -19,6 +22,63 @@ class CreateQuiz extends CreateRecord
         QuizResource::applyResultsReleaseMode($data);
 
         return $data;
+    }
+
+    /**
+     * Persist a draft as soon as Basic Info + Settings are done so the Questions
+     * step can attach bank imports / AI items (those APIs need a quiz_id).
+     */
+    public function saveDraftFromWizard(): void
+    {
+        if ($this->getRecord()) {
+            return;
+        }
+
+        $raw = $this->form->getRawState();
+
+        $cover = $raw['cover_image'] ?? null;
+        if (is_array($cover)) {
+            $cover = collect($cover)->filter()->first();
+        }
+
+        $data = [
+            'title'                     => $raw['title'] ?? null,
+            'slug'                      => $raw['slug'] ?? null,
+            'category_id'               => $raw['category_id'] ?? null,
+            'description'               => $raw['description'] ?? null,
+            'cover_image'               => $cover,
+            'duration_minutes'          => $raw['duration_minutes'] ?? null,
+            'max_attempts'              => $raw['max_attempts'] ?? null,
+            'pass_percentage'           => $raw['pass_percentage'] ?? 60,
+            'visibility'                => $raw['visibility'] ?? 'public',
+            'shuffle_questions'         => (bool) ($raw['shuffle_questions'] ?? false),
+            'shuffle_options'           => (bool) ($raw['shuffle_options'] ?? false),
+            'results_release_mode'      => $raw['results_release_mode'] ?? 'immediate',
+            'allow_review_after_submit' => (bool) ($raw['allow_review_after_submit'] ?? true),
+            'negative_marking_enabled'  => (bool) ($raw['negative_marking_enabled'] ?? false),
+            'certificate_enabled'       => (bool) ($raw['certificate_enabled'] ?? false),
+            'certificate_template'      => $raw['certificate_template'] ?? 'classic',
+            'status'                    => 'draft',
+        ];
+
+        $data = $this->mutateFormDataBeforeCreate($data);
+
+        /** @var Quiz $quiz */
+        $quiz = static::getModel()::create(
+            Arr::only($data, (new Quiz)->getFillable())
+        );
+
+        $this->record = $quiz;
+
+        Notification::make()
+            ->title(__('lecturer.notification_quiz_drafted'))
+            ->success()
+            ->send();
+
+        $this->redirect(QuizResource::getUrl('edit', [
+            'record' => $quiz,
+            'step'   => 'questions',
+        ]), navigate: true);
     }
 
     public function saveQuestion(array $data, ?string $questionId = null): array

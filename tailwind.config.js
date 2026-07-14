@@ -1,14 +1,16 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
+import filamentPreset from './vendor/filament/filament/tailwind.config.preset.js';
 
 /** @type {import('tailwindcss').Config} */
 export default {
+    presets: [filamentPreset],
     content: [
+        './app/Filament/**/*.php',
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './vendor/filament/**/*.blade.php',
     ],
-    darkMode: 'class',
     theme: {
         extend: {
             fontFamily: {

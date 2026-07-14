@@ -12,8 +12,8 @@
 .form-input:disabled{background:var(--surface-2);}
 .form-error{display:block;font-size:12px;color:var(--danger);margin-top:4px;}
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;border:1.5px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:all .15s;}
-.btn-primary{background:var(--brand-primary);color:#fff;border-color:var(--brand-primary);}
-.btn-primary:hover{opacity:.9;}
+.btn-primary{background:var(--brand-primary);color:var(--on-primary);border-color:var(--brand-primary);}
+.btn-primary:hover{background:var(--brand-primary-strong);}
 .btn-danger{background:var(--danger);color:#fff;border-color:var(--danger);}
 .btn-danger:hover{opacity:.9;}
 .toggle-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;}

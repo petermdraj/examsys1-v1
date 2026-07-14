@@ -193,42 +193,95 @@
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E") !important;
 }
 
-/* Filament buttons — ensure readable contrast on dashboard cards and header */
-.fi-main .cc-card .fi-btn.fi-btn-outlined.fi-color-gray,
-.fi-main .cc-widget .fi-btn.fi-btn-outlined.fi-color-gray {
+/* Filament buttons — ensure readable contrast across the panel */
+.fi-btn.fi-btn-outlined.fi-color-gray,
+.fi-ac-btn-action.fi-btn-outlined.fi-color-gray {
     color: rgb(55 65 81) !important;
     border-color: rgb(209 213 219) !important;
     background-color: rgb(255 255 255) !important;
 }
 
-.fi-main .cc-card .fi-btn.fi-btn-outlined.fi-color-gray .fi-btn-icon,
-.fi-main .cc-widget .fi-btn.fi-btn-outlined.fi-color-gray .fi-btn-icon {
-    color: rgb(107 114 128) !important;
+.fi-btn.fi-btn-outlined.fi-color-gray .fi-btn-label,
+.fi-btn.fi-btn-outlined.fi-color-gray .fi-btn-icon,
+.fi-ac-btn-action.fi-btn-outlined.fi-color-gray .fi-btn-label,
+.fi-ac-btn-action.fi-btn-outlined.fi-color-gray .fi-btn-icon {
+    color: inherit !important;
 }
 
-.dark .fi-main .cc-card .fi-btn.fi-btn-outlined.fi-color-gray,
-.dark .fi-main .cc-widget .fi-btn.fi-btn-outlined.fi-color-gray {
+.dark .fi-btn.fi-btn-outlined.fi-color-gray,
+.dark .fi-ac-btn-action.fi-btn-outlined.fi-color-gray {
     color: rgb(243 244 246) !important;
     border-color: rgb(75 85 99) !important;
     background-color: rgb(31 41 55) !important;
 }
 
-.dark .fi-main .cc-card .fi-btn.fi-btn-outlined.fi-color-gray .fi-btn-icon,
-.dark .fi-main .cc-widget .fi-btn.fi-btn-outlined.fi-color-gray .fi-btn-icon {
-    color: rgb(156 163 175) !important;
+.fi-btn.fi-color-gray:not(.fi-btn-outlined):not(.fi-btn-ghost),
+.fi-ac-btn-action.fi-color-gray:not(.fi-btn-outlined):not(.fi-btn-ghost) {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border: 1px solid #d1d5db !important;
 }
 
-.fi-main .fi-btn.fi-color-primary:not(.fi-btn-outlined),
-.fi-topbar .fi-btn.fi-color-primary:not(.fi-btn-outlined),
-.fi-header .fi-ac-btn-action.fi-color-primary,
-.settings-form-actions .fi-btn.fi-color-primary:not(.fi-btn-outlined) {
+.dark .fi-btn.fi-color-gray:not(.fi-btn-outlined):not(.fi-btn-ghost),
+.dark .fi-ac-btn-action.fi-color-gray:not(.fi-btn-outlined):not(.fi-btn-ghost) {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: #f9fafb !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.fi-btn.fi-color-primary:not(.fi-btn-outlined):not(.fi-btn-ghost),
+.fi-ac-btn-action.fi-color-primary:not(.fi-btn-outlined):not(.fi-btn-ghost),
+.fi-link.fi-color-primary:not(.fi-link-outlined) {
     background-color: rgb(var(--primary-600, 108 46 99)) !important;
     color: #ffffff !important;
 }
 
-.fi-main .fi-btn.fi-color-primary:not(.fi-btn-outlined) .fi-btn-icon,
-.fi-topbar .fi-btn.fi-color-primary:not(.fi-btn-outlined) .fi-btn-icon,
-.fi-header .fi-ac-btn-action.fi-color-primary .fi-btn-icon,
-.settings-form-actions .fi-btn.fi-color-primary:not(.fi-btn-outlined) .fi-btn-icon {
+.fi-btn.fi-color-primary:not(.fi-btn-outlined) .fi-btn-label,
+.fi-btn.fi-color-primary:not(.fi-btn-outlined) .fi-btn-icon,
+.fi-ac-btn-action.fi-color-primary:not(.fi-btn-outlined) .fi-btn-label,
+.fi-ac-btn-action.fi-color-primary:not(.fi-btn-outlined) .fi-btn-icon {
     color: #ffffff !important;
+}
+
+.fi-btn.fi-btn-outlined.fi-color-primary,
+.fi-ac-btn-action.fi-btn-outlined.fi-color-primary {
+    color: rgb(var(--primary-600, 108 46 99)) !important;
+    border-color: rgb(var(--primary-600, 108 46 99)) !important;
+    background-color: transparent !important;
+}
+
+.fi-btn.fi-color-success:not(.fi-btn-outlined):not(.fi-btn-ghost),
+.fi-ac-btn-action.fi-color-success:not(.fi-btn-outlined):not(.fi-btn-ghost) {
+    background-color: rgb(var(--success-600, 46 158 104)) !important;
+    color: #ffffff !important;
+}
+
+.fi-btn.fi-color-danger:not(.fi-btn-outlined):not(.fi-btn-ghost),
+.fi-ac-btn-action.fi-color-danger:not(.fi-btn-outlined):not(.fi-btn-ghost) {
+    background-color: rgb(var(--danger-600, 213 68 63)) !important;
+    color: #ffffff !important;
+}
+
+.fi-btn.fi-color-warning:not(.fi-btn-outlined):not(.fi-btn-ghost),
+.fi-ac-btn-action.fi-color-warning:not(.fi-btn-outlined):not(.fi-btn-ghost) {
+    background-color: rgb(var(--warning-500, 224 164 49)) !important;
+    color: #1a1a1a !important;
+}
+
+.fi-btn.fi-color-info:not(.fi-btn-outlined):not(.fi-btn-ghost),
+.fi-ac-btn-action.fi-color-info:not(.fi-btn-outlined):not(.fi-btn-ghost) {
+    background-color: rgb(var(--info-600, 59 130 246)) !important;
+    color: #ffffff !important;
+}
+
+/* Tailwind primary utilities in custom widget markup */
+.fi-body a.bg-primary-600,
+.fi-body button.bg-primary-600 {
+    background-color: rgb(var(--primary-600, 108 46 99)) !important;
+    color: #ffffff !important;
+}
+
+.fi-body a.bg-primary-600:hover,
+.fi-body button.bg-primary-600:hover {
+    background-color: rgb(var(--primary-700, 77 32 71)) !important;
 }

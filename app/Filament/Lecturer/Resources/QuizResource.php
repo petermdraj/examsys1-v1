@@ -264,6 +264,13 @@ class QuizResource extends Resource
                 // Step 2: Settings
                 Forms\Components\Wizard\Step::make(__('lecturer.step_settings'))
                     ->icon('heroicon-o-cog-6-tooth')
+                    ->afterValidation(function (\Livewire\Component $livewire) {
+                        // Questions / bank import need a persisted quiz_id. On create,
+                        // save a draft when leaving Settings and open Edit on Questions.
+                        if ($livewire instanceof Pages\CreateQuiz) {
+                            $livewire->saveDraftFromWizard();
+                        }
+                    })
                     ->schema([
                         Forms\Components\Section::make(__('lecturer.section_scheduling'))
                             ->description(__('lecturer.section_scheduling_desc'))

@@ -27,10 +27,14 @@
             </div>
 
             <div class="pt-1">
-                <a href="{{ route('filament.lecturer.pages.ai-generator') }}"
-                   class="block text-center text-xs font-semibold py-2 px-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white transition-colors">
+                <x-filament::button
+                    tag="a"
+                    href="{{ route('filament.lecturer.pages.ai-generator') }}"
+                    size="sm"
+                    class="w-full justify-center"
+                >
                     {{ __('lecturer.ai_btn_generate_quiz') }}
-                </a>
+                </x-filament::button>
             </div>
         </div>
     </x-filament::section>
