@@ -10,7 +10,9 @@ use App\Models\Quiz;
 use App\Services\QuestionBank\QuestionBankService;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use Filament\Support\Exceptions\Halt;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
 
 class CreateQuiz extends CreateRecord
 {
@@ -41,10 +43,33 @@ class CreateQuiz extends CreateRecord
             $cover = collect($cover)->filter()->first();
         }
 
+        $required = [
+            'title'       => is_string($raw['title'] ?? null) ? trim($raw['title']) : $raw['title'] ?? null,
+            'slug'        => is_string($raw['slug'] ?? null) ? trim($raw['slug']) : $raw['slug'] ?? null,
+            'category_id' => $raw['category_id'] ?? null,
+        ];
+
+        $validator = Validator::make($required, [
+            'title'       => ['required', 'string', 'max:255'],
+            'slug'        => ['required', 'string', 'max:255'],
+            'category_id' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            Notification::make()
+                ->title(__('lecturer.complete_steps_first'))
+                ->body(__('lecturer.complete_steps_import_hint'))
+                ->warning()
+                ->send();
+
+            // Halt (not ValidationException) — wizard only catches Halt in afterValidation.
+            throw new Halt;
+        }
+
         $data = [
-            'title'                     => $raw['title'] ?? null,
-            'slug'                      => $raw['slug'] ?? null,
-            'category_id'               => $raw['category_id'] ?? null,
+            'title'                     => $required['title'],
+            'slug'                      => $required['slug'],
+            'category_id'               => $required['category_id'],
             'description'               => $raw['description'] ?? null,
             'cover_image'               => $cover,
             'duration_minutes'          => $raw['duration_minutes'] ?? null,
@@ -63,10 +88,23 @@ class CreateQuiz extends CreateRecord
 
         $data = $this->mutateFormDataBeforeCreate($data);
 
-        /** @var Quiz $quiz */
-        $quiz = static::getModel()::create(
-            Arr::only($data, (new Quiz)->getFillable())
-        );
+        try {
+            /** @var Quiz $quiz */
+            $quiz = static::getModel()::create(
+                Arr::only($data, (new Quiz)->getFillable())
+            );
+        } catch (\Throwable $e) {
+            report($e);
+
+            Notification::make()
+                ->title(__('lecturer.notification_quiz_draft_failed'))
+                ->body($e->getMessage())
+                ->danger()
+                ->persistent()
+                ->send();
+
+            throw new Halt;
+        }
 
         $this->record = $quiz;
 
@@ -79,6 +117,9 @@ class CreateQuiz extends CreateRecord
             'record' => $quiz,
             'step'   => 'questions',
         ]), navigate: true);
+
+        // Stop the wizard from advancing on the Create page after redirect.
+        throw new Halt;
     }
 
     public function saveQuestion(array $data, ?string $questionId = null): array

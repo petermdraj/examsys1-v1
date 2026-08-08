@@ -4,6 +4,8 @@ import filamentPreset from './vendor/filament/filament/tailwind.config.preset.js
 /** @type {import('tailwindcss').Config} */
 export default {
     presets: [filamentPreset],
+    // Filament requires this on the root config (preset alone is not enough for the panel toggle).
+    darkMode: 'class',
     content: [
         './app/Filament/**/*.php',
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',

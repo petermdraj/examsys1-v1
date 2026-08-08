@@ -523,6 +523,7 @@ return [
     'notification_quiz_published'   => 'Exam published',
     'notification_quiz_archived'    => 'Exam archived',
     'notification_quiz_drafted'     => 'Exam saved as draft',
+    'notification_quiz_draft_failed' => 'Could not save exam draft',
     'notification_question_duplicated' => 'Question duplicated',
     'notification_import_result'    => ':imported of :total questions imported',
     'notification_profile_saved'    => 'Profile updated successfully',
